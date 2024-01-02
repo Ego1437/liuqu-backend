@@ -1,483 +1,550 @@
 databaseChangeLog:
   - changeSet:
-      id: 1
+      id: 1-create-user-table
       author: Ego
       changes:
 #       User table
         - createTable:
-            tableName: user
+            tableName: Users
+            columns:
+                - column:
+                    name: user_id
+                    type: bigint
+                    constraints:
+                      primaryKey: true
+                      nullable: false
+                - column:
+                    name: user_name
+                    type: varchar(50)
+                    constraints:
+                      remarks: "用户姓名"
+                      nullable: false
+                - column:
+                    name: user_tel
+                    type: varchar(20)
+                    constraints:
+                      remarks: "用户电话"
+                      nullable: false
+                - column:
+                    name: user_email
+                    type: varchar(30)
+                    constraints:
+                      remarks: "用户邮箱"
+                      nullable: false
+                - column:
+                    name: avatar
+                    type: varchar(30)
+                    constraints:
+                      remarks: "用户头像"
+                      nullable: false
+                - column:
+                    name: password
+                    type: varchar(20)
+                - column:
+                    name: age
+                    type: int
+                - column:
+                    name: gender
+                    type: varchar(10)
+                - column:
+                    name: address
+                    type: varchar(100)
+                - column:
+                    name: postcode
+                    type: int
+                - column:
+                    name: is_subscribe
+                    type: int
+
+  - changeSet:
+      id: 2-create-activities-table
+      author: Ego
+      changes:
+        - createTable:
+            tableName: Activities
             columns:
               - column:
-                  name: uid
-                  type: int
-                  autoIncrement: true
+                  name: activity_id
+                  type: bigint
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: username
+                  name: partner_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: staff_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: tags
+                  type: varchar(255)  # Adjust this type based on your specific DB support for arrays
+                  constraints:
+                    remarks: "活动标签"
+                    nullable: false
+              - column:
+                  name: activity_type
+                  type: int
+                  constraints:
+                    remarks: "活动类型"
+                    nullable: false
+              - column:
+                  name: activity_image
+                  type: text  # Adjust this type based on your specific DB support for JSON
+                  constraints:
+                    nullable: false
+              - column:
+                  name: activity_duration
+                  type: bigint
+                  constraints:
+                    remarks: "活动时长"
+                    nullable: false
+              - column:
+                  name: portfolio
+                  type: text  # Adjust this type based on your specific DB support for JSON
+              - column:
+                  name: activity_detail
+                  type: text  # Adjust this type based on your specific DB support for JSON
+              - column:
+                  name: activity_status
+                  type: int
+                  constraints:
+                    remarks: "活动状态"
+                    nullable: false
+              - column:
+                  name: event_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 3-create-events-table
+      author: Ego
+      changes:
+        - createTable:
+            tableName: Events
+            columns:
+              - column:
+                  name: event_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: activity_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: start_time
+                  type: date
+                  constraints:
+                    remarks: "开始时间"
+                    nullable: false
+              - column:
+                  name: deadline
+                  type: date
+                  constraints:
+                    remarks: "结束时间"
+                    nullable: false
+              - column:
+                  name: max_capacity
+                  type: int
+                  constraints:
+                    remarks: "活动最高人数"
+                    nullable: false
+              - column:
+                  name: residual_num
+                  type: int
+                  constraints:
+                    remarks: "上车人数"
+                    nullable: false
+              - column:
+                  name: event_status
+                  type: int
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 4-create-tickets-table
+      author: Ego
+      changes:
+        - createTable:
+            tableName: Tickets
+            columns:
+              - column:
+                  name: ticket_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: event_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
                   type: varchar(255)
                   constraints:
                     nullable: false
               - column:
-                  name: personal_description
-                  type: varchar(255)
-                  constraints:
-                    nullable: true
-              - column:
-                  name: email
-                  type: varchar(255)
+                  name: price
+                  type: decimal(10,2)
                   constraints:
                     nullable: false
               - column:
-                  name: phone
-                  type: varchar(10)
+                  name: deadline
+                  type: date
+                  constraints:
+                    nullable: false
+
+
+
+  - changeSet:
+      id: 5-create-order-table
+      author: Ego
+      changes:
+        - createTable:
+            tableName: Orders
+            columns:
+              - column:
+                  name: order_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: activity_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: event_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: ticket_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: staff_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: total_amount
+                  type: decimal(10,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price
+                  type: decimal(10,2)
+              - column:
+                  name: quantity
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: platform_discount
+                  type: decimal(10,2)
+              - column:
+                  name: final_amount
+                  type: decimal(10,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: order_date
+                  type: date
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 6-create-notification-table
+      author: Ego
+      changes:
+        - createTable:
+            tableName: Notifications
+            columns:
+              - column:
+                  name: notification_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: activity_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: event_time
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: promotion
+                  type: varchar(100)
+
+  - changeSet:
+      id: 7-create-customer-staff-table
+      author: Ego
+      changes:
+        - createTable:
+            tableName: Customer_staffs
+            columns:
+              - column:
+                  name: staff_id
+                  type: int
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: staff_name
+                  type: char(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: staff_tel
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: staff_email
+                  type: varchar(30)
                   constraints:
                     nullable: false
               - column:
                   name: password
-                  type: varchar(255)
-                  constraints:
-                    nullable: false
+                  type: varchar(20)
               - column:
-                  name: is_silence
-                  type: TINYINT(1)
-                  constraints:
-                    nullable: true
-                    defaultValue: 0
-              - column:
-                  name: token
-                  type: varchar(255)
-                  constraints:
-                    nullable: true
-              - column:
-                  name: dob
-                  type: datetime
-                  constraints:
-                    remarks: "??? I forgot"
-                    nullable: true
-              - column:
-                  name: avatar_path
-                  type: varchar(255)
-                  constraints:
-                    remarks: "avatar path"
-                    nullable: true
-                    defaultValue: "default value path"
-              - column:
-                  name: hobby
-                  type: varchar(255)
-                  constraints:
-                    nullable: true
-                    defaultValue: "nothing"
-              - column:
-                  name: user_type
-                  type: enum('Regular', 'Admin', 'Editor', 'Autism')
-                  constraints:
-                    nullable: false
-
-#       event table
-        - createTable:
-            tableName: event
-            columns:
-              - column:
-                  name: eid
+                  name: age
                   type: int
-                  autoIncrement: true
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
-                  name: uid
-                  type: int
-                  constraints:
-                    remarks: "owner id"
-                    nullable: false
-              - column:
-                  name: title
-                  type: varchar(255)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: label
-                  type: varchar(50)
-                  constraints:
-                    nullable: false
-
-              - column:
-                  name: description
-                  type: varchar(255)
-                  constraints:
-                    remarks: "event introduction"
-                    nullable: false
-              - column:
-                  name: event_date
-                  type: datetime
-                  constraints:
-                    nullable: false
-
-#       post table
-        - createTable:
-            tableName: post
-            columns:
-              - column:
-                  name: pid
-                  type: int
-                  autoIncrement: true
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
-                  name: uid
-                  type: int
-                  constraints:
-                    remarks: "pusher id"
-                    nullable: false
-              - column:
-                  name: content
-                  type: varchar(255)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: post
-                  type: datetime
-                  constraints:
-                    nullable: false
-#       comment table
-        - createTable:
-            tableName: comment
-            columns:
-              - column:
-                  name: cid
-                  type: int
-                  autoIncrement: true
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
-                  name: uid
-                  type: int
-                  constraints:
-                    nullable: false
-              - column:
-                  name: parent_comment_id
-                  type: int
-              - column:
-                  name: context
-                  type: varchar(255)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: comment_date
-                  type: datetime
-                  constraints:
-                    nullable: true
-#       emotion record
-        - createTable:
-            tableName: emotion_record
-            columns:
-              - column:
-                  name: eid
-                  type: int
-                  autoIncrement: true
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
-                  name: emotion
-                  type: varchar(255)
-                  constraints:
-                    remarks: "emtion card"
-                    nullable: false
-              - column:
-                  name: emotion_record_date
-                  type: datetime
-                  constraints:
-                    nullable: false
-#       entry
-        - createTable:
-            tableName: entry
-            columns:
-              - column:
-                  name: eid
-                  type: int
-                  autoIncrement: true
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
-                  name: emotion
-                  type: varchar(50)
-                  constraints:
-                    remarks: "emtion card"
-                    nullable: false
-              - column:
-                  name: emotion_record_date
-                  type: datetime
-                  constraints:
-                    nullable: false
-#       news
-        - createTable:
-            tableName: news
-            columns:
-              - column:
-                  name: eid
-                  type: int
-                  autoIncrement: true
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
-                  name: uid
-                  type: int
-                  constraints:
-                    remarks: "emtion card"
-                    nullable: false
-              - column:
-                  name: title
-                  type: varchar(255)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: content
-                  type: text
-                  constraints:
-                    nullable: false
-              - column:
-                  name: new_date
-                  type: datetime
-                  constraints:
-                    nullable: false
-        #     autism_register
-        - createTable:
-            tableName: autism_register
-            columns:
-              - column:
-                  name: aid
-                  type: int
-                  autoIncrement: true
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
-                  name: first_name
-                  type: varchar(50)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: last_name
-                  type: varchar(50)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: dob
-                  type: datetime
-                  constraints:
-                    nullable: false
               - column:
                   name: gender
                   type: varchar(10)
+
+  - changeSet:
+      id: 8-create-tags-table
+      author: your_username
+      changes:
+        - createTable:
+            tableName: Tags
+            columns:
+              - column:
+                  name: tag_id
+                  type: int
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: tag_name
+                  type: varchar(200)
                   constraints:
                     nullable: false
               - column:
-                  name: phone
-                  type: varchar(15)
+                  name: parent_type
+                  type: int
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 9-create-partners-table
+      author: your_username
+      changes:
+        - createTable:
+            tableName: Partners
+            columns:
+              - column:
+                  name: partner_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: staff_id
+                  type: int
                   constraints:
                     nullable: false
               - column:
-                  name: email
-                  type: varchar(100)
+                  name: activity_id
+                  type: bigint
+              - column:
+                  name: b_name
+                  type: char(50)
                   constraints:
                     nullable: false
+              - column:
+                  name: b_tel
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: b_email
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(20)
+              - column:
+                  name: create_time
+                  type: date
+              - column:
+                  name: type
+                  type: varchar(10)
               - column:
                   name: address
-                  type: text
-                  constraints:
-                    nullable: true
-              - column:
-                  name: guardian_first_name
-                  type: varchar(50)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: guardian_last_name
-                  type: varchar(50)
-                  constraints:
-                    nullable: true
-              - column:
-                  name: relationship_to_individual
-                  type: varchar(50)
-                  constraints:
-                    nullable: true
-              - column:
-                  name: guardian_email
                   type: varchar(100)
-                  constraints:
-                    nullable: true
               - column:
-                  name: guardian_phone
-                  type: varchar(15)
-                  constraints:
-                    nullable: true
-              - column:
-                  name: race_ethnicity
-                  type: varchar(50)
-                  constraints:
-                    nullable: true
-              - column:
-                  name: spoken_languages
-                  type: text
-                  constraints:
-                    nullable: true
-              - column:
-                  name: nationality
-                  type: varchar(50)
-                  constraints:
-                    nullable: true
-              - column:
-                  name: diagnosis
-                  type: varchar(100)
-                  constraints:
-                    nullable: true
-              - column:
-                  name: diagnosis_date
-                  type: datetime
-                  constraints:
-                    nullable: true
-              - column:
-                  name: register_date
-                  type: datetime
-                  constraints:
-                    nullable: false
-
-  - changeSet:
-      id: 2
-      author: Ego
-      changes:
-        - addColumn:
-            tableName: user
-            columns:
-              - column:
-                  name: gender
-                  type: varchar(10)
-                  constraints:
-                    nullable: false
-
-  - changeSet:
-      id: 3
-      author: Ego
-      changes:
-        - addColumn:
-            tableName: post
-            columns:
-              - column:
-                  name: if_deleted
-                  type: boolean
-                  defaultValue: false
-                  constraints:
-                    nullable: false
-                    defaultValue: false
-
-  - changeSet:
-      id: 4
-      author: Ego
-      changes:
-        - addForeignKeyConstraint:
-            baseTableName: post
-            baseColumnNames: uid
-            constraintName: fk_post_user
-            referencedTableName: user
-            referencedColumnNames: uid
-            onDelete: CASCADE
-
-  - changeSet:
-      id: 5
-      author: Ego
-      changes:
-        - addColumn:
-            tableName: comment
-            columns:
-              - column:
-                  name: if_deleted
-                  type: boolean
-                  defaultValue: false
-                  constraints:
-                    nullable: false
-                    defaultValue: false
-  - changeSet:
-      id: 6
-      author: Ego
-      changes:
-        - addColumn:
-            tableName: comment
-            columns:
-              - column:
-                  name: pid
+                  name: postcode
                   type: int
-                  constraints:
-                    nullable: false
+              - column:
+                  name: decription
+                  type: varchar(200)
+
   - changeSet:
-      id: 7
+      id: 1-add-fk-events-activity_id
       author: Ego
       changes:
         - addForeignKeyConstraint:
-            baseTableName: comment
-            baseColumnNames: uid
-            constraintName: fk_comment_user
-            referencedTableName: user
-            referencedColumnNames: uid
+            baseTableName: Events
+            baseColumnNames: activity_id
+            constraintName: fk_events_activity_id
+            referencedTableName: Activities
+            referencedColumnNames: activity_id
             onDelete: CASCADE
 
   - changeSet:
-      id: 8
+      id: 2-add-fk-tickets-event_id
       author: Ego
       changes:
         - addForeignKeyConstraint:
-            baseTableName: comment
-            baseColumnNames: pid
-            constraintName: fk_comment_post
-            referencedTableName: post
-            referencedColumnNames: pid
+            baseTableName: Tickets
+            baseColumnNames: event_id
+            constraintName: fk_tickets_event_id
+            referencedTableName: Events
+            referencedColumnNames: event_id
             onDelete: CASCADE
+
   - changeSet:
-      id: 9
+      id: 3-add-fk-activities-partner_id
       author: Ego
       changes:
         - addForeignKeyConstraint:
-            baseTableName: comment
-            baseColumnNames: parent_comment_id
-            constraintName: fk_comment_parent_comment
-            referencedTableName: comment
-            referencedColumnNames: cid
-            onDelete: SET NULL
+            baseTableName: Activities
+            baseColumnNames: partner_id
+            constraintName: fk_activities_partner_id
+            referencedTableName: Partners
+            referencedColumnNames: partner_id
+            onDelete: CASCADE
+
   - changeSet:
-      id: 10
-      author: Ego
-      changes:
-        - renameColumn:
-            tableName: post
-            oldColumnName: post
-            newColumnName: post_date
-            columnDataType: datetime
-  - changeSet:
-      id: 11
-      author: Ego
-      changes:
-        - addColumn:
-            tableName: emotion_record
-            columns:
-              - column:
-                  name: uid
-                  type: int
-                  constraints:
-                    nullable: false
-  - changeSet:
-      id: 12
+      id: 4-add-fk-activities-staff_id
       author: Ego
       changes:
         - addForeignKeyConstraint:
-            baseTableName: emotion_record
-            baseColumnNames: uid
-            constraintName: fk_emotion_record_user
-            referencedTableName: user
-            referencedColumnNames: uid
+            baseTableName: Activities
+            baseColumnNames: staff_id
+            constraintName: fk_activities_staff_id
+            referencedTableName: Customer_staffs
+            referencedColumnNames: staff_id
+            onDelete: CASCADE
+
+  - changeSet:
+      id: 5-add-fk-order-activity_id
+      author: Ego
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: Orders
+            baseColumnNames: activity_id
+            constraintName: fk_order_activity_id
+            referencedTableName: Activities
+            referencedColumnNames: activity_id
+            onDelete: CASCADE
+
+  - changeSet:
+      id: 6-add-fk-order-event_id
+      author: Ego
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: Orders
+            baseColumnNames: event_id
+            constraintName: fk_order_event_id
+            referencedTableName: Events
+            referencedColumnNames: event_id
+            onDelete: CASCADE
+
+  - changeSet:
+      id: 7-add-fk-order-ticket_id
+      author: Ego
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: Orders
+            baseColumnNames: ticket_id
+            constraintName: fk_order_ticket_id
+            referencedTableName: Tickets
+            referencedColumnNames: ticket_id
+            onDelete: CASCADE
+
+  - changeSet:
+      id: 8-add-fk-order-staff_id
+      author: Ego
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: Orders
+            baseColumnNames: staff_id
+            constraintName: fk_order_staff_id
+            referencedTableName: Customer_staffs
+            referencedColumnNames: staff_id
+            onDelete: CASCADE
+
+  - changeSet:
+      id: 9-add-fk-order-user_id
+      author: Ego
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: Orders
+            baseColumnNames: user_id
+            constraintName: fk_order_user_id
+            referencedTableName: Users
+            referencedColumnNames: user_id
+            onDelete: CASCADE
+
+  - changeSet:
+      id: 10-add-fk-notification-user_id
+      author: Ego
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: Notifications
+            baseColumnNames: user_id
+            constraintName: fk_notification_user_id
+            referencedTableName: Users
+            referencedColumnNames: user_id
+            onDelete: CASCADE
+
+  - changeSet:
+      id: 11-add-fk-notification-activity_id
+      author: Ego
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: Notifications
+            baseColumnNames: activity_id
+            constraintName: fk_notification_activity_id
+            referencedTableName: Activities
+            referencedColumnNames: activity_id
             onDelete: CASCADE

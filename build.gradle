@@ -65,6 +65,43 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
+
+
+// 为不同环境定义任务，复制并重命名相应的配置文件
+task prepareProdProperties(type: Copy) {
+	from 'src/main/resources'
+	include 'application.prod.properties'
+	rename 'application.prod.properties', 'application.properties'
+	into 'build/resources/main'
+}
+
+task prepareTestProperties(type: Copy) {
+	from 'src/main/resources'
+	include 'application.test.properties'
+	rename 'application.test.properties', 'application.properties'
+	into 'build/resources/main'
+}
+
+tasks.named('resolveMainClassName') {
+	dependsOn 'prepareTestProperties'
+}
+
+// 修改bootJar任务，在执行之前选择和准备正确的配置文件
+bootJar {
+//	dependsOn selectProperties
+	// 当运行selectProperties时，不直接执行任务，而是声明任务依赖
+	if (project.hasProperty('prod')) {
+		dependsOn 'prepareProdProperties'
+	} else if (project.hasProperty('test')) {
+		dependsOn 'prepareTestProperties'
+	}
+}
+
+// 确保在资源处理之前排除所有的application*.properties文件
+processResources {
+	exclude '**/application*.properties'
+}
+
 def jarname = String.format("%s-%s.jar",project.name,version)
 // 拷贝文件 dependsOn: bootJar 依赖springboot 插件的 bootJar打包命令
 task copyConfigFile(type: Copy, dependsOn: bootJar) {
@@ -76,8 +113,17 @@ task copyConfigFile(type: Copy, dependsOn: bootJar) {
 	// 重命名成我们要的名字
 	rename(jarname, project.name + '.jar')
 }
-// 依赖 clean 任务
+
 task buildTodoCoderJar(dependsOn: clean) {
 	dependsOn copyConfigFile
+	doLast {
+		if (project.hasProperty('prod')) {
+			println 'Production properties file selected.'
+		} else if (project.hasProperty('test')) {
+			println 'Test properties file selected.'
+		} else {
+			println 'No specific properties file selected; default configuration applied.'
+		}
+	}
 }
 
