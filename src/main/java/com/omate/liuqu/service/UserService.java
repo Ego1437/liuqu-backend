@@ -32,12 +32,15 @@ public class UserService {
      */
     public UserDTO convertToDto(User user) {
         UserDTO userDTO = new UserDTO();
-        userDTO.setUid(user.getUid());
-        userDTO.setUsername(user.getUsername());
-        userDTO.setEmail(user.getEmail());
-        userDTO.setPhone(user.getPhone());
+        userDTO.setUserId(user.getUserId());
+        userDTO.setUserName(user.getUserName());
+        userDTO.setUserEmail(user.getUserEmail());
+        userDTO.setUserTel(user.getUserTel());
         userDTO.setGender(user.getGender());
-        userDTO.setPersonalDescription(user.getPersonalDescription());
+        userDTO.setAddress(user.getAddress());
+        userDTO.setAvatarPath(user.getAvatarPath());
+        userDTO.setPostcode(user.getPostcode());
+        userDTO.setIsSubscribe(user.getIsSubscribe());
         return userDTO;
     }
 
@@ -52,13 +55,13 @@ public class UserService {
         // Define a regex pattern for email validation
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
         Pattern pattern = Pattern.compile(emailRegex);
-        Matcher matcher = pattern.matcher(user.getEmail());
+        Matcher matcher = pattern.matcher(user.getUserEmail());
         // Check if email format is valid
         if (!matcher.matches()) {
             result.setResultFailed(9);
             return result;
         }
-        Optional<User> getUser = userRepository.findByEmail(user.getEmail());
+        Optional<User> getUser = userRepository.findByEmail(user.getUserEmail());
         if (getUser.isPresent()) {
             result.setResultFailed(2);
             return result;
@@ -101,7 +104,7 @@ public class UserService {
 
 
 
-    public UserDTO findUserById(Integer uid) {
+    public UserDTO findUserById(Long uid) {
         User user = userRepository.findById(uid).orElse(null);
         if (user != null) {
 
@@ -119,27 +122,39 @@ public class UserService {
         return user;
 
     }
-    public User updateUser(Integer id, User updatedUser) {
+    public User updateUser(Long id, User updatedUser) {
         return userRepository.findById(id)
                 .map(user -> {
-                    if (updatedUser.getPersonalDescription() != null && !updatedUser.getPersonalDescription().isEmpty()) {
-                        user.setPersonalDescription(updatedUser.getPersonalDescription());
+                    if (updatedUser.getAddress() != null && !updatedUser.getAddress().isEmpty()) {
+                        user.setAddress(updatedUser.getAddress());
                     }
 
-                    if (updatedUser.getHobby() != null && !updatedUser.getHobby().isEmpty()) {
-                        user.setHobby(updatedUser.getHobby());
+                    if (updatedUser.getAvatarPath() != null && !updatedUser.getAvatarPath().isEmpty()) {
+                        user.setAvatarPath(updatedUser.getAvatarPath());
+                    }
+
+                    if (updatedUser.getUserEmail() != null && !updatedUser.getUserEmail().isEmpty()) {
+                        user.setUserEmail(updatedUser.getUserEmail());
+                    }
+
+                    if (updatedUser.getUserTel() != null && !updatedUser.getUserTel().isEmpty()) {
+                        user.setUserTel(updatedUser.getUserTel());
+                    }
+
+                    if (updatedUser.getUserName() != null && !updatedUser.getUserName().isEmpty()) {
+                        user.setUserName(updatedUser.getUserName());
                     }
 
                     if (updatedUser.getGender() != null && !updatedUser.getGender().isEmpty()) {
                         user.setGender(updatedUser.getGender());
                     }
 
-                    if (updatedUser.getPhone() != null && !updatedUser.getPhone().isEmpty()) {
-                        user.setPhone(updatedUser.getPhone());
+                    if (updatedUser.getPostcode() != null) {
+                        user.setPostcode(updatedUser.getPostcode());
                     }
 
-                    if (updatedUser.getUsername() != null && !updatedUser.getUsername().isEmpty()) {
-                        user.setUsername(updatedUser.getUsername());
+                    if (updatedUser.getIsSubscribe() != null) {
+                        user.setIsSubscribe(updatedUser.getIsSubscribe());
                     }
 
                     return userRepository.save(user);

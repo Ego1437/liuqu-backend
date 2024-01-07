@@ -61,19 +61,17 @@ public class EventController {
 
     @DeleteMapping("/events/{eid}")
     public ResponseEntity<Result> deletePost(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                             @PathVariable Integer eid) {
+                                             @PathVariable Long eid) {
 
 
         token = token.replace("Bearer ", "");
         UserDTO userDTO = JWTManager.getDataFromToken(token, "user", UserDTO.class);
         Result result = new Result();
-        if (userDTO == null || !userDTO.getUserType().equals("Admin")) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
+
         if (!eventService.existsById(eid)){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        boolean isDeleted = eventService.deleteEvent(eid, userDTO.getUid());
+        boolean isDeleted = eventService.deleteEvent(eid, userDTO.getUserId());
         if (!isDeleted) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }

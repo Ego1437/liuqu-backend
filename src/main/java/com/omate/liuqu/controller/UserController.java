@@ -42,14 +42,16 @@ public class UserController {
      */
     public UserDTO convertToDto(User user) {
         UserDTO userDTO = new UserDTO();
-        userDTO.setUid(user.getUid());
-        userDTO.setUsername(user.getUsername());
-        userDTO.setEmail(user.getEmail());
-        userDTO.setPhone(user.getPhone());
-        userDTO.setHobby(user.getHobby());
+        userDTO.setUserId(user.getUserId());
+        userDTO.setUserName(user.getUserName());
+        userDTO.setUserEmail(user.getUserEmail());
+        userDTO.setUserTel(user.getUserTel());
         userDTO.setGender(user.getGender());
-        userDTO.setPersonalDescription(user.getPersonalDescription());
-        userDTO.setUserType(user.getUserType());
+        userDTO.setAge(user.getAge());
+        userDTO.setAvatarPath(user.getAvatarPath());
+        userDTO.setPostcode(user.getPostcode());
+        userDTO.setAddress(user.getAddress());
+        userDTO.setIsSubscribe(user.getIsSubscribe());
         return userDTO;
     }
 
@@ -108,7 +110,7 @@ public class UserController {
             return new ResponseEntity<>(result, HttpStatus.UNAUTHORIZED);
         }
 
-        UserDTO updatedUserDTO = convertToDto(userRepository.findById(userDTO.getUid()).orElse(null));
+        UserDTO updatedUserDTO = convertToDto(userRepository.findById(userDTO.getUserId()).orElse(null));
 
         if (updatedUserDTO == null) {
             result.setResultFailed(3);
@@ -136,14 +138,14 @@ public class UserController {
 
         if (user != null) {
             String token = JWTManager.createToken(new Date(System.currentTimeMillis() + 1000 * 60 * 15), // 15 minutes
-                    Map.of("uid", user.getUid()));
+                    Map.of("uid", user.getUserId()));
 
             String resetPasswordLink = "%BASE_URL%/reset-password/" + token + "/";
 
             try {
                 EmailManager.sendEmail(emailOrPhone,
-                        "Reset password for " + user.getUsername(),
-                        "Hello " + user.getUsername() + "!" + "<br><br>" +
+                        "Reset password for " + user.getUserName(),
+                        "Hello " + user.getUserName() + "!" + "<br><br>" +
                                 " Please follow this link to reset your password: " + "<br>" +
                                 " <a href=\"" + resetPasswordLink + "\">" + resetPasswordLink + "</a>" + "<br><br>" +
                                 " The link will expire in 15 minutes." + "<br><br>" +
@@ -171,7 +173,7 @@ public class UserController {
             return new ResponseEntity<>(result, HttpStatus.UNAUTHORIZED);
         }
 
-        int uid = JWTManager.getDataFromToken(resetPasswordToken, "uid", Integer.class);
+        Long uid = JWTManager.getDataFromToken(resetPasswordToken, "uid", Long.class);
 
         if (uid == 0) {
             result.setResultFailed(4);
@@ -213,7 +215,7 @@ public class UserController {
             return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         }
 
-        int uid = JWTManager.getDataFromToken(resetPasswordToken, "uid", Integer.class);
+        Long uid = JWTManager.getDataFromToken(resetPasswordToken, "uid", Long.class);
 
         if (uid == 0) {
             result.setResultFailed(4);
@@ -237,7 +239,7 @@ public class UserController {
 
 
     @GetMapping("users/{id}")
-    public ResponseEntity<Result> getUserById(@PathVariable Integer id) {
+    public ResponseEntity<Result> getUserById(@PathVariable Long id) {
         Result result = new Result();
 
         Map<String, Object> resultMap = new HashMap<>();
@@ -258,7 +260,7 @@ public class UserController {
 
     }
     @PutMapping(value = "/users/{id}", consumes = { "multipart/form-data" })
-    public ResponseEntity<Result> updateUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Integer id,User updatedUser) {
+    public ResponseEntity<Result> updateUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long id,User updatedUser) {
         Result result = new Result();
 
         if (token == null || token.isEmpty() || !JWTManager.checkToken(token.substring(7), id)) {

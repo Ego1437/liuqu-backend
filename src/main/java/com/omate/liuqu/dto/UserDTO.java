@@ -4,37 +4,44 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO {
-    private Integer uid;
-    private String username;
-    private String email;
-    private String phone;
-    private String personalDescription;
-    private String gender;
-    private String avatarPath;
-    private String userType;
-
-    public String getUserType() {
-        return userType;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUserType(String userType) {
-        this.userType = userType;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public String getAvatarPath() {
-        return avatarPath;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setAvatarPath(String avatar_path) {
-        this.avatarPath = avatar_path;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public String getPersonalDescription() {
-        return personalDescription;
+    public String getUserEmail() {
+        return userEmail;
     }
 
-    public void setPersonalDescription(String personal_description) {
-        this.personalDescription = personal_description;
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+    public String getUserTel() {
+        return userTel;
+    }
+
+    public void setUserTel(String userTel) {
+        this.userTel = userTel;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
     }
 
     public String getGender() {
@@ -45,58 +52,49 @@ public class UserDTO {
         this.gender = gender;
     }
 
-    public String getHobby() {
-        return hobby;
+    public String getAvatarPath() {
+        return avatarPath;
     }
 
-    public void setHobby(String hobby) {
-        this.hobby = hobby;
+    public void setAvatarPath(String avatarPath) {
+        this.avatarPath = avatarPath;
     }
 
-    private String hobby;
-// getters and setters
-
-    public Integer getUid() {
-        return uid;
+    public String getAddress() {
+        return address;
     }
 
-    public void setUid(Integer uid) {
-        this.uid = uid;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-
-    public String getUsername() {
-        return username;
+    public Integer getPostcode() {
+        return postcode;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setPostcode(Integer postcode) {
+        this.postcode = postcode;
     }
 
-    public String getEmail() {
-        return email;
+    public Integer getIsSubscribe() {
+        return isSubscribe;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setIsSubscribe(Integer isSubscribe) {
+        this.isSubscribe = isSubscribe;
     }
 
-    public String getPhone() {
-        return phone;
-    }
+    private Long userId;
+    private String userName;
+    private String userEmail;
+    private String userTel;
+    private Integer age;
+    private String gender;
+    private String avatarPath;
+    private String address;
+    private Integer postcode;
+    private Integer isSubscribe;
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
 
-    // Override toString() if needed for debugging or logging
-    @Override
-    public String toString() {
-        return "UserDTO{" +
-                "uid=" + uid +
-                ", username='" + username + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                '}';
-    }
+
 }

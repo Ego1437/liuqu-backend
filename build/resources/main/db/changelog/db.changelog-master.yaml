@@ -5,7 +5,7 @@ databaseChangeLog:
       changes:
 #       User table
         - createTable:
-            tableName: Users
+            tableName: users
             columns:
                 - column:
                     name: user_id
@@ -61,11 +61,17 @@ databaseChangeLog:
       author: Ego
       changes:
         - createTable:
-            tableName: Activities
+            tableName: activities
             columns:
               - column:
                   name: activity_id
                   type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: activity_name
+                  type: varchar(255)
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -125,7 +131,7 @@ databaseChangeLog:
       author: Ego
       changes:
         - createTable:
-            tableName: Events
+            tableName: events
             columns:
               - column:
                   name: event_id
@@ -173,7 +179,7 @@ databaseChangeLog:
       author: Ego
       changes:
         - createTable:
-            tableName: Tickets
+            tableName: tickets
             columns:
               - column:
                   name: ticket_id
@@ -209,7 +215,7 @@ databaseChangeLog:
       author: Ego
       changes:
         - createTable:
-            tableName: Orders
+            tableName: orders
             columns:
               - column:
                   name: order_id
@@ -273,7 +279,7 @@ databaseChangeLog:
       author: Ego
       changes:
         - createTable:
-            tableName: Notifications
+            tableName: notifications
             columns:
               - column:
                   name: notification_id
@@ -305,7 +311,7 @@ databaseChangeLog:
       author: Ego
       changes:
         - createTable:
-            tableName: Customer_staffs
+            tableName: customer_staffs
             columns:
               - column:
                   name: staff_id
@@ -343,7 +349,7 @@ databaseChangeLog:
       author: your_username
       changes:
         - createTable:
-            tableName: Tags
+            tableName: tags
             columns:
               - column:
                   name: tag_id
@@ -367,7 +373,7 @@ databaseChangeLog:
       author: your_username
       changes:
         - createTable:
-            tableName: Partners
+            tableName: partners
             columns:
               - column:
                   name: partner_id
@@ -422,7 +428,7 @@ databaseChangeLog:
       author: Ego
       changes:
         - addForeignKeyConstraint:
-            baseTableName: Events
+            baseTableName: events
             baseColumnNames: activity_id
             constraintName: fk_events_activity_id
             referencedTableName: Activities
@@ -434,10 +440,10 @@ databaseChangeLog:
       author: Ego
       changes:
         - addForeignKeyConstraint:
-            baseTableName: Tickets
+            baseTableName: tickets
             baseColumnNames: event_id
             constraintName: fk_tickets_event_id
-            referencedTableName: Events
+            referencedTableName: events
             referencedColumnNames: event_id
             onDelete: CASCADE
 
@@ -446,10 +452,10 @@ databaseChangeLog:
       author: Ego
       changes:
         - addForeignKeyConstraint:
-            baseTableName: Activities
+            baseTableName: activities
             baseColumnNames: partner_id
             constraintName: fk_activities_partner_id
-            referencedTableName: Partners
+            referencedTableName: partners
             referencedColumnNames: partner_id
             onDelete: CASCADE
 
@@ -458,10 +464,10 @@ databaseChangeLog:
       author: Ego
       changes:
         - addForeignKeyConstraint:
-            baseTableName: Activities
+            baseTableName: activities
             baseColumnNames: staff_id
             constraintName: fk_activities_staff_id
-            referencedTableName: Customer_staffs
+            referencedTableName: customer_staffs
             referencedColumnNames: staff_id
             onDelete: CASCADE
 
@@ -470,10 +476,10 @@ databaseChangeLog:
       author: Ego
       changes:
         - addForeignKeyConstraint:
-            baseTableName: Orders
+            baseTableName: orders
             baseColumnNames: activity_id
             constraintName: fk_order_activity_id
-            referencedTableName: Activities
+            referencedTableName: activities
             referencedColumnNames: activity_id
             onDelete: CASCADE
 
@@ -482,10 +488,10 @@ databaseChangeLog:
       author: Ego
       changes:
         - addForeignKeyConstraint:
-            baseTableName: Orders
+            baseTableName: orders
             baseColumnNames: event_id
             constraintName: fk_order_event_id
-            referencedTableName: Events
+            referencedTableName: events
             referencedColumnNames: event_id
             onDelete: CASCADE
 
@@ -494,10 +500,10 @@ databaseChangeLog:
       author: Ego
       changes:
         - addForeignKeyConstraint:
-            baseTableName: Orders
+            baseTableName: orders
             baseColumnNames: ticket_id
             constraintName: fk_order_ticket_id
-            referencedTableName: Tickets
+            referencedTableName: tickets
             referencedColumnNames: ticket_id
             onDelete: CASCADE
 
@@ -506,10 +512,10 @@ databaseChangeLog:
       author: Ego
       changes:
         - addForeignKeyConstraint:
-            baseTableName: Orders
+            baseTableName: orders
             baseColumnNames: staff_id
             constraintName: fk_order_staff_id
-            referencedTableName: Customer_staffs
+            referencedTableName: customer_staffs
             referencedColumnNames: staff_id
             onDelete: CASCADE
 
@@ -518,10 +524,10 @@ databaseChangeLog:
       author: Ego
       changes:
         - addForeignKeyConstraint:
-            baseTableName: Orders
+            baseTableName: orders
             baseColumnNames: user_id
             constraintName: fk_order_user_id
-            referencedTableName: Users
+            referencedTableName: users
             referencedColumnNames: user_id
             onDelete: CASCADE
 
@@ -530,10 +536,10 @@ databaseChangeLog:
       author: Ego
       changes:
         - addForeignKeyConstraint:
-            baseTableName: Notifications
+            baseTableName: notifications
             baseColumnNames: user_id
             constraintName: fk_notification_user_id
-            referencedTableName: Users
+            referencedTableName: users
             referencedColumnNames: user_id
             onDelete: CASCADE
 
@@ -542,9 +548,9 @@ databaseChangeLog:
       author: Ego
       changes:
         - addForeignKeyConstraint:
-            baseTableName: Notifications
+            baseTableName: notifications
             baseColumnNames: activity_id
             constraintName: fk_notification_activity_id
-            referencedTableName: Activities
+            referencedTableName: activities
             referencedColumnNames: activity_id
             onDelete: CASCADE

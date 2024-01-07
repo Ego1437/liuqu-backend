@@ -1,36 +1,42 @@
 package com.omate.liuqu.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
-@Entity // This tells Hibernate to make a table out of this class
+@Entity
+@Table(name = "User")
 public class User {
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Integer uid;
 
-    @NotBlank(message = "Username is mandatory")
-    private String username;
-//    @NotBlank(message = "Email is mandatory")
-    private String email;
-    @NotBlank(message = "Phone is mandatory")
-    private String phone;
-//    @NotBlank(message = "Password is mandatory")
-    private String password;
-//    @NotBlank(message = "AvatarPath is mandatory")
-    private String avatarPath = "http://13.236.138.98:8082/api/view/cHJvZmlsZS1waWN0dXJl_1698819116508.jpg";
-    @NotBlank(message = "UserType is mandatory")
-    private String userType;
-
-    public String getUserType() {
-        return userType;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUserType(String userType) {
-        this.userType = userType;
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserTel() {
+        return userTel;
+    }
+
+    public void setUserTel(String userTel) {
+        this.userTel = userTel;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     public String getAvatarPath() {
@@ -41,69 +47,6 @@ public class User {
         this.avatarPath = avatarPath;
     }
 
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    private String gender;
-
-    public String getPersonalDescription() {
-        return personalDescription;
-    }
-
-    public void setPersonalDescription(String personal_description) {
-        this.personalDescription = personal_description;
-    }
-
-    public String getHobby() {
-        return hobby;
-    }
-
-    public void setHobby(String hobby) {
-        this.hobby = hobby;
-    }
-
-    private String personalDescription;
-    private String hobby;
-
-
-    public Integer getUid() {
-        return uid;
-    }
-
-    public void setUid(Integer uid) {
-        this.uid = uid;
-    }
-
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -112,6 +55,77 @@ public class User {
         this.password = password;
     }
 
+    public Integer getAge() {
+        return age;
+    }
 
+    public void setAge(Integer age) {
+        this.age = age;
+    }
 
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Integer getPostcode() {
+        return postcode;
+    }
+
+    public void setPostcode(Integer postcode) {
+        this.postcode = postcode;
+    }
+
+    public Integer getIsSubscribe() {
+        return isSubscribe;
+    }
+
+    public void setIsSubscribe(Integer isSubscribe) {
+        this.isSubscribe = isSubscribe;
+    }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long userId;
+
+    @Column(length = 50, nullable = false)
+    private String userName;
+
+    @Column(length = 20, nullable = false)
+    private String userTel;
+
+    @Column(length = 30, nullable = false)
+    private String userEmail;
+
+    private String avatarPath = "http://13.236.138.98:8082/api/view/cHJvZmlsZS1waWN0dXJl_1698819116508.jpg";
+    @NotBlank(message = "UserType is mandatory")
+
+    @Column(length = 20)
+    private String password;
+
+    private Integer age;
+
+    @Column(length = 10)
+    private String gender;
+
+    @Column(length = 100)
+    private String address;
+
+    private Integer postcode;
+
+    @Column(name = "is_subscribe")
+    private Integer isSubscribe;
+
+    // getter和setter方法
 }
