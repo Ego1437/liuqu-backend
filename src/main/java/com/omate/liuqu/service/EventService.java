@@ -23,16 +23,13 @@ public class EventService {
     }
 
     public Event createEvent(Event event, UserDTO userDTO){
-        Integer uid = userDTO.getUid();
+        Long uid = userDTO.getUserId();
         User user = userRepository.findById(uid).orElse(null);
-        if(!user.getUserType().equals("Admin")){
-            return null;
-        }
         eventRepository.save(event);
         return event;
     }
 
-    public boolean deleteEvent(Integer eid, Integer uid) {
+    public boolean deleteEvent(Long eid, Long uid) {
         Optional<Event> event = eventRepository.findById(eid);
         if (event.isPresent() && event.get().getUid().equals(uid)) {
             eventRepository.deleteById(eid);
@@ -41,7 +38,7 @@ public class EventService {
         return false;
     }
 
-    public boolean existsById(Integer eid) {
+    public boolean existsById(Long eid) {
         return eventRepository.existsById(eid);
     }
 

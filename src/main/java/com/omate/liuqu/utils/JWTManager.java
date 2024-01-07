@@ -98,11 +98,11 @@ public class JWTManager {
         }
     }
 
-    public static boolean checkToken(String token, Integer id) {
+    public static boolean checkToken(String token, Long id) {
 
         UserDTO userDTO = JWTManager.getDataFromToken(token, "user", UserDTO.class);
 
-        if (userDTO.getUid() != id) {
+        if (userDTO.getUserId() != id) {
             return false;
         }
         return true;

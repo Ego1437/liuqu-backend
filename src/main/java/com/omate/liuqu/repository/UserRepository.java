@@ -9,11 +9,11 @@ import java.util.Optional;
 // This will be AUTO IMPLEMENTED by Spring into a Bean called userRepository
 // CRUD refers Create, Read, Update, Delete
 @Repository
-public interface UserRepository extends CrudRepository<User, Integer> {
+public interface UserRepository extends CrudRepository<User, Long> {
 
     Optional<User> findByEmail(String email);
 
-    Optional<User> findById(Integer id);
+    Optional<User> findById(Long id);
 
     Optional<Object> findByPhone(String Phone);
 
