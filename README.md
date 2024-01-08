@@ -67,3 +67,4 @@
 1. 使用 `${SSH_PRIVATE_KEY}` 环境变量引用 secret 中存储的私钥并验证会导致验证失败而无法登录 EC2。
 2. 运行 Gradle 任务时存在性能问题，`task:compileJava` 用时约两分钟左右，整个 Action 用时约 3 分钟，推测为依赖同步问题导致。
 3. `application.properties` 和 `application.test.properties` 无法达到配置 SpringBoot 的目的。如本地无其他配置文件，请使用 `application.yml`。
+4. 使用此 GitHub Actions 时，必须保证 main 分支也有对应的 yml 文件，否则无法运行。
