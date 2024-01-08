@@ -61,7 +61,7 @@ public class UserService {
             result.setResultFailed(9);
             return result;
         }
-        Optional<User> getUser = userRepository.findByEmail(user.getUserEmail());
+        Optional<User> getUser = userRepository.findByUserEmail(user.getUserEmail());
         if (getUser.isPresent()) {
             result.setResultFailed(2);
             return result;
@@ -85,8 +85,8 @@ public class UserService {
         // Encode login password
         String hashedPassword = passwordEncoder.encode(plainPassword);
         // validate password
-        User user = userRepository.findByEmail(emailOrPhone)
-                .orElse((User) userRepository.findByPhone(emailOrPhone).orElse(null));
+        User user = userRepository.findByUserEmail(emailOrPhone)
+                .orElse((User) userRepository.findByUserTel(emailOrPhone).orElse(null));
         if (user != null && passwordEncoder.matches(plainPassword, user.getPassword())) { // Encrypted passwords should
                                                                                           // be used in practical
                                                                                           // applications
@@ -118,7 +118,7 @@ public class UserService {
     }
 
     public User findUserByEmail(String email) {
-        User user = userRepository.findByEmail(email).orElse(null);
+        User user = userRepository.findByUserEmail(email).orElse(null);
         return user;
 
     }

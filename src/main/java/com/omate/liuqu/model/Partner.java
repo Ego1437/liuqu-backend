@@ -11,13 +11,6 @@ import java.util.Date;
 @Table(name = "Partners")
 public class Partner {
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getBusinessName() {
         return businessName;
@@ -91,10 +84,18 @@ public class Partner {
         this.description = description;
     }
 
+    public Long getPartnerId() {
+        return partnerId;
+    }
+
+    public void setPartnerId(Long partnerId) {
+        this.partnerId = partnerId;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "partner_id", nullable = false)
-    private Long id;
+    private Long partnerId;
 
     @Column(name = "b_name", nullable = false, length = 50)
     private String businessName;
@@ -121,8 +122,20 @@ public class Partner {
     @Column(name = "postcode")
     private Integer postcode;
 
-    @Column(name = "decription", length = 200)
+    @Column(name = "description", length = 200)
     private String description;
 
+    public PartnerStaff getPartnerStaff() {
+        return partnerStaff;
+    }
+
+    public void setPartnerStaff(PartnerStaff partnerStaff) {
+        this.partnerStaff = partnerStaff;
+    }
+
+    // 假设staff_id关联到Customer_staff表的staff_id
+    @ManyToOne
+    @JoinColumn(name = "partner_staff_id", referencedColumnName = "partner_staff_id")
+    private PartnerStaff partnerStaff;
     // Getters and setters for all fields
 }

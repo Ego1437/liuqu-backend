@@ -3,11 +3,12 @@ package com.omate.liuqu.model;
 import jakarta.persistence.*;
 
 import java.util.List;
-import java.util.Date;
+import java.util.Set;
+
 import jakarta.persistence.Entity;
 
 @Entity
-@Table(name = "activity")
+@Table(name = "activities")
 public class Activity {
 
     public Long getActivityId() {
@@ -34,13 +35,6 @@ public class Activity {
         this.staff = staff;
     }
 
-    public List<Integer> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<Integer> tags) {
-        this.tags = tags;
-    }
 
     public Integer getActivityType() {
         return activityType;
@@ -98,16 +92,17 @@ public class Activity {
         this.activityStatus = activityStatus;
     }
 
-    public Date getEventTime() {
-        return eventTime;
+    public Set<Tag> getTags() {
+        return tags;
     }
 
-    public void setEventTime(Date eventTime) {
-        this.eventTime = eventTime;
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "activity_id")
     private Long activityId;
 
     // 假设partner_id关联到Partner表的partner_id
@@ -117,11 +112,11 @@ public class Activity {
 
     // 假设staff_id关联到Customer_staff表的staff_id
     @ManyToOne
-    @JoinColumn(name = "staff_id", referencedColumnName = "staff_id")
+    @JoinColumn(name = "customer_staff_id", referencedColumnName = "customer_staff_id")
     private CustomerStaff staff;
 
-    @ElementCollection
-    private List<Integer> tags; // 如果tags是一个简单的逗号分隔的字符串列表
+//    @ElementCollection
+//    private List<Integer> tags; // 如果tags是一个简单的逗号分隔的字符串列表
     private Integer activityType;
 
     // 如果activityImage是一个JSON数组或其他复杂结构，需要适当处理
@@ -142,8 +137,23 @@ public class Activity {
 
     private Integer activityStatus;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date eventTime;
-
+    @ManyToMany
+    @JoinTable(
+            name = "activity_tags",
+            joinColumns = @JoinColumn(name = "activity_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private Set<Tag> tags;
     // getters and setters
+
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
+    }
+
+    @OneToMany(mappedBy = "activity")
+    private List<Event> events;
 }

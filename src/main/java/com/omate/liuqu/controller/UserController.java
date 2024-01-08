@@ -67,7 +67,7 @@ public class UserController {
 
         String hashedPassword = passwordEncoder.encode(password);
 
-        User user = userRepository.findByEmail(email).orElse(null);
+        User user = userRepository.findByUserEmail(email).orElse(null);
         Result result = new Result();
 
         if (user != null && passwordEncoder.matches(password, user.getPassword())) { // Encrypted passwords should
@@ -133,8 +133,8 @@ public class UserController {
 
     @PostMapping("/forgot-password")
     public ResponseEntity<Result> forgotPassword(@RequestParam String emailOrPhone) {
-        User user = userRepository.findByEmail(emailOrPhone)
-                .orElse((User) userRepository.findByPhone(emailOrPhone).orElse(null));
+        User user = userRepository.findByUserEmail(emailOrPhone)
+                .orElse((User) userRepository.findByUserTel(emailOrPhone).orElse(null));
 
         if (user != null) {
             String token = JWTManager.createToken(new Date(System.currentTimeMillis() + 1000 * 60 * 15), // 15 minutes
@@ -196,7 +196,7 @@ public class UserController {
     @PostMapping("/change-password")
     public ResponseEntity<Void> resetPassword(@RequestParam String email, @RequestParam String password){
         Result result = new Result();
-        User user = userRepository.findByEmail(email).orElse(null);
+        User user = userRepository.findByUserEmail(email).orElse(null);
         if(user != null) {
             String hashedPassword = passwordEncoder.encode(password);
             user.setPassword(hashedPassword);

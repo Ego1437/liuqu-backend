@@ -10,6 +10,7 @@ databaseChangeLog:
                 - column:
                     name: user_id
                     type: bigint
+                    autoIncrement: true
                     constraints:
                       primaryKey: true
                       nullable: false
@@ -66,6 +67,7 @@ databaseChangeLog:
               - column:
                   name: activity_id
                   type: bigint
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -81,16 +83,16 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: staff_id
+                  name: customer_staff_id
                   type: int
                   constraints:
                     nullable: false
-              - column:
-                  name: tags
-                  type: varchar(255)  # Adjust this type based on your specific DB support for arrays
-                  constraints:
-                    remarks: "活动标签"
-                    nullable: false
+#              - column:
+#                  name: tags
+#                  type: varchar(255)  # Adjust this type based on your specific DB support for arrays
+#                  constraints:
+#                    remarks: "活动标签"
+#                    nullable: false
               - column:
                   name: activity_type
                   type: int
@@ -120,11 +122,7 @@ databaseChangeLog:
                   constraints:
                     remarks: "活动状态"
                     nullable: false
-              - column:
-                  name: event_id
-                  type: bigint
-                  constraints:
-                    nullable: false
+
 
   - changeSet:
       id: 3-create-events-table
@@ -136,6 +134,7 @@ databaseChangeLog:
               - column:
                   name: event_id
                   type: bigint
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -184,6 +183,7 @@ databaseChangeLog:
               - column:
                   name: ticket_id
                   type: bigint
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -220,6 +220,7 @@ databaseChangeLog:
               - column:
                   name: order_id
                   type: bigint
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -239,7 +240,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: staff_id
+                  name: customer_staff_id
                   type: int
                   constraints:
                     nullable: false
@@ -284,6 +285,7 @@ databaseChangeLog:
               - column:
                   name: notification_id
                   type: bigint
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -307,70 +309,8 @@ databaseChangeLog:
                   type: varchar(100)
 
   - changeSet:
-      id: 7-create-customer-staff-table
+      id: 7-create-partners-table
       author: Ego
-      changes:
-        - createTable:
-            tableName: customer_staffs
-            columns:
-              - column:
-                  name: staff_id
-                  type: int
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
-                  name: staff_name
-                  type: char(50)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: staff_tel
-                  type: varchar(20)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: staff_email
-                  type: varchar(30)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: password
-                  type: varchar(20)
-              - column:
-                  name: age
-                  type: int
-              - column:
-                  name: gender
-                  type: varchar(10)
-
-  - changeSet:
-      id: 8-create-tags-table
-      author: your_username
-      changes:
-        - createTable:
-            tableName: tags
-            columns:
-              - column:
-                  name: tag_id
-                  type: int
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
-                  name: tag_name
-                  type: varchar(200)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: parent_type
-                  type: int
-                  constraints:
-                    nullable: false
-
-  - changeSet:
-      id: 9-create-partners-table
-      author: your_username
       changes:
         - createTable:
             tableName: partners
@@ -378,17 +318,15 @@ databaseChangeLog:
               - column:
                   name: partner_id
                   type: bigint
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: staff_id
+                  name: partner_staff_id
                   type: int
                   constraints:
                     nullable: false
-              - column:
-                  name: activity_id
-                  type: bigint
               - column:
                   name: b_name
                   type: char(50)
@@ -420,8 +358,145 @@ databaseChangeLog:
                   name: postcode
                   type: int
               - column:
-                  name: decription
+                  name: description
                   type: varchar(200)
+
+  - changeSet:
+      id: 9-create-customer-staff-table
+      author: Ego
+      changes:
+        - createTable:
+            tableName: customer_staffs
+            columns:
+              - column:
+                  name: customer_staff_id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: staff_name
+                  type: char(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: staff_tel
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: staff_email
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(20)
+              - column:
+                  name: age
+                  type: int
+              - column:
+                  name: gender
+                  type: varchar(10)
+              - column:
+                  name: partner_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_customer_staffs_partners
+                    references: partners(partner_id)
+
+
+  - changeSet:
+      id: 10-create-partners-table
+      author: Ego
+      changes:
+        - createTable:
+            tableName: partner_staffs
+            columns:
+              - column:
+                  name: partner_staff_id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: staff_name
+                  type: char(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: staff_type
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: staff_tel
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: staff_email
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(20)
+              - column:
+                  name: age
+                  type: int
+              - column:
+                  name: gender
+                  type: varchar(10)
+
+  - changeSet:
+      id: 11-create-tags-dictionary-table
+      author: Ego
+      changes:
+        - createTable:
+            tableName: tags
+            columns:
+              - column:
+                  name: tag_id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: tag_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+  - changeSet:
+      id: 12-create-activity-tags-table
+      author: Ego
+      changes:
+        - createTable:
+            tableName: activity_tags
+            columns:
+              - column:
+                  name: activity_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_activity_tags_activities
+                    references: activities(activity_id)
+              - column:
+                  name: tag_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_activity_tags_tags
+                    references: tags(tag_id)
+        - addPrimaryKey:
+            tableName: activity_tags
+            columnNames: activity_id, tag_id
 
   - changeSet:
       id: 1-add-fk-events-activity_id
@@ -465,10 +540,10 @@ databaseChangeLog:
       changes:
         - addForeignKeyConstraint:
             baseTableName: activities
-            baseColumnNames: staff_id
+            baseColumnNames: customer_staff_id
             constraintName: fk_activities_staff_id
             referencedTableName: customer_staffs
-            referencedColumnNames: staff_id
+            referencedColumnNames: customer_staff_id
             onDelete: CASCADE
 
   - changeSet:
@@ -513,10 +588,10 @@ databaseChangeLog:
       changes:
         - addForeignKeyConstraint:
             baseTableName: orders
-            baseColumnNames: staff_id
+            baseColumnNames: customer_staff_id
             constraintName: fk_order_staff_id
             referencedTableName: customer_staffs
-            referencedColumnNames: staff_id
+            referencedColumnNames: customer_staff_id
             onDelete: CASCADE
 
   - changeSet:
@@ -554,3 +629,142 @@ databaseChangeLog:
             referencedTableName: activities
             referencedColumnNames: activity_id
             onDelete: CASCADE
+
+  - changeSet:
+      id: 12-add-fk-partner_staffs-partner
+      author: Ego
+      changes:
+        - addForeignKeyConstraint:
+            constraintName: fk_partner_staffs_partner
+            baseTableName: partners
+            baseColumnNames: partner_staff_id
+            referencedTableName: partner_staffs
+            referencedColumnNames: partner_staff_id
+
+  - changeSet:
+      id: 1-insert-default-tags
+      author: Ego
+      changes:
+        - insert:
+            tableName: tags
+            columns:
+              - column:
+                  name: tag_name
+                  value: "机制"
+        - insert:
+            tableName: tags
+            columns:
+              - column:
+                  name: tag_name
+                  value: "欢乐"
+        - insert:
+            tableName: tags
+            columns:
+              - column:
+                  name: tag_name
+                  value: "烧脑"
+        - insert:
+            tableName: tags
+            columns:
+              - column:
+                  name: tag_name
+                  value: "恐怖"
+        - insert:
+            tableName: tags
+            columns:
+              - column:
+                  name: tag_name
+                  value: "沉浸"
+
+  - changeSet:
+      id: 2-insert-default-partner-staff
+      author: your_name
+      changes:
+        - insert:
+            tableName: partner_staffs
+            columns:
+              - column:
+                  name: staff_name
+                  value: "Default Partner Staff"
+              - column:
+                  name: staff_type
+                  value: "1"
+              - column:
+                  name: staff_tel
+                  value: "1234567890"
+              - column:
+                  name: staff_email
+                  value: "partnerstaff@example.com"
+              - column:
+                  name: password
+                  value: "securepassword"
+              - column:
+                  name: age
+                  value: "30"
+              - column:
+                  name: gender
+                  value: "Non-Binary"
+
+  - changeSet:
+      id: 3-insert-default-partner
+      author: Ego
+      changes:
+        - insert:
+            tableName: partners
+            columns:
+              - column:
+                  name: b_name
+                  value: "Default Partner Business"
+              - column:
+                  name: b_tel
+                  value: "0987654321"
+              - column:
+                  name: b_email
+                  value: "partner@example.com"
+              - column:
+                  name: password
+                  value: "securepassword"
+              - column:
+                  name: type
+                  value: "1"
+              - column:
+                  name: address
+                  value: "123 Main St"
+              - column:
+                  name: postcode
+                  value: "12345"
+              - column:
+                  name: description
+                  value: "A default partner description."
+              - column:
+                  name: partner_staff_id
+                  value: "1"
+
+  - changeSet:
+      id: 4-insert-default-customer-staff
+      author: Ego
+      changes:
+        - insert:
+            tableName: customer_staffs
+            columns:
+              - column:
+                  name: staff_name
+                  value: "Default Customer Staff"
+              - column:
+                  name: staff_tel
+                  value: "1234567890"
+              - column:
+                  name: staff_email
+                  value: "customerstaff@example.com"
+              - column:
+                  name: password
+                  value: "securepassword"
+              - column:
+                  name: age
+                  value: "25"
+              - column:
+                  name: gender
+                  value: "1"
+              - column:
+                  name: partner_id
+                  valueNumeric: 1

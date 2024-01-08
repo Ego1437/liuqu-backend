@@ -97,6 +97,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id") // 确保这里的列名与数据库中的列名一致
     private Long userId;
 
     @Column(length = 50, nullable = false)

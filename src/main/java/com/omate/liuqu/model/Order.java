@@ -11,9 +11,13 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
+//
+//    @Column(nullable = false)
+//    private Long activityId;
 
-    @Column(nullable = false)
-    private Long activityId;
+    @ManyToOne
+    @JoinColumn(name = "activity_id", referencedColumnName = "activity_id", nullable = false)
+    private Activity activity;
 
     @Column(nullable = false)
     private Long eventId;

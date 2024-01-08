@@ -9,17 +9,14 @@ public class CustomerStaff {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customer_staff_id", nullable = false)
-    private Integer id;
+    private Integer customerStaffId;
 
     @ManyToOne
-    @JoinColumn(name = "partner_id", nullable = false)
+    @JoinColumn(name = "partner_id", nullable = false, referencedColumnName = "partner_id")
     private Partner partner;
 
     @Column(name = "staff_name", nullable = false, length = 50)
     private String staffName;
-
-    @Column(name = "staff_type", nullable = false)
-    private Integer staffType;
 
     @Column(name = "staff_tel", length = 20)
     private String staffTelephone;

@@ -31,10 +31,9 @@ public class Result implements Serializable {
     }
 
 
-//    private int code;
-
+    private int code;
     private String message;
-    private Map data;
+    private Object data;
 
 
     public void setResultSuccess(int code) {
@@ -42,7 +41,8 @@ public class Result implements Serializable {
         this.data = null;
     }
 
-    public void setResultSuccess(int code, Map data) {
+    public void setResultSuccess(int code, Object data) {
+        this.code = code;
         this.message = resultMessage.get(code);
         this.data = data;
     }
