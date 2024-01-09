@@ -506,7 +506,7 @@ databaseChangeLog:
             baseTableName: events
             baseColumnNames: activity_id
             constraintName: fk_events_activity_id
-            referencedTableName: Activities
+            referencedTableName: activities
             referencedColumnNames: activity_id
             onDelete: CASCADE
 
