@@ -82,8 +82,12 @@ task prepareTestProperties(type: Copy) {
 	into 'build/resources/main'
 }
 
-tasks.named('resolveMainClassName') {
-	dependsOn 'prepareTestProperties'
+tasks.named('resolveMainClassName').configure {
+	if (project.hasProperty('prod')) {
+		dependsOn 'prepareProdProperties'
+	} else if (project.hasProperty('test')) {
+		dependsOn 'prepareTestProperties'
+	}
 }
 
 // 修改bootJar任务，在执行之前选择和准备正确的配置文件
