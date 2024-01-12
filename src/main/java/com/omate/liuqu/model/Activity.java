@@ -131,8 +131,6 @@ public class Activity {
     @JoinColumn(name = "customer_staff_id", referencedColumnName = "customer_staff_id")
     private CustomerStaff staff;
 
-    private Date activityStartTime;
-
     private String activityAddress;
 
     // 如果activityImage是一个JSON数组或其他复杂结构，需要适当处理

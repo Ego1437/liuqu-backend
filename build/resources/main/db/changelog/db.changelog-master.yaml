@@ -88,12 +88,12 @@ databaseChangeLog:
                   type: int
                   constraints:
                     nullable: false
-#              - column:
-#                  name: tags
-#                  type: varchar(255)  # Adjust this type based on your specific DB support for arrays
-#                  constraints:
-#                    remarks: "活动标签"
-#                    nullable: false
+              - column:
+                  name: activity_address
+                  type: varchar(255)
+                  constraints:
+                    remarks: "活动地址"
+                    nullable: false
               - column:
                   name: category_level_1
                   type: int
