@@ -52,7 +52,7 @@ public class ActivityController {
     }
 
     // 通过ID读取单个活动
-    @GetMapping("/{id}")
+    @GetMapping("getActivityById/{id}")
     public ResponseEntity<Activity> getActivityById(@PathVariable Long id) {
         try {
             Activity activity = activityService.getActivityById(id);

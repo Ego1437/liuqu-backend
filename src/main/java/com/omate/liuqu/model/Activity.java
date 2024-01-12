@@ -2,6 +2,7 @@ package com.omate.liuqu.model;
 
 import jakarta.persistence.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -107,6 +108,14 @@ public class Activity {
         this.categoryLevel2 = categoryLevel2;
     }
 
+    public String getActivityAddress() {
+        return activityAddress;
+    }
+
+    public void setActivityAddress(String activityAddress) {
+        this.activityAddress = activityAddress;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "activity_id")
@@ -122,8 +131,9 @@ public class Activity {
     @JoinColumn(name = "customer_staff_id", referencedColumnName = "customer_staff_id")
     private CustomerStaff staff;
 
-//    @ElementCollection
-//    private List<Integer> tags; // 如果tags是一个简单的逗号分隔的字符串列表
+    private Date activityStartTime;
+
+    private String activityAddress;
 
     // 如果activityImage是一个JSON数组或其他复杂结构，需要适当处理
     @Column(columnDefinition = "TEXT")
