@@ -11,4 +11,6 @@ import java.util.List;
 @Repository
 public interface ActivityRepository extends CrudRepository<Activity, Long> {
     Page<Activity> findAll(Pageable pageable);
+    // 通过商家ID查找活动
+    List<Activity> findByPartner_PartnerId(Long partnerId);
 }

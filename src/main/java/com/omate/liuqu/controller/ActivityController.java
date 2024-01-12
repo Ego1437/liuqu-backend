@@ -33,7 +33,7 @@ public class ActivityController {
     @PostMapping(value = "/createActivity", consumes = { "multipart/form-data" })
     public ResponseEntity<Activity> createActivity(@Valid Activity activity,
                                                    @RequestParam("partnerId") Long partnerId,
-                                                   @RequestParam("staffId") Long staffId,
+                                                   @RequestParam("staffId") Integer staffId,
                                                    @RequestParam("tagIds") List<Long> tagIds) {
         Activity createdActivity = activityService.createActivity(activity, partnerId, staffId, tagIds);
         return ResponseEntity.ok(createdActivity);
@@ -62,15 +62,26 @@ public class ActivityController {
         }
     }
 
+    // 通过商家ID获取活动信息
+    @GetMapping("/getActivitiesByPartner/{partnerId}")
+    public ResponseEntity<List<Activity>> getActivitiesByPartnerId(@PathVariable Long partnerId) {
+        List<Activity> activities = activityService.getActivitiesByPartnerId(partnerId);
+        if (activities.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(activities);
+    }
     // 更新活动
-    @PutMapping("/{id}")
-    public ResponseEntity<Activity> updateActivity(@PathVariable Long id,
-                                                   @RequestBody Activity activityDetails,
-                                                   @RequestParam Long partnerId,
-                                                   @RequestParam Long staffId) {
+    @PutMapping("/updateActivity/{id}")
+    public ResponseEntity<Activity> updateActivity(@PathVariable Long id, @RequestBody Activity activityDetails) {
+        // 在Activity对象中获取partnerId和staffId
+        Long partnerId = activityDetails.getPartner() != null ? activityDetails.getPartner().getPartnerId() : null;
+        Integer staffId = activityDetails.getStaff() != null ? activityDetails.getStaff().getCustomerStaffId() : null;
+
         Activity updatedActivity = activityService.updateActivity(id, activityDetails, partnerId, staffId);
         return ResponseEntity.ok(updatedActivity);
     }
+
 
     // 删除活动
     @DeleteMapping("/{id}")

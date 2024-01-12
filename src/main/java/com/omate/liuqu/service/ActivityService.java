@@ -42,7 +42,7 @@ public class ActivityService {
         this.tagRepository = tagRepository;
     }
 
-    public Activity createActivity(Activity activity, Long partnerId, Long customerStaffId, List<Long> tagIds) {
+    public Activity createActivity(Activity activity, Long partnerId, Integer customerStaffId, List<Long> tagIds) {
         Partner partner = partnerRepository.findById(partnerId)
                 .orElseThrow(() -> new EntityNotFoundException("Partner not found with id " + partnerId));
         CustomerStaff staff = customerStaffRepository.findById(customerStaffId)
@@ -61,7 +61,7 @@ public class ActivityService {
         return activityRepository.save(activity);
     }
 
-    public Activity updateActivity(Long activityId, Activity activityDetails, Long partnerId, Long customerStaffId) {
+    public Activity updateActivity(Long activityId, Activity activityDetails, Long partnerId, Integer customerStaffId) {
         Activity activity = getActivityById(activityId);
 
         // Check if partner and staff exist
@@ -74,6 +74,35 @@ public class ActivityService {
         activity.setPartner(partner);
         activity.setStaff(staff);
         // ... update other fields ...
+
+        // Update other fields from activityDetails
+        if (activityDetails.getActivityName() != null) {
+            activity.setActivityName(activityDetails.getActivityName());
+        }
+        if (activityDetails.getActivityImage() != null) {
+            activity.setActivityImage(activityDetails.getActivityImage());
+        }
+        if (activityDetails.getActivityDuration() != null) {
+            activity.setActivityDuration(activityDetails.getActivityDuration());
+        }
+        if (activityDetails.getPortfolio() != null) {
+            activity.setPortfolio(activityDetails.getPortfolio());
+        }
+        if (activityDetails.getActivityDetail() != null) {
+            activity.setActivityDetail(activityDetails.getActivityDetail());
+        }
+        if (activityDetails.getActivityStatus() != null) {
+            activity.setActivityStatus(activityDetails.getActivityStatus());
+        }
+        if (activityDetails.getCategoryLevel1() != null) {
+            activity.setCategoryLevel1(activityDetails.getCategoryLevel1());
+        }
+        if (activityDetails.getCategoryLevel2() != null) {
+            activity.setCategoryLevel2(activityDetails.getCategoryLevel2());
+        }
+        if (activityDetails.getTags() != null && !activityDetails.getTags().isEmpty()) {
+            activity.setTags(activityDetails.getTags());
+        }
 
         return activityRepository.save(activity);
     }
@@ -104,5 +133,10 @@ public class ActivityService {
             activity.getEvents().forEach(event -> Hibernate.initialize(event.getTickets()));
         });
         return page;
+    }
+
+    // 通过商家ID获取活动列表
+    public List<Activity> getActivitiesByPartnerId(Long partnerId) {
+        return activityRepository.findByPartner_PartnerId(partnerId);
     }
 }

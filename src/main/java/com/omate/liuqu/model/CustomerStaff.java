@@ -6,6 +6,70 @@ import jakarta.persistence.*;
 @Table(name = "Customer_staffs")
 public class CustomerStaff {
 
+    public Integer getCustomerStaffId() {
+        return customerStaffId;
+    }
+
+    public void setCustomerStaffId(Integer customerStaffId) {
+        this.customerStaffId = customerStaffId;
+    }
+
+    public Partner getPartner() {
+        return partner;
+    }
+
+    public void setPartner(Partner partner) {
+        this.partner = partner;
+    }
+
+    public String getStaffName() {
+        return staffName;
+    }
+
+    public void setStaffName(String staffName) {
+        this.staffName = staffName;
+    }
+
+    public String getStaffTelephone() {
+        return staffTelephone;
+    }
+
+    public void setStaffTelephone(String staffTelephone) {
+        this.staffTelephone = staffTelephone;
+    }
+
+    public String getStaffEmail() {
+        return staffEmail;
+    }
+
+    public void setStaffEmail(String staffEmail) {
+        this.staffEmail = staffEmail;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customer_staff_id", nullable = false)

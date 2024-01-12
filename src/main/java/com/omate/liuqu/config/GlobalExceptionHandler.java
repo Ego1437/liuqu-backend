@@ -1,5 +1,6 @@
 package com.omate.liuqu.config;
 
+import com.omate.liuqu.model.Result;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -41,16 +42,18 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
-//    @ExceptionHandler(EntityNotFoundException.class)
-//    public ResponseEntity<Map<String, Object>> handleEntityNotFoundException(EntityNotFoundException e) {
-//        Map<String, Object> response = new HashMap<>();
-//        response.put("error", e.getMessage());
-//        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-//    }
-
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<String> handleEntityNotFound(EntityNotFoundException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    public ResponseEntity<Result> handleEntityNotFoundException(EntityNotFoundException ex, WebRequest request) {
+        Result result = new Result();
+        result.setResultFailed(3, ex.getMessage()); // 假设代码3对应于"search failed"
+        return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Result> handleAllExceptions(Exception ex, WebRequest request) {
+        Result result = new Result();
+        result.setResultFailed(4, "An error occurred"); // 假设代码4对应于"Invalid token!"
+        return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)

@@ -35,15 +35,6 @@ public class Activity {
         this.staff = staff;
     }
 
-
-    public Integer getActivityType() {
-        return activityType;
-    }
-
-    public void setActivityType(Integer activityType) {
-        this.activityType = activityType;
-    }
-
     public String getActivityImage() {
         return activityImage;
     }
@@ -100,6 +91,22 @@ public class Activity {
         this.tags = tags;
     }
 
+    public Integer getCategoryLevel1() {
+        return categoryLevel1;
+    }
+
+    public void setCategoryLevel1(Integer categoryLevel1) {
+        this.categoryLevel1 = categoryLevel1;
+    }
+
+    public Integer getCategoryLevel2() {
+        return categoryLevel2;
+    }
+
+    public void setCategoryLevel2(Integer categoryLevel2) {
+        this.categoryLevel2 = categoryLevel2;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "activity_id")
@@ -117,7 +124,6 @@ public class Activity {
 
 //    @ElementCollection
 //    private List<Integer> tags; // 如果tags是一个简单的逗号分隔的字符串列表
-    private Integer activityType;
 
     // 如果activityImage是一个JSON数组或其他复杂结构，需要适当处理
     @Column(columnDefinition = "TEXT")
@@ -153,6 +159,12 @@ public class Activity {
     public void setEvents(List<Event> events) {
         this.events = events;
     }
+
+    @Column(name = "category_level_1")
+    private Integer categoryLevel1;
+
+    @Column(name = "category_level_2")
+    private Integer categoryLevel2;
 
     @OneToMany(mappedBy = "activity")
     private List<Event> events;

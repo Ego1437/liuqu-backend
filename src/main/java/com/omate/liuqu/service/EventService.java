@@ -2,6 +2,7 @@ package com.omate.liuqu.service;
 
 import com.omate.liuqu.model.Activity;
 import com.omate.liuqu.model.Event;
+import com.omate.liuqu.model.Result;
 import com.omate.liuqu.repository.ActivityRepository;
 import com.omate.liuqu.repository.EventRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -27,7 +28,7 @@ public class EventService {
     @Transactional
     public Event createEvent(Event event, Long activityId) {
         Activity activity = activityRepository.findById(activityId)
-                .orElseThrow(() -> new EntityNotFoundException("Activity not found with id: " + event.getActivity().getActivityId()));
+                .orElseThrow(() -> new EntityNotFoundException("Activity not found with id: " + activityId));
         event.setActivity(activity);
         return eventRepository.save(event);
     }

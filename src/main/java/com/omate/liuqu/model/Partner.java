@@ -92,6 +92,22 @@ public class Partner {
         this.partnerId = partnerId;
     }
 
+    public Integer getTicketTotal() {
+        return ticketTotal;
+    }
+
+    public void setTicketTotal(Integer orderTotal) {
+        this.ticketTotal = orderTotal;
+    }
+
+    public Integer getFansCount() {
+        return fansCount;
+    }
+
+    public void setFansCount(Integer fansCount) {
+        this.fansCount = fansCount;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "partner_id", nullable = false)
@@ -124,6 +140,12 @@ public class Partner {
 
     @Column(name = "description", length = 200)
     private String description;
+
+    @Column(name = "ticket_total")
+    private Integer ticketTotal = 0; // 订单总量
+
+    @Column(name = "fans_count")
+    private Integer fansCount = 0; // 粉丝数
 
     public PartnerStaff getPartnerStaff() {
         return partnerStaff;

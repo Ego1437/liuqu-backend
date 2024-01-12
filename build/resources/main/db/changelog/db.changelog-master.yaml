@@ -75,6 +75,7 @@ databaseChangeLog:
                   name: activity_name
                   type: varchar(255)
                   constraints:
+                    remarks: "活动类型"
                     primaryKey: true
                     nullable: false
               - column:
@@ -94,10 +95,16 @@ databaseChangeLog:
 #                    remarks: "活动标签"
 #                    nullable: false
               - column:
-                  name: activity_type
+                  name: category_level_1
                   type: int
                   constraints:
-                    remarks: "活动类型"
+                    remarks: "活动一级分类"
+                    nullable: false
+              - column:
+                  name: category_level_2
+                  type: int
+                  constraints:
+                    remarks: "活动二级分类"
                     nullable: false
               - column:
                   name: activity_image
@@ -351,6 +358,7 @@ databaseChangeLog:
               - column:
                   name: type
                   type: varchar(10)
+
               - column:
                   name: address
                   type: varchar(100)
@@ -360,6 +368,18 @@ databaseChangeLog:
               - column:
                   name: description
                   type: varchar(200)
+              - column:
+                  name: ticket_total
+                  type: int
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fans_count
+                  type: int
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
 
   - changeSet:
       id: 9-create-customer-staff-table
@@ -506,7 +526,7 @@ databaseChangeLog:
             baseTableName: events
             baseColumnNames: activity_id
             constraintName: fk_events_activity_id
-            referencedTableName: Activities
+            referencedTableName: activities
             referencedColumnNames: activity_id
             onDelete: CASCADE
 
@@ -768,3 +788,14 @@ databaseChangeLog:
               - column:
                   name: partner_id
                   valueNumeric: 1
+  - changeSet:
+      id: 1-create-index-on-activities-partner_id
+      author: Ego
+      changes:
+        - createIndex:
+            tableName: activities
+            columns:
+              - column:
+                  name: partner_id
+            indexName: idx_activities_partner_id
+
