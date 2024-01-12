@@ -65,7 +65,7 @@ jobs:
           context: .
           file: ./docker/springboot/Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: latest
           labels: ${{ steps.meta.outputs.labels }}
 
       # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
@@ -78,32 +78,32 @@ jobs:
           USERNAME: ${{ github.actor }}
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: actions/checkout@v2
-      - name: Deploy to EC2
-        env:
-          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          HOSTNAME: ${{ secrets.SSH_HOST }}
-          USERNAME: ${{ secrets.USERNAME }}
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-        run: |
-          mkdir -p ~/.ssh/
-          echo "-----BEGIN RSA PRIVATE KEY-----
-          !!! REPLACE THIS WITH YOUR PRIVATE KEY !!!
-          -----END RSA PRIVATE KEY-----" | tr -d '\r' > ~/.ssh/github-actions-key
-          chmod 600 ~/.ssh/github-actions-key
-          cat >>~/.ssh/config <<END
-          Host ec2
-            HostName ec2-13-211-15-220.ap-southeast-2.compute.amazonaws.com
-            User ec2-user
-            IdentityFile ~/.ssh/github-actions-key
-            StrictHostKeyChecking no
-          END
-          echo "$TOKEN" > github_token && chmod 600 github_token
-          #scp -i private_key ./github_token ${USERNAME}@${HOSTNAME}:~
-          scp ./github_token ec2:~
-          #ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOSTNAME} '
-          ssh ec2 'cat ./github_token | sudo docker login ghcr.io -u USERNAME --password-stdin'
-          ssh ec2 'sudo docker pull ghcr.io/adamuomate/liuqu-backend:develop-ada'
-          ssh ec2 'sudo docker run -d --name=springboot-liuqu --add-host host.docker.internal:host-gateway -p 8083:8080 ghcr.io/adamuomate/liuqu-backend:develop-ada'
-          ssh ec2 'sudo docker ps -a'
+#      - uses: actions/checkout@v2
+#      - name: Deploy to EC2
+#        env:
+#          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+#          HOSTNAME: ${{ secrets.SSH_HOST }}
+#          USERNAME: ${{ secrets.USERNAME }}
+#          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#
+#        run: |
+#          mkdir -p ~/.ssh/
+#          echo "-----BEGIN RSA PRIVATE KEY-----
+#          !!! REPLACE THIS WITH YOUR PRIVATE KEY !!!
+#          -----END RSA PRIVATE KEY-----" | tr -d '\r' > ~/.ssh/github-actions-key
+#          chmod 600 ~/.ssh/github-actions-key
+#          cat >>~/.ssh/config <<END
+#          Host ec2
+#            HostName ec2-13-211-15-220.ap-southeast-2.compute.amazonaws.com
+#            User ec2-user
+#            IdentityFile ~/.ssh/github-actions-key
+#            StrictHostKeyChecking no
+#          END
+#          echo "$TOKEN" > github_token && chmod 600 github_token
+#          #scp -i private_key ./github_token ${USERNAME}@${HOSTNAME}:~
+#          scp ./github_token ec2:~
+#          #ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOSTNAME} '
+#          ssh ec2 'cat ./github_token | sudo docker login ghcr.io -u USERNAME --password-stdin'
+#          ssh ec2 'sudo docker pull ghcr.io/adamuomate/liuqu-backend:develop-ada'
+#          ssh ec2 'sudo docker run -d --name=springboot-liuqu --add-host host.docker.internal:host-gateway -p 8083:8080 ghcr.io/adamuomate/liuqu-backend:develop-ada'
+#          ssh ec2 'sudo docker ps -a'
