@@ -32,6 +32,7 @@ public class Ticket {
         return deadline;
     }
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public void setDeadline(LocalDateTime deadline) {
         this.deadline = deadline;
     }

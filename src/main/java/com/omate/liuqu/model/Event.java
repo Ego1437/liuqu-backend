@@ -24,6 +24,7 @@ public class Event {
         return startTime;
     }
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
@@ -33,7 +34,7 @@ public class Event {
         return deadline;
     }
 
-
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public void setDeadline(LocalDateTime deadline) {
         this.deadline = deadline;
     }
