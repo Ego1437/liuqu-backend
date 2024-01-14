@@ -1,5 +1,6 @@
 package com.omate.liuqu.controller;
 
+import com.omate.liuqu.model.Result;
 import com.omate.liuqu.model.Ticket;
 import com.omate.liuqu.service.TicketService;
 import jakarta.validation.Valid;
@@ -20,10 +21,12 @@ public class TicketController {
         this.ticketService = ticketService;
     }
 
-    @PostMapping(value = "/createTicket", consumes = { "multipart/form-data" })
-    public ResponseEntity<Ticket> createTicket(@Valid Ticket ticket, @RequestParam("eventId") Long eventId) {
+    @PostMapping("/createTicket")
+    public ResponseEntity<Result> createTicket(@RequestBody Ticket ticket, @RequestParam("eventId") Long eventId) {
         Ticket createdTicket = ticketService.createTicket(ticket, eventId);
-        return ResponseEntity.ok(createdTicket);
+        Result result = new Result();
+        result.setResultSuccess(0, createdTicket); // 使用0作为成功代码，您可以根据需要更改这个值
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/{ticketId}")

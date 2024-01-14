@@ -1,6 +1,7 @@
 package com.omate.liuqu.controller;
 import com.omate.liuqu.model.Activity;
 import com.omate.liuqu.model.Event;
+import com.omate.liuqu.model.Result;
 import com.omate.liuqu.service.EventService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +22,13 @@ public class EventController {
         this.eventService = eventService;
     }
 
-    @PostMapping(value = "/createEvent", consumes = { "multipart/form-data" })
-    public ResponseEntity<Event> createEvent(@Valid Event event,
+    @PostMapping("/createEvent")
+    public ResponseEntity<Result> createEvent(@RequestBody Event event,
                                              @RequestParam("activityId") Long activityId) {
         Event createdEvent = eventService.createEvent(event, activityId);
-        return ResponseEntity.ok(createdEvent);
+        Result result = new Result();
+        result.setResultSuccess(0, createdEvent); // 使用0作为成功代码，您可以根据需要更改这个值
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/{id}")
