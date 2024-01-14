@@ -55,12 +55,12 @@ public class UserController {
         return userDTO;
     }
 
-    @PostMapping(value = "/register", consumes = { "multipart/form-data" })
-    public ResponseEntity<Result> register(@Valid User user) {
-        Result result = userService.register(user);
-        return new ResponseEntity<>(result, HttpStatus.OK);
-
-    }
+//    @PostMapping(value = "/register", consumes = { "multipart/form-data" })
+//    public ResponseEntity<Result> register(@Valid User user) {
+//        Result result = userService.register(user);
+//        return new ResponseEntity<>(result, HttpStatus.OK);
+//
+//    }
 
     @PostMapping("/login")
     public ResponseEntity<Result> login(@RequestParam String email, @RequestParam String password) {
@@ -238,44 +238,44 @@ public class UserController {
 
 
 
-    @GetMapping("users/{id}")
-    public ResponseEntity<Result> getUserById(@PathVariable Long id) {
-        Result result = new Result();
-
-        Map<String, Object> resultMap = new HashMap<>();
-        UserDTO userDTO = userService.findUserById(id);
-
-        if(userDTO != null){
-
-            resultMap.put("user",userDTO);
-            result.setResultSuccess(0, resultMap);
-            return new ResponseEntity<>(result, HttpStatus.OK);
-
-        } else {
-
-            result.setResultFailed(3);
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
-        }
-
-
-    }
-    @PutMapping(value = "/users/{id}", consumes = { "multipart/form-data" })
-    public ResponseEntity<Result> updateUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long id,User updatedUser) {
-        Result result = new Result();
-
-        if (token == null || token.isEmpty() || !JWTManager.checkToken(token.substring(7), id)) {
-            result.setResultFailed(4);
-            return new ResponseEntity<>(result, HttpStatus.UNAUTHORIZED);
-        }
-
-        User user = userService.updateUser(id, updatedUser);
-
-        UserDTO userDTO = convertToDto(user);
-        Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("user",userDTO);
-        result.setResultSuccess(0, resultMap);
-
-        HttpHeaders headers = new HttpHeaders();
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
+//    @GetMapping("users/{id}")
+//    public ResponseEntity<Result> getUserById(@PathVariable Long id) {
+//        Result result = new Result();
+//
+//        Map<String, Object> resultMap = new HashMap<>();
+//        UserDTO userDTO = userService.findUserById(id);
+//
+//        if(userDTO != null){
+//
+//            resultMap.put("user",userDTO);
+//            result.setResultSuccess(0, resultMap);
+//            return new ResponseEntity<>(result, HttpStatus.OK);
+//
+//        } else {
+//
+//            result.setResultFailed(3);
+//            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+//        }
+//
+//
+//    }
+//    @PutMapping(value = "/users/{id}", consumes = { "multipart/form-data" })
+//    public ResponseEntity<Result> updateUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long id,User updatedUser) {
+//        Result result = new Result();
+//
+//        if (token == null || token.isEmpty() || !JWTManager.checkToken(token.substring(7), id)) {
+//            result.setResultFailed(4);
+//            return new ResponseEntity<>(result, HttpStatus.UNAUTHORIZED);
+//        }
+//
+//        User user = userService.updateUser(id, updatedUser);
+//
+//        UserDTO userDTO = convertToDto(user);
+//        Map<String, Object> resultMap = new HashMap<>();
+//        resultMap.put("user",userDTO);
+//        result.setResultSuccess(0, resultMap);
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        return new ResponseEntity<>(result, HttpStatus.OK);
+//    }
 }

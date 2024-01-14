@@ -17,5 +17,4 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     Optional<Object> findByUserTel(String userTel);
 
-
 }

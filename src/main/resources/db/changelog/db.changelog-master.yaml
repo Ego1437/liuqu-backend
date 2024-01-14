@@ -152,13 +152,13 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: start_time
-                  type: date
+                  type: datetime
                   constraints:
                     remarks: "开始时间"
                     nullable: false
               - column:
                   name: deadline
-                  type: date
+                  type: datetime
                   constraints:
                     remarks: "结束时间"
                     nullable: false
@@ -211,7 +211,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: deadline
-                  type: date
+                  type: datetime
                   constraints:
                     nullable: false
 

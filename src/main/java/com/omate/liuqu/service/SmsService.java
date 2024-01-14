@@ -1,7 +1,11 @@
 package com.omate.liuqu.service;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,15 +18,24 @@ public class SmsService {
     public void sendSms(String phoneNumber, String message) {
         RestTemplate restTemplate = new RestTemplate();
 
+        // 在方法内创建请求头并设置 API 令牌和内容类型
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("x-api-token", apiToken);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("Body", message);
-        requestBody.put("Recipients", new Object[]{ new HashMap<String, String>() {{
+        requestBody.put("Recipients", Collections.singletonList(new HashMap<String, Object>() {{
             put("type", "mobile_number");
             put("value", phoneNumber);
-        }}});
-        requestBody.put("From", "");
-        requestBody.put("AddUnsubscribeLink", true);
+        }}));
+        requestBody.put("From", "OmateGlobal");
+        requestBody.put("AddUnsubscribeLink", false);
 
-        restTemplate.postForObject(apiUrl, requestBody, String.class);
+        // 将头部和请求体封装为 HttpEntity
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
+
+        // 发送 POST 请求
+        restTemplate.postForObject(apiUrl, entity, String.class);
     }
 }

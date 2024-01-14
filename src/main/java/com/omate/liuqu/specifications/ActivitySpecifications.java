@@ -1,8 +1,12 @@
 package com.omate.liuqu.specifications;
 
 import com.omate.liuqu.model.Activity;
+import com.omate.liuqu.model.Event;
+import jakarta.persistence.criteria.Join;
 import org.springframework.data.jpa.domain.Specification;
 import jakarta.persistence.criteria.Predicate;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +17,9 @@ public class ActivitySpecifications {
             Integer minActivityDuration,
             Integer maxActivityDuration,
             String activityName,
-            String activityAddress
+            String activityAddress,
+            LocalDateTime startTime,
+            LocalDateTime endTime
     ) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
@@ -35,6 +41,16 @@ public class ActivitySpecifications {
             }
             if (activityAddress != null) {
                 predicates.add(criteriaBuilder.like(root.get("activityAddress"), "%" + activityAddress + "%"));
+            }
+
+            if (startTime != null && endTime != null) {
+                Join<Activity, Event> eventJoin = root.join("events");
+                predicates.add(
+                        criteriaBuilder.between(eventJoin.get("startTime"), startTime, endTime)
+                );
+                predicates.add(
+                        criteriaBuilder.equal(eventJoin.get("eventStatus"), 1)
+                );
             }
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
