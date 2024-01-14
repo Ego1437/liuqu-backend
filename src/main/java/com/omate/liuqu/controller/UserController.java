@@ -53,144 +53,34 @@ public class UserController {
         userDTO.setUserTel(user.getUserTel());
         userDTO.setGender(user.getGender());
         userDTO.setAge(user.getAge());
-        userDTO.setAvatarPath(user.getAvatarPath());
+        userDTO.setAvatarPath(user.getAvatar());
         userDTO.setPostcode(user.getPostcode());
         userDTO.setAddress(user.getAddress());
         userDTO.setIsSubscribe(user.getIsSubscribe());
         return userDTO;
     }
 
-//    @PostMapping(value = "/register", consumes = { "multipart/form-data" })
-//    public ResponseEntity<Result> register(@Valid User user) {
-//        Result result = userService.register(user);
-//        return new ResponseEntity<>(result, HttpStatus.OK);
-//
-//    }
-
     @PostMapping("/login")
-    public ResponseEntity<Result> login(@RequestParam String email, @RequestParam String password) {
-
-        String hashedPassword = passwordEncoder.encode(password);
-
-        User user = userRepository.findByUserEmail(email).orElse(null);
-        Result result = new Result();
-
-        if (user != null && passwordEncoder.matches(password, user.getPassword())) { // Encrypted passwords should
-                                                                                     // be used in practical
-                                                                                     // applications
-            UserDTO userDTO = convertToDto(user);
-            Map<String, Object> resultMap = new HashMap<>();
-            resultMap.put("user",userDTO);
-
-            result.setResultSuccess(0, resultMap);
-
-            HttpHeaders headers = new HttpHeaders();
-            Date exp = new Date();
-            exp.setTime(exp.getTime() + 1000 * 60 * 60 * 24 * 7); // 7 days
-            Map<String, Object> data = Map.of("user", userDTO);
-            headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + JWTManager.createToken(exp, data));
-            headers.add(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.AUTHORIZATION);
-
-            return new ResponseEntity<>(result, headers, HttpStatus.OK);
-        } else {
-            result.setResultFailed(1);
-            return new ResponseEntity<>(result, HttpStatus.UNAUTHORIZED);
+    public ResponseEntity<LoginResponse> loginUser(@RequestParam String phoneNumber, @RequestParam String password) {
+        try {
+            LoginResponse response = userService.loginUser(phoneNumber, password);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new LoginResponse("Login failed: " + e.getMessage(), null));
         }
     }
 
-    @GetMapping("/users/me")
-    public ResponseEntity<Result> getUserByAuthToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        Result result = new Result();
-        if (token == null || token.isEmpty() || !token.contains("Bearer ")) {
-            result.setResultFailed(4);
-            return new ResponseEntity<>(result, HttpStatus.UNAUTHORIZED);
+    @PostMapping("/register")
+    public ResponseEntity<LoginResponse> registerUser(@RequestParam String phoneNumber,
+                                                      @RequestParam String password,
+                                                      @RequestParam String verificationCode) {
+        try {
+            LoginResponse response = userService.registerUser(phoneNumber, password, verificationCode);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(new LoginResponse("Registration failed: " + e.getMessage(), null));
         }
-
-        token = token.replace("Bearer ", "");
-
-        UserDTO userDTO = JWTManager.getDataFromToken(token, "user", UserDTO.class);
-
-        if (userDTO == null) {
-            result.setResultFailed(4);
-            return new ResponseEntity<>(result, HttpStatus.UNAUTHORIZED);
-        }
-
-        UserDTO updatedUserDTO = convertToDto(userRepository.findById(userDTO.getUserId()).orElse(null));
-
-        if (updatedUserDTO == null) {
-            result.setResultFailed(3);
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
-        }
-
-        Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("user",updatedUserDTO);
-        result.setResultSuccess(0, resultMap);
-
-        HttpHeaders headers = new HttpHeaders();
-        Date exp = new Date();
-        exp.setTime(exp.getTime() + 1000 * 60 * 60 * 24 * 7); // 7 days
-        Map<String, Object> data = Map.of("user", updatedUserDTO);
-        headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + JWTManager.createToken(exp, data));
-        headers.add(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.AUTHORIZATION);
-
-        return new ResponseEntity<>(result, headers, HttpStatus.OK);
     }
 
 
-//    @PostMapping("/change-password")
-//    public ResponseEntity<?> changePassword(@RequestBody PasswordChangeRequest request) {
-//        try {
-//            if (userService.changePassword(request)) {
-//                return ResponseEntity.ok("Password changed successfully");
-//            } else {
-//                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Password change failed");
-//            }
-//        } catch (UsernameNotFoundException | InvalidVerificationCodeException ex) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-//        }
-//    }
-
-
-
-
-//    @GetMapping("users/{id}")
-//    public ResponseEntity<Result> getUserById(@PathVariable Long id) {
-//        Result result = new Result();
-//
-//        Map<String, Object> resultMap = new HashMap<>();
-//        UserDTO userDTO = userService.findUserById(id);
-//
-//        if(userDTO != null){
-//
-//            resultMap.put("user",userDTO);
-//            result.setResultSuccess(0, resultMap);
-//            return new ResponseEntity<>(result, HttpStatus.OK);
-//
-//        } else {
-//
-//            result.setResultFailed(3);
-//            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
-//        }
-//
-//
-//    }
-//    @PutMapping(value = "/users/{id}", consumes = { "multipart/form-data" })
-//    public ResponseEntity<Result> updateUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long id,User updatedUser) {
-//        Result result = new Result();
-//
-//        if (token == null || token.isEmpty() || !JWTManager.checkToken(token.substring(7), id)) {
-//            result.setResultFailed(4);
-//            return new ResponseEntity<>(result, HttpStatus.UNAUTHORIZED);
-//        }
-//
-//        User user = userService.updateUser(id, updatedUser);
-//
-//        UserDTO userDTO = convertToDto(user);
-//        Map<String, Object> resultMap = new HashMap<>();
-//        resultMap.put("user",userDTO);
-//        result.setResultSuccess(0, resultMap);
-//
-//        HttpHeaders headers = new HttpHeaders();
-//        return new ResponseEntity<>(result, HttpStatus.OK);
-//    }
 }

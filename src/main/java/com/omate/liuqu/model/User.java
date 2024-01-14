@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
-@Table(name = "User")
+@Table(name = "users")
 public class User {
 
     public Long getUserId() {
@@ -39,12 +39,12 @@ public class User {
         this.userEmail = userEmail;
     }
 
-    public String getAvatarPath() {
-        return avatarPath;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setAvatarPath(String avatarPath) {
-        this.avatarPath = avatarPath;
+    public void setAvatar(String avatarPath) {
+        this.avatar = avatarPath;
     }
 
     public String getPassword() {
@@ -109,7 +109,7 @@ public class User {
     @Column(length = 30, nullable = false)
     private String userEmail;
 
-    private String avatarPath = "http://13.236.138.98:8082/api/view/cHJvZmlsZS1waWN0dXJl_1698819116508.jpg";
+    private String avatar = "http://13.236.138.98:8082/api/view/cHJvZmlsZS1waWN0dXJl_1698819116508.jpg";
     @NotBlank(message = "UserType is mandatory")
 
     @Column(length = 20)

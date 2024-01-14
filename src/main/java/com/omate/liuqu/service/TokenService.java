@@ -10,15 +10,19 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import io.jsonwebtoken.security.Keys;
+import javax.crypto.SecretKey;
 @Service
 public class TokenService {
 
     @Autowired
     private StringRedisTemplate redisTemplate;
 
-    private final String secretKey = "B981AD8E3ED3EC7955C1B599D6AF8"; // 使用您的密钥
+    private final SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+//    private final String secretKey = "B981AD8E3ED3EC7955C1B599D6AF8"; // 使用您的密钥
 
     public String createAccessToken(User user) {
+
         long validityInMilliseconds = TimeUnit.HOURS.toMillis(3); // 3小时
         return Jwts.builder()
                 .setSubject(String.valueOf(user.getUserId()))

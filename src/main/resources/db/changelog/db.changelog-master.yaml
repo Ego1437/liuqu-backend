@@ -19,7 +19,6 @@ databaseChangeLog:
                     type: varchar(50)
                     constraints:
                       remarks: "用户姓名"
-                      nullable: false
                 - column:
                     name: user_tel
                     type: varchar(20)
@@ -31,16 +30,14 @@ databaseChangeLog:
                     type: varchar(30)
                     constraints:
                       remarks: "用户邮箱"
-                      nullable: false
                 - column:
                     name: avatar
-                    type: varchar(30)
+                    type: varchar(255)
                     constraints:
                       remarks: "用户头像"
-                      nullable: false
                 - column:
                     name: password
-                    type: varchar(20)
+                    type: varchar(255)
                 - column:
                     name: age
                     type: int

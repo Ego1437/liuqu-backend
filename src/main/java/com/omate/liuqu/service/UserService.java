@@ -6,10 +6,9 @@ import com.omate.liuqu.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -20,13 +19,16 @@ public class UserService {
     private TokenService tokenService;
 
     @Autowired
+    private VerificationService verificationService;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private StringRedisTemplate redisTemplate;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private BCryptPasswordEncoder passwordEncoder;
 
     public LoginResponse loginUser(String phoneNumber, String password) {
         // 根据手机号查找用户
@@ -53,8 +55,8 @@ public class UserService {
 
     public LoginResponse registerUser(String phoneNumber, String password, String verificationCode) {
         // 验证验证码
-        String correctCode = redisTemplate.opsForValue().get("verification_code:" + phoneNumber);
-        if (correctCode != null && correctCode.equals(verificationCode)) {
+        boolean isValid = verificationService.verifyCode(phoneNumber, verificationCode);
+        if (isValid) {
             // 创建用户实体
             User newUser = new User();
             newUser.setUserTel(phoneNumber);
