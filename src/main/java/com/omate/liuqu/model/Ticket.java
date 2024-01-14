@@ -1,8 +1,10 @@
 package com.omate.liuqu.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -25,11 +27,12 @@ public class Ticket {
         this.price = price;
     }
 
-    public Date getDeadline() {
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    public LocalDateTime getDeadline() {
         return deadline;
     }
 
-    public void setDeadline(Date deadline) {
+    public void setDeadline(LocalDateTime deadline) {
         this.deadline = deadline;
     }
 
@@ -59,8 +62,8 @@ public class Ticket {
     private BigDecimal price;
 
     @Column(nullable = false)
-    @Temporal(TemporalType.DATE) // 使用Temporal，因为架构中的类型指示为 'date'
-    private Date deadline;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime deadline;
 
     @ManyToOne
     @JsonBackReference

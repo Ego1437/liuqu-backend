@@ -5,8 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="61e4a3c5-88e3-450e-bcff-c69e0ab99dec" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/omate/liuqu/controller/VerificationController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/omate/liuqu/service/VerificationService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/omate/liuqu/specifications/ActivitySpecifications.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.2.1/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.2.1/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.2.1/dependencies-accessors/dependencies-accessors.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.2.1/dependencies-accessors/dependencies-accessors.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.2.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.2.1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.2.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.2.1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.2.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.2.1/fileHashes/fileHashes.bin" afterDir="false" />
@@ -16,31 +19,24 @@
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/omate/liuqu/controller/ActivityController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/omate/liuqu/controller/ActivityController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/omate/liuqu/model/Activity.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/omate/liuqu/model/Activity.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/omate/liuqu/model/Event.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/omate/liuqu/model/Event.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/omate/liuqu/model/Result.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/omate/liuqu/model/Result.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/omate/liuqu/model/Ticket.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/omate/liuqu/model/Ticket.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/omate/liuqu/repository/ActivityRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/omate/liuqu/repository/ActivityRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/omate/liuqu/service/ActivityService.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/omate/liuqu/service/ActivityService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/omate/liuqu/service/SmsService$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/omate/liuqu/service/SmsService$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/omate/liuqu/service/SmsService$2.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/omate/liuqu/service/SmsService.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/omate/liuqu/service/SmsService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/libs/liuqu-backend-0.0.1-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/liuqu-backend-0.0.1-SNAPSHOT.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/resources/main/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/build/resources/main/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/resources/main/db/changelog/db.changelog-master.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/build/resources/main/db/changelog/db.changelog-master.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/Activity.class.uniqueId5" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/ActivityController.class.uniqueId9" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/ActivityRepository.class.uniqueId12" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/ActivityService.class.uniqueId14" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/CustomerStaff.class.uniqueId8" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/CustomerStaffRepository.class.uniqueId3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/Event.class.uniqueId15" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/EventController.class.uniqueId10" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/EventRepository.class.uniqueId0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/EventService.class.uniqueId13" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/Notification.class.uniqueId11" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/Order.class.uniqueId1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/Ticket.class.uniqueId2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/TicketController.class.uniqueId7" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/TicketRepository.class.uniqueId6" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/TicketService.class.uniqueId4" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/omate/liuqu/model/Activity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/omate/liuqu/model/Activity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.test.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.test.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/springboot/app/liuqu-backend.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/omate/liuqu/controller/ActivityController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/omate/liuqu/controller/ActivityController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/omate/liuqu/model/Event.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/omate/liuqu/model/Event.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/omate/liuqu/model/Ticket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/omate/liuqu/model/Ticket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/omate/liuqu/repository/ActivityRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/omate/liuqu/repository/ActivityRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/omate/liuqu/service/ActivityService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/omate/liuqu/service/ActivityService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/omate/liuqu/service/SmsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/omate/liuqu/service/SmsService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -186,6 +182,14 @@
           <properties class="java.lang.NullPointerException" package="java.lang" />
           <option name="timeStamp" value="21" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/com/omate/liuqu/specifications/ActivitySpecifications.java</url>
+          <line>9</line>
+          <properties class="com.omate.liuqu.specifications.ActivitySpecifications" method="filterBy">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="22" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

@@ -51,6 +51,20 @@ public class ActivityController {
 //        return ResponseEntity.ok(activityPage);
     }
 
+    @GetMapping("/getFilteredActivities")
+    public Page<Activity> getActivities(
+            @RequestParam(required = false) Integer categoryLevel1,
+            @RequestParam(required = false) Integer categoryLevel2,
+            @RequestParam(required = false) Integer minActivityDuration,
+            @RequestParam(required = false) Integer maxActivityDuration,
+            @RequestParam(required = false) String activityName,
+            @RequestParam(required = false) String activityAddress,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return activityService.getFilteredActivities(categoryLevel1, categoryLevel2, minActivityDuration, maxActivityDuration, activityName, activityAddress, pageable);
+    }
+
     // 通过ID读取单个活动
     @GetMapping("getActivityById/{id}")
     public ResponseEntity<Activity> getActivityById(@PathVariable Long id) {

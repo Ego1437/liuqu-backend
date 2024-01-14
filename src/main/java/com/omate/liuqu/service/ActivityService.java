@@ -10,10 +10,12 @@ import com.omate.liuqu.repository.ActivityRepository;
 import com.omate.liuqu.repository.CustomerStaffRepository;
 import com.omate.liuqu.repository.PartnerRepository;
 import com.omate.liuqu.repository.TagRepository;
+import com.omate.liuqu.specifications.ActivitySpecifications;
 import jakarta.persistence.EntityNotFoundException;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -138,5 +140,25 @@ public class ActivityService {
     // 通过商家ID获取活动列表
     public List<Activity> getActivitiesByPartnerId(Long partnerId) {
         return activityRepository.findByPartner_PartnerId(partnerId);
+    }
+
+    public Page<Activity> getFilteredActivities(
+            Integer categoryLevel1,
+            Integer categoryLevel2,
+            Integer minActivityDuration,
+            Integer maxActivityDuration,
+            String activityName,
+            String activityAddress,
+            Pageable pageable) {
+
+        Specification<Activity> spec = ActivitySpecifications.filterBy(
+                categoryLevel1,
+                categoryLevel2,
+                minActivityDuration,
+                maxActivityDuration,
+                activityName,
+                activityAddress);
+
+        return activityRepository.findAll(spec, pageable);
     }
 }

@@ -4,6 +4,7 @@ import com.omate.liuqu.model.Activity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.domain.Specification;
 
 import org.springframework.data.domain.Pageable;
 import java.util.List;
@@ -13,4 +14,12 @@ public interface ActivityRepository extends CrudRepository<Activity, Long> {
     Page<Activity> findAll(Pageable pageable);
     // 通过商家ID查找活动
     List<Activity> findByPartner_PartnerId(Long partnerId);
+    Page<Activity> findAll(Specification<Activity> spec, Pageable pageable);
+    List<Activity> findByCategoryLevel1AndCategoryLevel2AndActivityDurationAndActivityNameAndActivityAddress(
+            Integer categoryLevel1,
+            Integer categoryLevel2,
+            Integer activityDuration,
+            String activityName,
+            String activityAddress
+    );
 }

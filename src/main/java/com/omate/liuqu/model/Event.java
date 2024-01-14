@@ -1,7 +1,10 @@
 package com.omate.liuqu.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -16,20 +19,22 @@ public class Event {
     public void setEventId(Long eventId) {
         this.eventId = eventId;
     }
-
-    public Date getStartTime() {
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public Date getDeadline() {
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    public LocalDateTime getDeadline() {
         return deadline;
     }
 
-    public void setDeadline(Date deadline) {
+
+    public void setDeadline(LocalDateTime deadline) {
         this.deadline = deadline;
     }
 
@@ -84,10 +89,12 @@ public class Event {
     private Activity activity;
 
     @Column(name = "start_time") // 映射到表中的start_time列
-    private Date startTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime startTime;
 
     @Column(name = "deadline") // 映射到表中的deadline列
-    private Date deadline;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime deadline;
 
     @Column(name = "max_capacity") // 映射到表中的max_capacity列
     private Integer maxCapacity;
