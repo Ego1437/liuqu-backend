@@ -63,10 +63,11 @@ public class ActivityController {
             @RequestParam(required = false) String activityAddress,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime startTime,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime endTime,
+            @RequestParam(required = false) List<String> tags,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Activity> activityPage = activityService.getFilteredActivities(categoryLevel1, categoryLevel2, minActivityDuration, maxActivityDuration, activityName, activityAddress, pageable, startTime, endTime);
+        Page<Activity> activityPage = activityService.getFilteredActivities(categoryLevel1, categoryLevel2, minActivityDuration, maxActivityDuration, activityName, activityAddress, tags, pageable, startTime, endTime);
         Result result = new Result();
         result.setResultSuccess(0, activityPage); // 使用0作为成功代码，您可以根据需要更改这个值
         return ResponseEntity.ok(result);

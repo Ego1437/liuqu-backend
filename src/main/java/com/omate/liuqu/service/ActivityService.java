@@ -151,6 +151,7 @@ public class ActivityService {
             Integer maxActivityDuration,
             String activityName,
             String activityAddress,
+            List<String> tags,
             Pageable pageable,
             LocalDateTime startTime,
             LocalDateTime endTime
@@ -163,6 +164,7 @@ public class ActivityService {
                 maxActivityDuration,
                 activityName,
                 activityAddress,
+                tags,
                 startTime,
                 endTime);
 

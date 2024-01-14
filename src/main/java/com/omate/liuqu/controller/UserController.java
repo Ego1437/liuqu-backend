@@ -13,9 +13,11 @@ import java.util.Map;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import org.springframework.stereotype.Controller;
@@ -33,6 +35,9 @@ public class UserController {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
     /**
      * *
@@ -131,110 +136,20 @@ public class UserController {
         return new ResponseEntity<>(result, headers, HttpStatus.OK);
     }
 
-    @PostMapping("/forgot-password")
-    public ResponseEntity<Result> forgotPassword(@RequestParam String emailOrPhone) {
-        User user = userRepository.findByUserEmail(emailOrPhone)
-                .orElse((User) userRepository.findByUserTel(emailOrPhone).orElse(null));
 
-        if (user != null) {
-            String token = JWTManager.createToken(new Date(System.currentTimeMillis() + 1000 * 60 * 15), // 15 minutes
-                    Map.of("uid", user.getUserId()));
+//    @PostMapping("/change-password")
+//    public ResponseEntity<?> changePassword(@RequestBody PasswordChangeRequest request) {
+//        try {
+//            if (userService.changePassword(request)) {
+//                return ResponseEntity.ok("Password changed successfully");
+//            } else {
+//                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Password change failed");
+//            }
+//        } catch (UsernameNotFoundException | InvalidVerificationCodeException ex) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+//        }
+//    }
 
-            String resetPasswordLink = "%BASE_URL%/reset-password/" + token + "/";
-
-            try {
-                EmailManager.sendEmail(emailOrPhone,
-                        "Reset password for " + user.getUserName(),
-                        "Hello " + user.getUserName() + "!" + "<br><br>" +
-                                " Please follow this link to reset your password: " + "<br>" +
-                                " <a href=\"" + resetPasswordLink + "\">" + resetPasswordLink + "</a>" + "<br><br>" +
-                                " The link will expire in 15 minutes." + "<br><br>" +
-                                " Do NOT share this link with anyone." + "<br><br>" +
-                                " If you did not request a password reset, please ignore this email.");
-            } catch (Exception e) {
-                e.printStackTrace();
-
-                Result result = new Result();
-                result.setResultFailed(5);
-                return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
-
-        Result result = new Result();
-        result.setResultSuccess(7);
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
-
-    @PostMapping("/validate-reset-password-token")
-    public ResponseEntity<Result> validateResetPasswordToken(@RequestParam String resetPasswordToken) {
-        Result result = new Result();
-        if (resetPasswordToken == null || resetPasswordToken.isEmpty()) {
-            result.setResultFailed(4);
-            return new ResponseEntity<>(result, HttpStatus.UNAUTHORIZED);
-        }
-
-        Long uid = JWTManager.getDataFromToken(resetPasswordToken, "uid", Long.class);
-
-        if (uid == 0) {
-            result.setResultFailed(4);
-            return new ResponseEntity<>(result, HttpStatus.UNAUTHORIZED);
-        }
-
-        UserDTO userDTO = convertToDto(userRepository.findById(uid).orElse(null));
-
-        if (userDTO == null) {
-            result.setResultFailed(3);
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
-        }
-
-        Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("user",userDTO);
-
-        result.setResultSuccess(0, resultMap);
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
-    @PostMapping("/change-password")
-    public ResponseEntity<Void> resetPassword(@RequestParam String email, @RequestParam String password){
-        Result result = new Result();
-        User user = userRepository.findByUserEmail(email).orElse(null);
-        if(user != null) {
-            String hashedPassword = passwordEncoder.encode(password);
-            user.setPassword(hashedPassword);
-            userRepository.save(user);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-    @PostMapping("/reset-password")
-    public ResponseEntity<Result> resetPassword(@RequestParam String resetPasswordToken, @RequestParam String password,
-            @RequestParam String confirmPassword) {
-        Result result = new Result();
-
-        if (!password.equals(confirmPassword)) {
-            result.setResultFailed(6);
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
-        }
-
-        Long uid = JWTManager.getDataFromToken(resetPasswordToken, "uid", Long.class);
-
-        if (uid == 0) {
-            result.setResultFailed(4);
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
-        }
-
-        User user = userRepository.findById(uid).orElse(null);
-
-        if (user == null) {
-            result.setResultFailed(3);
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
-        }
-
-        user.setPassword(passwordEncoder.encode(password));
-        userRepository.save(user);
-
-        result.setResultSuccess(0);
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
 
 
 

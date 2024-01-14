@@ -2,6 +2,8 @@ package com.omate.liuqu.specifications;
 
 import com.omate.liuqu.model.Activity;
 import com.omate.liuqu.model.Event;
+import com.omate.liuqu.model.Tag;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Join;
 import org.springframework.data.jpa.domain.Specification;
 import jakarta.persistence.criteria.Predicate;
@@ -18,6 +20,7 @@ public class ActivitySpecifications {
             Integer maxActivityDuration,
             String activityName,
             String activityAddress,
+            List<String> tags,
             LocalDateTime startTime,
             LocalDateTime endTime
     ) {
@@ -52,6 +55,21 @@ public class ActivitySpecifications {
                         criteriaBuilder.equal(eventJoin.get("eventStatus"), 1)
                 );
             }
+
+            // 添加标签过滤逻辑
+            if (tags != null && !tags.isEmpty()) {
+                // 创建一个存储"或"条件的列表
+                List<Predicate> tagPredicates = new ArrayList<>();
+                Join<Activity, Tag> tagsJoin = root.join("tags");
+                for (String tag : tags) {
+                    tagPredicates.add(criteriaBuilder.equal(tagsJoin.get("tagId"), tag));
+                }
+
+                // 将所有标签条件合并为一个大的"或"条件
+                Predicate orPredicate = criteriaBuilder.or(tagPredicates.toArray(new Predicate[0]));
+                predicates.add(orPredicate);
+            }
+
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
