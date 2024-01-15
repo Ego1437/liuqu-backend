@@ -75,12 +75,15 @@ public class ActivityController {
 
     // 通过ID读取单个活动
     @GetMapping("getActivityById/{id}")
-    public ResponseEntity<Activity> getActivityById(@PathVariable Long id) {
+    public ResponseEntity<Result> getActivityById(@PathVariable Long id) {
+        Result result = new Result();
         try {
             Activity activity = activityService.getActivityById(id);
-            return ResponseEntity.ok(activity);
+            result.setResultSuccess(0, activity); // 使用0作为成功代码，您可以根据需要更改这个值
+            return ResponseEntity.ok(result);
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().build();
+            result.setResultFailed(3); // 使用0作为成功代码，您可以根据需要更改这个值
+            return ResponseEntity.ok(result);
         }
     }
 
