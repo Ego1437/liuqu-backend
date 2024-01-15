@@ -86,26 +86,27 @@ public class ActivityController {
 
     //通过活动地址和活动名称进行模糊搜索
     @GetMapping("/search")
-    public ResponseEntity<List<Activity>> searchActivities(@RequestParam String keyword) {
+    public ResponseEntity<Result> searchActivities(@RequestParam String keyword) {
         List<Activity> activities = activityService.searchActivitiesByKeyword(keyword);
-        return ResponseEntity.ok(activities);
+        Result result = new Result();
+        result.setResultSuccess(0, activities); // 使用0作为成功代码，您可以根据需要更改这个值
+        return ResponseEntity.ok(result);
     }
 
     // 通过商家ID获取活动信息
-//    @GetMapping("/getActivitiesByPartner/{partnerId}")
-//    public ResponseEntity<List<Activity>> getActivitiesByPartnerId(@PathVariable Long partnerId) {
-//        List<Activity> activities = activityService.getActivitiesByPartnerId(partnerId);
-//        if (activities.isEmpty()) {
-//            return ResponseEntity.notFound().build();
-//        }
-//        return ResponseEntity.ok(activities);
-//    }
+    @GetMapping("/getActivitiesByPartner/{partnerId}")
+    public ResponseEntity<Result> getActivitiesByPartnerId(@PathVariable Long partnerId) {
+        List<Activity> activities = activityService.getActivitiesByPartnerId(partnerId);
+        Result result = new Result();
+        result.setResultSuccess(0, activities); // 使用0作为成功代码，您可以根据需要更改这个值
+        return ResponseEntity.ok(result);
+    }
     // 更新活动
     @PutMapping("/updateActivity/{id}")
     public ResponseEntity<Activity> updateActivity(@PathVariable Long id, @RequestBody Activity activityDetails) {
         // 在Activity对象中获取partnerId和staffId
         Long partnerId = activityDetails.getPartner() != null ? activityDetails.getPartner().getPartnerId() : null;
-        Integer staffId = activityDetails.getStaff() != null ? activityDetails.getStaff().getCustomerStaffId() : null;
+        Integer staffId = activityDetails.getCustomerStaff() != null ? activityDetails.getCustomerStaff().getCustomerStaffId() : null;
 
         Activity updatedActivity = activityService.updateActivity(id, activityDetails, partnerId, staffId);
         return ResponseEntity.ok(updatedActivity);

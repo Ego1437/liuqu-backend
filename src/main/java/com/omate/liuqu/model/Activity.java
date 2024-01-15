@@ -1,5 +1,6 @@
 package com.omate.liuqu.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -26,14 +27,6 @@ public class Activity {
 
     public void setPartner(Partner partner) {
         this.partner = partner;
-    }
-
-    public CustomerStaff getStaff() {
-        return customerStaff;
-    }
-
-    public void setStaff(CustomerStaff staff) {
-        this.customerStaff = staff;
     }
 
     public String getActivityImage() {
@@ -116,6 +109,22 @@ public class Activity {
         this.activityAddress = activityAddress;
     }
 
+    public Long getPartnerId() {
+        return partnerId;
+    }
+
+    public void setPartnerId(Long partnerId) {
+        this.partnerId = partnerId;
+    }
+
+    public CustomerStaff getCustomerStaff() {
+        return customerStaff;
+    }
+
+    public void setCustomerStaff(CustomerStaff customerStaff) {
+        this.customerStaff = customerStaff;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "activity_id")
@@ -124,7 +133,11 @@ public class Activity {
     // 假设partner_id关联到Partner表的partner_id
     @ManyToOne
     @JoinColumn(name = "partner_id", referencedColumnName = "partner_id")
+    @JsonIgnore  // 阻止序列化商家信息
     private Partner partner;
+
+    @Column(name = "partner_id", updatable = false, insertable = false)
+    private Long partnerId;
 
     // 假设staff_id关联到Customer_staff表的staff_id
     @ManyToOne

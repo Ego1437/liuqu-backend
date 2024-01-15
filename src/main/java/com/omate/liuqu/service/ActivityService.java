@@ -59,7 +59,7 @@ public class ActivityService {
         }
 
         activity.setPartner(partner);
-        activity.setStaff(staff);
+        activity.setCustomerStaff(staff);
         activity.setTags(tags);
 
         return activityRepository.save(activity);
@@ -76,7 +76,7 @@ public class ActivityService {
 
         // Update activity details
         activity.setPartner(partner);
-        activity.setStaff(staff);
+        activity.setCustomerStaff(staff);
         // ... update other fields ...
 
         // Update other fields from activityDetails
@@ -130,6 +130,10 @@ public class ActivityService {
         } catch (EntityNotFoundException e) {
             return false; // 活动未找到，删除失败
         }
+    }
+
+    public List<Activity> getActivitiesByPartnerId(Long partnerId) {
+        return activityRepository.findByPartnerPartnerId(partnerId);
     }
 
     @Transactional(readOnly = true)

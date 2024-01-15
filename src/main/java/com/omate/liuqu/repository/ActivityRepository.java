@@ -19,6 +19,8 @@ import java.util.List;
 public interface ActivityRepository extends CrudRepository<Activity, Long> {
     Page<Activity> findAll(Pageable pageable);
 
+    List<Activity> findByPartnerPartnerId(Long partnerId);
+
     // 通过商家ID查找活动
     @EntityGraph(attributePaths = {"tags", "customerStaff", "events", "events.tickets"})
     @Query("SELECT a FROM Activity a WHERE a.partner.partnerId = :partnerId")

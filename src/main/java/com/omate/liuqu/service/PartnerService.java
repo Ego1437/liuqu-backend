@@ -62,7 +62,7 @@ public class PartnerService {
                 .collect(Collectors.toSet());
 
         // 将CustomerStaff实体转换为CustomerStaffDTO
-        CustomerStaff staff = activity.getStaff();
+        CustomerStaff staff = activity.getCustomerStaff();
         CustomerStaffDTO customerStaffDTO = new CustomerStaffDTO(
                 staff.getCustomerStaffId(),
                 staff.getStaffName(),
