@@ -48,7 +48,7 @@ jobs:
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
@@ -76,7 +76,7 @@ jobs:
           arguments: publish
         env:
           USERNAME: ${{ github.actor }}
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
 #      - uses: actions/checkout@v2
 #      - name: Deploy to EC2
