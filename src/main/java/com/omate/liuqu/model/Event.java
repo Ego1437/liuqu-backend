@@ -39,22 +39,6 @@ public class Event {
         this.deadline = deadline;
     }
 
-    public Integer getMaxCapacity() {
-        return maxCapacity;
-    }
-
-    public void setMaxCapacity(Integer maxCapacity) {
-        this.maxCapacity = maxCapacity;
-    }
-
-    public Integer getResidualNum() {
-        return residualNum;
-    }
-
-    public void setResidualNum(Integer residualNum) {
-        this.residualNum = residualNum;
-    }
-
     public Integer getEventStatus() {
         return eventStatus;
     }
@@ -96,12 +80,6 @@ public class Event {
     @Column(name = "deadline") // 映射到表中的deadline列
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime deadline;
-
-    @Column(name = "max_capacity") // 映射到表中的max_capacity列
-    private Integer maxCapacity;
-
-    @Column(name = "residual_num") // 映射到表中的residual_num列
-    private Integer residualNum;
 
     @Column(name = "event_status") // 映射到表中的event_status列
     private Integer eventStatus;

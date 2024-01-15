@@ -53,6 +53,23 @@ public class Ticket {
         this.name = name;
     }
 
+
+    public Integer getMaxCapacity() {
+        return maxCapacity;
+    }
+
+    public void setMaxCapacity(Integer maxCapacity) {
+        this.maxCapacity = maxCapacity;
+    }
+
+    public Integer getResidualNum() {
+        return residualNum;
+    }
+
+    public void setResidualNum(Integer residualNum) {
+        this.residualNum = residualNum;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ticketId;
@@ -71,5 +88,10 @@ public class Ticket {
     @JoinColumn(name = "event_id", nullable = false, referencedColumnName = "event_id")
     private Event event;
 
+    @Column(name = "max_capacity") // 映射到表中的max_capacity列
+    private Integer maxCapacity;
+
+    @Column(name = "residual_num") // 映射到表中的residual_num列
+    private Integer residualNum;
     // getter和setter方法
 }

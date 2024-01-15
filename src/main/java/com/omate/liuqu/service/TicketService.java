@@ -26,7 +26,9 @@ public class TicketService {
                 ticket.getTicketId(),
                 ticket.getName(),
                 ticket.getPrice(),
-                ticket.getDeadline()
+                ticket.getDeadline(),
+                ticket.getMaxCapacity(),
+                ticket.getResidualNum()
                 // ... 其他Ticket属性
         )).collect(Collectors.toList());
     }

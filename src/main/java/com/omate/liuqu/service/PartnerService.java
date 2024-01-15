@@ -76,8 +76,6 @@ public class PartnerService {
                         event.getEventId(),
                         event.getStartTime(),
                         event.getDeadline(),
-                        event.getMaxCapacity(),
-                        event.getResidualNum(),
                         event.getEventStatus()
                         // 不立即加载TicketDTOs
                 ))
