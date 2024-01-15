@@ -33,13 +33,10 @@ public class UserService {
     public LoginResponse loginUser(String phoneNumber, String password) {
         // 根据手机号查找用户
         User user = userRepository.findByUserTel(phoneNumber);
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found");
-        }
-
-        // 检查密码是否匹配
-        if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new BadCredentialsException("Invalid password");
+        if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
+            String accessToken = "1";
+            String refreshToken = "";
+            return new LoginResponse(accessToken, refreshToken);
         }
 
         // 生成JWT访问令牌和刷新令牌
@@ -57,6 +54,14 @@ public class UserService {
         // 验证验证码
         boolean isValid = verificationService.verifyCode(phoneNumber, verificationCode);
         if (isValid) {
+            // 根据手机号查找用户
+            User user = userRepository.findByUserTel(phoneNumber);
+            if (user != null) {
+                String accessToken = "User has been registered";
+                String refreshToken = "";
+                // 返回注册响应，包括令牌（根据您的业务需求）
+                return new LoginResponse(accessToken, refreshToken);
+            }
             // 创建用户实体
             User newUser = new User();
             newUser.setUserTel(phoneNumber);

@@ -48,6 +48,7 @@ public class Result implements Serializable {
     }
 
     public void setResultFailed(int code) {
+        this.code = code;
         this.message = resultMessage.get(code);
         this.data = null;
     }

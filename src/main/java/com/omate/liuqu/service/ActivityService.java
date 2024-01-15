@@ -1,6 +1,6 @@
 package com.omate.liuqu.service;
 
-import com.omate.liuqu.dto.ActivityDTO;
+import com.omate.liuqu.dto.*;
 import com.omate.liuqu.model.Activity;
 import com.omate.liuqu.model.CustomerStaff;
 import com.omate.liuqu.model.Partner;
@@ -116,6 +116,10 @@ public class ActivityService {
                 .orElseThrow(() -> new EntityNotFoundException("Activity not found with id " + id));
     }
 
+    public List<Activity> searchActivitiesByKeyword(String keyword) {
+        return activityRepository.findByActivityNameOrActivityAddressContainingIgnoreCase(keyword);
+    }
+
     // 删除特定ID的活动
     public boolean deleteActivity(Long id) {
         try {
@@ -137,11 +141,6 @@ public class ActivityService {
             activity.getEvents().forEach(event -> Hibernate.initialize(event.getTickets()));
         });
         return page;
-    }
-
-    // 通过商家ID获取活动列表
-    public List<Activity> getActivitiesByPartnerId(Long partnerId) {
-        return activityRepository.findByPartner_PartnerId(partnerId);
     }
 
     public Page<Activity> getFilteredActivities(
@@ -170,6 +169,7 @@ public class ActivityService {
 
         return activityRepository.findAll(spec, pageable);
     }
+
 
 
 

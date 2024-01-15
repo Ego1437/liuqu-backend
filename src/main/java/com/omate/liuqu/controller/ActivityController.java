@@ -84,15 +84,22 @@ public class ActivityController {
         }
     }
 
-    // 通过商家ID获取活动信息
-    @GetMapping("/getActivitiesByPartner/{partnerId}")
-    public ResponseEntity<List<Activity>> getActivitiesByPartnerId(@PathVariable Long partnerId) {
-        List<Activity> activities = activityService.getActivitiesByPartnerId(partnerId);
-        if (activities.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
+    //通过活动地址和活动名称进行模糊搜索
+    @GetMapping("/search")
+    public ResponseEntity<List<Activity>> searchActivities(@RequestParam String keyword) {
+        List<Activity> activities = activityService.searchActivitiesByKeyword(keyword);
         return ResponseEntity.ok(activities);
     }
+
+    // 通过商家ID获取活动信息
+//    @GetMapping("/getActivitiesByPartner/{partnerId}")
+//    public ResponseEntity<List<Activity>> getActivitiesByPartnerId(@PathVariable Long partnerId) {
+//        List<Activity> activities = activityService.getActivitiesByPartnerId(partnerId);
+//        if (activities.isEmpty()) {
+//            return ResponseEntity.notFound().build();
+//        }
+//        return ResponseEntity.ok(activities);
+//    }
     // 更新活动
     @PutMapping("/updateActivity/{id}")
     public ResponseEntity<Activity> updateActivity(@PathVariable Long id, @RequestBody Activity activityDetails) {

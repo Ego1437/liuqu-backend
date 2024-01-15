@@ -108,6 +108,18 @@ public class Partner {
         this.fansCount = fansCount;
     }
 
+    public void setPartnerStaff(PartnerStaff partnerStaff) {
+        this.partnerStaff = partnerStaff;
+    }
+
+    public String getPartnerAlbum() {
+        return partnerAlbum;
+    }
+
+    public void setPartnerAlbum(String partnerAlbum) {
+        this.partnerAlbum = partnerAlbum;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "partner_id", nullable = false)
@@ -151,13 +163,14 @@ public class Partner {
         return partnerStaff;
     }
 
-    public void setPartnerStaff(PartnerStaff partnerStaff) {
-        this.partnerStaff = partnerStaff;
-    }
-
     // 假设staff_id关联到Customer_staff表的staff_id
     @ManyToOne
     @JoinColumn(name = "partner_staff_id", referencedColumnName = "partner_staff_id")
     private PartnerStaff partnerStaff;
-    // Getters and setters for all fields
+
+    // 如果activityImage是一个JSON数组或其他复杂结构，需要适当处理
+    @Column(columnDefinition = "TEXT")
+    private String partnerAlbum;
+
+// Getters and setters for all fields
 }

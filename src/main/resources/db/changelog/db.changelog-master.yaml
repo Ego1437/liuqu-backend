@@ -332,6 +332,9 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: partner_album
+                  type: text  # Adjust this type based on your specific DB support for JSON
+              - column:
                   name: b_name
                   type: char(50)
                   constraints:
@@ -739,6 +742,9 @@ databaseChangeLog:
                   name: b_email
                   value: "partner@example.com"
               - column:
+                  name: partner_album
+                  value: "https://seopic.699pic.com/photo/50232/7585.jpg_wh1200.jpg,https://seopic.699pic.com/photo/50232/7585.jpg_wh1200.jpg, https://seopic.699pic.com/photo/50232/7585.jpg_wh1200.jpg,https://seopic.699pic.com/photo/50232/7585.jpg_wh1200.jpg"
+              - column:
                   name: password
                   value: "securepassword"
               - column:
@@ -796,3 +802,11 @@ databaseChangeLog:
                   name: partner_id
             indexName: idx_activities_partner_id
 
+  - changeSet:
+      id: 1-add-unique-constraint-user
+      author: Ego
+      changes:
+        - addUniqueConstraint:
+            tableName: users
+            columnNames: user_tel
+            constraintName: unique_user_tel

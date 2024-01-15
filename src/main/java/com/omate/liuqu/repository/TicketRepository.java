@@ -4,7 +4,10 @@ import com.omate.liuqu.model.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
     // JpaRepository提供了基本的CRUD操作，你可以根据需要添加自定义查询方法
+    List<Ticket> findByEventEventId(Long eventId);
 }

@@ -1,6 +1,8 @@
 package com.omate.liuqu.controller;
 
 
+import com.omate.liuqu.dto.ActivityDTO;
+import com.omate.liuqu.model.Activity;
 import com.omate.liuqu.model.Partner;
 import com.omate.liuqu.service.PartnerService;
 import jakarta.validation.Valid;
@@ -57,5 +59,14 @@ public class PartnerController {
                     return ResponseEntity.ok().<Void>build();
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/{partnerId}/activities")
+    public ResponseEntity<List<ActivityDTO>> getActivitiesByPartner(@PathVariable Long partnerId) {
+        List<ActivityDTO> activities = partnerService.getActivitiesWithDetailsByPartner(partnerId);
+        if (activities.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(activities);
     }
 }

@@ -29,11 +29,11 @@ public class Activity {
     }
 
     public CustomerStaff getStaff() {
-        return staff;
+        return customerStaff;
     }
 
     public void setStaff(CustomerStaff staff) {
-        this.staff = staff;
+        this.customerStaff = staff;
     }
 
     public String getActivityImage() {
@@ -129,7 +129,7 @@ public class Activity {
     // 假设staff_id关联到Customer_staff表的staff_id
     @ManyToOne
     @JoinColumn(name = "customer_staff_id", referencedColumnName = "customer_staff_id")
-    private CustomerStaff staff;
+    private CustomerStaff customerStaff;
 
     private String activityAddress;
 

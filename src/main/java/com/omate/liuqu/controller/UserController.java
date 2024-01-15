@@ -61,24 +61,39 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> loginUser(@RequestParam String phoneNumber, @RequestParam String password) {
+    public ResponseEntity<Result> loginUser(@RequestParam String phoneNumber, @RequestParam String password) {
+        Result result = new Result();
         try {
             LoginResponse response = userService.loginUser(phoneNumber, password);
-            return ResponseEntity.ok(response);
+            if (response.getAccessToken() == "1"){
+                result.setResultFailed(1); // 使用0作为成功代码，您可以根据需要更改这个值
+            }else {
+                result.setResultSuccess(0, response);
+            }
+            return ResponseEntity.ok(result);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new LoginResponse("Login failed: " + e.getMessage(), null));
+            result.setResultFailed(10, "Login failed: " + e.getMessage());
+            return ResponseEntity.badRequest().body(result);
         }
     }
 
     @PostMapping("/register")
-    public ResponseEntity<LoginResponse> registerUser(@RequestParam String phoneNumber,
+    public ResponseEntity<Result> registerUser(@RequestParam String phoneNumber,
                                                       @RequestParam String password,
                                                       @RequestParam String verificationCode) {
+        Result result = new Result();
         try {
             LoginResponse response = userService.registerUser(phoneNumber, password, verificationCode);
-            return ResponseEntity.ok(response);
+            if (response.getAccessToken() == "User has been registered"){
+                result.setResultFailed(2); // 使用0作为成功代码，您可以根据需要更改这个值
+            }else {
+                result.setResultSuccess(0, response);
+            }
+            return ResponseEntity.ok(result);
+
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(new LoginResponse("Registration failed: " + e.getMessage(), null));
+            result.setResultFailed(4);
+            return ResponseEntity.badRequest().body(result);
         }
     }
 

@@ -4,22 +4,34 @@ import com.omate.liuqu.model.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import io.jsonwebtoken.security.Keys;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+
 @Service
 public class TokenService {
 
     @Autowired
     private StringRedisTemplate redisTemplate;
 
-    private final SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
-//    private final String secretKey = "B981AD8E3ED3EC7955C1B599D6AF8"; // 使用您的密钥
+    @Value("${app.jwt.secretKey}")
+    private String base64SecretKey;
+
+    private SecretKey getSecretKey() {
+        // 解码Base64编码的密钥
+        byte[] decodedKey = Base64.getDecoder().decode(base64SecretKey);
+        // 使用解码后的字节数组创建一个新的SecretKeySpec对象
+        return new SecretKeySpec(decodedKey, 0, decodedKey.length, "HmacSHA512");
+    }
+
 
     public String createAccessToken(User user) {
 
@@ -28,7 +40,7 @@ public class TokenService {
                 .setSubject(String.valueOf(user.getUserId()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + validityInMilliseconds))
-                .signWith(SignatureAlgorithm.HS512, secretKey)
+                .signWith(SignatureAlgorithm.HS512, getSecretKey())
                 .compact();
     }
 
@@ -38,7 +50,7 @@ public class TokenService {
                 .setSubject(String.valueOf(user.getUserId()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + validityInMilliseconds))
-                .signWith(SignatureAlgorithm.HS512, secretKey)
+                .signWith(SignatureAlgorithm.HS512, getSecretKey())
                 .compact();
     }
 

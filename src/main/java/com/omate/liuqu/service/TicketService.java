@@ -1,5 +1,6 @@
 package com.omate.liuqu.service;
 
+import com.omate.liuqu.dto.TicketDTO;
 import com.omate.liuqu.model.Event;
 import com.omate.liuqu.model.Ticket;
 import com.omate.liuqu.repository.EventRepository;
@@ -11,12 +12,24 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TicketService {
 
     private final TicketRepository ticketRepository;
     private final EventRepository eventRepository; // 确保你有一个EventRepository
+
+    public List<TicketDTO> getTicketsForEvent(Long eventId) {
+        List<Ticket> tickets = ticketRepository.findByEventEventId(eventId);
+        return tickets.stream().map(ticket -> new TicketDTO(
+                ticket.getTicketId(),
+                ticket.getName(),
+                ticket.getPrice(),
+                ticket.getDeadline()
+                // ... 其他Ticket属性
+        )).collect(Collectors.toList());
+    }
 
     @Autowired
     public TicketService(TicketRepository ticketRepository, EventRepository eventRepository) {

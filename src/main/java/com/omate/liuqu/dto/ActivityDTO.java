@@ -1,15 +1,43 @@
 package com.omate.liuqu.dto;
 
+import com.omate.liuqu.model.CustomerStaff;
+import com.omate.liuqu.model.Event;
+import com.omate.liuqu.model.Tag;
+
 import java.util.List;
+import java.util.Set;
 
 public class ActivityDTO {
-
-    public String getEventTime() {
-        return eventTime;
+    public Long getActivityId() {
+        return activityId;
     }
 
-    public void setEventTime(String eventTime) {
-        this.eventTime = eventTime;
+    public void setActivityId(Long activityId) {
+        this.activityId = activityId;
+    }
+
+    public String getActivityAddress() {
+        return activityAddress;
+    }
+
+    public void setActivityAddress(String activityAddress) {
+        this.activityAddress = activityAddress;
+    }
+
+    public String getActivityImage() {
+        return activityImage;
+    }
+
+    public void setActivityImage(String activityImage) {
+        this.activityImage = activityImage;
+    }
+
+    public String getActivityName() {
+        return activityName;
+    }
+
+    public void setActivityName(String activityName) {
+        this.activityName = activityName;
     }
 
     public Integer getActivityDuration() {
@@ -20,30 +48,6 @@ public class ActivityDTO {
         this.activityDuration = activityDuration;
     }
 
-    public Integer getMaxCapacity() {
-        return maxCapacity;
-    }
-
-    public void setMaxCapacity(Integer maxCapacity) {
-        this.maxCapacity = maxCapacity;
-    }
-
-    public Integer getActivityType() {
-        return activityType;
-    }
-
-    public void setActivityType(Integer activityType) {
-        this.activityType = activityType;
-    }
-
-    public List<String> getActivityImage() {
-        return activityImage;
-    }
-
-    public void setActivityImage(List<String> activityImage) {
-        this.activityImage = activityImage;
-    }
-
     public String getPortfolio() {
         return portfolio;
     }
@@ -52,11 +56,11 @@ public class ActivityDTO {
         this.portfolio = portfolio;
     }
 
-    public List<String> getActivityDetail() {
+    public String getActivityDetail() {
         return activityDetail;
     }
 
-    public void setActivityDetail(List<String> activityDetail) {
+    public void setActivityDetail(String activityDetail) {
         this.activityDetail = activityDetail;
     }
 
@@ -68,23 +72,82 @@ public class ActivityDTO {
         this.activityStatus = activityStatus;
     }
 
-    public String getActivityName() {
-        return activityName;
+    public Integer getCategoryLevel1() {
+        return categoryLevel1;
     }
 
-    public void setActivityName(String activityName) {
-        this.activityName = activityName;
+    public void setCategoryLevel1(Integer categoryLevel1) {
+        this.categoryLevel1 = categoryLevel1;
     }
 
-    private String eventTime; // 或 LocalDateTime/Date 类型，取决于 JSON 数据格式
-    private Integer activityDuration;
-    private Integer maxCapacity;
-    private Integer activityType;
-    private List<String> activityImage; // JSON 或 String 类型取决于具体用例
-    private String portfolio; // JSON 或 String 类型取决于具体用例
-    private List<String> activityDetail; // JSON 或 String 类型取决于具体用例
-    private Integer activityStatus;
+    public Integer getCategoryLevel2() {
+        return categoryLevel2;
+    }
+
+    public void setCategoryLevel2(Integer categoryLevel2) {
+        this.categoryLevel2 = categoryLevel2;
+    }
+
+    public Set<TagDTO> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<TagDTO> tags) {
+        this.tags = tags;
+    }
+
+    public CustomerStaff getCustomerStaff() {
+        return customerStaff;
+    }
+
+    public void setCustomerStaff(CustomerStaff customerStaff) {
+        this.customerStaff = customerStaff;
+    }
+
+    public List<EventDTO> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<EventDTO> events) {
+        this.events = events;
+    }
+
+    private Long activityId;
+    private String activityAddress;
+    private String activityImage;
     private String activityName;
-    // Getters and Setters
+    private Integer activityDuration;
+    private String portfolio;
+    private String activityDetail;
+    private Integer activityStatus;
+    private Integer categoryLevel1;
+    private Integer categoryLevel2;
+    private Set<TagDTO> tags;
+    private CustomerStaff customerStaff;
+    private List<EventDTO> events; // 使用EventDTO替换Event实体
+    // 可以考虑添加其他您需要的字段
+
+    public ActivityDTO(Long activityId, String activityAddress, String activityImage,
+                       String activityName, Integer activityDuration, String portfolio,
+                       String activityDetail, Integer activityStatus,
+                       Integer categoryLevel1, Integer categoryLevel2,
+                       Set<TagDTO> tags, CustomerStaff customerStaff, List<EventDTO> events) {
+        this.activityId = activityId;
+        this.activityAddress = activityAddress;
+        this.activityImage = activityImage;
+        this.activityName = activityName;
+        this.activityDuration = activityDuration;
+        this.portfolio = portfolio;
+        this.activityDetail = activityDetail;
+        this.activityStatus = activityStatus;
+        this.categoryLevel1 = categoryLevel1;
+        this.categoryLevel2 = categoryLevel2;
+        this.tags = tags;
+        this.customerStaff = customerStaff;
+        this.events = events;
+    }
+
+    // Getters and setters
+    // ...
 }
 
