@@ -19,17 +19,13 @@ else
   echo "Usage: $0 [prod|test]"
   exit 1
 fi
-echo "Creating Docker network..."
-docker network create spring-redis-net
 
-# 启动 Redis 容器
-echo "Starting Redis container..."
-docker run --name redis-server -d --network spring-redis-net redis
-
-# 构建和运行 Spring Boot 容器
-echo "Building and starting Spring Boot container..."
+# build docker image
 docker build -t springboot/springboot-liuqu:v1.0.0 -f ./docker/springboot/Dockerfile .
-docker run --name=springboot-liuqu -d --network=spring-redis-net -p 6379:6379 -p 8083:8080 -e SPRING_REDIS_HOST=redis-server -e SPRING_REDIS_PORT=6379 springboot/springboot-liuqu:v1.0.0
+
+# Run the container by image
+#docker run --name=springboot-liuqu -d --add-host host.docker.internal:host-gateway -p 8083:8080 springboot/springboot-liuqu:v1.0.0
+docker run --name=springboot-liuqu -d --add-host host.docker.internal:host-gateway -p 8083:8080 springboot/springboot-liuqu:v1.0.0
 
 # Run Liquibase migrations with the correct properties file
 docker run --rm -it -v "$(pwd)/src/main/resources/db/changelog:/liquibase/changelog" liquibase/liquibase-mysql update --defaultsFile=$LIQUIBASE_DEFAULTS_FILE
