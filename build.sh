@@ -29,7 +29,7 @@ docker run --name redis-server -d --network spring-redis-net redis
 # 构建和运行 Spring Boot 容器
 echo "Building and starting Spring Boot container..."
 docker build -t springboot/springboot-liuqu:v1.0.0 -f ./docker/springboot/Dockerfile .
-docker run --name=springboot-liuqu -d --network=spring-redis-net -p 8083:8080 -e SPRING_REDIS_HOST=redis-server -e SPRING_REDIS_PORT=6379 springboot/springboot-liuqu:v1.0.0
+docker run --name=springboot-liuqu -d --network=spring-redis-net -p 6379:6379 8083:8080 springboot/springboot-liuqu:v1.0.0
 
 # build docker image
 #docker build -t springboot/springboot-liuqu:v1.0.0 -f ./docker/springboot/Dockerfile .
