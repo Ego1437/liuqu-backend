@@ -11,5 +11,6 @@ ADD src/main/resources/publicKey.pem /todocoder/publicKey.pem
 ADD src/main/resources/privateKey.pem /todocoder/privateKey.pem
 
 # 镜像启动后运行的脚本
+# ENTRYPOINT ["java","-jar", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005", "/todocoder/app.jar","${APP_ARGS}","--spring.profiles.active=dev","-c"]
 ENTRYPOINT ["java","-jar", "/todocoder/app.jar","${APP_ARGS}","--spring.profiles.active=dev","-c"]
 

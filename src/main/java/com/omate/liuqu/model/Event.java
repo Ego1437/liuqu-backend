@@ -63,6 +63,22 @@ public class Event {
         this.tickets = tickets;
     }
 
+    public Integer getMaxCapacity() {
+        return maxCapacity;
+    }
+
+    public void setMaxCapacity(Integer maxCapacity) {
+        this.maxCapacity = maxCapacity;
+    }
+
+    public Integer getResidualNum() {
+        return residualNum;
+    }
+
+    public void setResidualNum(Integer residualNum) {
+        this.residualNum = residualNum;
+    }
+
     @Id // 表示这是主键
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 主键生成策略
     @Column(name = "event_id") // 映射到表中的event_id列
@@ -84,6 +100,11 @@ public class Event {
     @Column(name = "event_status") // 映射到表中的event_status列
     private Integer eventStatus;
 
+    @Column(name = "max_capacity") // 映射到表中的max_capacity列
+    private Integer maxCapacity;
+
+    @Column(name = "residual_num") // 映射到表中的residual_num列
+    private Integer residualNum;
 
 
     @OneToMany(mappedBy = "event")

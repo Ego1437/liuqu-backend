@@ -159,7 +159,18 @@ databaseChangeLog:
                   constraints:
                     remarks: "结束时间"
                     nullable: false
-
+              - column:
+                  name: max_capacity
+                  type: int
+                  constraints:
+                    remarks: "活动最高人数"
+                    nullable: false
+              - column:
+                  name: residual_num
+                  type: int
+                  constraints:
+                    remarks: "剩余票数"
+                    nullable: false
               - column:
                   name: event_status
                   type: int
