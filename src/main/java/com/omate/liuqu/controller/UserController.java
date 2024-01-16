@@ -60,7 +60,7 @@ public class UserController {
         userDTO.setGender(user.getGender());
         userDTO.setAge(user.getAge());
         userDTO.setAvatarPath(user.getAvatar());
-        userDTO.setPostcode(user.getPostcode());
+        userDTO.setPostCode(user.getPostcode());
         userDTO.setAddress(user.getAddress());
         userDTO.setIsSubscribe(user.getIsSubscribe());
         return userDTO;
@@ -122,5 +122,22 @@ public class UserController {
         result.setResultSuccess(0, userService.getUserById(userId));
         return ResponseEntity.ok(result);
     }
+
+    @PutMapping("/updateUserInfoById/{userId}")
+    public ResponseEntity<Result> updateUser(@PathVariable Long userId, @Valid @RequestBody UserDTO updateDTO) {
+        Result result = new Result();
+        try {
+            UserDTO updatedUser = userService.updateUser(userId, updateDTO);
+            result.setResultSuccess(0, updatedUser);
+            return ResponseEntity.ok(result);
+        } catch (EntityNotFoundException e) {
+            result.setResultFailed(1, "User not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+        } catch (Exception e) {
+            result.setResultFailed(2, "Update failed: " + e.getMessage());
+            return ResponseEntity.badRequest().body(result);
+        }
+    }
+
 
 }
