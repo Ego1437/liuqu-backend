@@ -11,13 +11,6 @@ import java.util.Date;
 @Table(name = "Partners")
 public class Partner {
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getBusinessName() {
         return businessName;
@@ -91,10 +84,46 @@ public class Partner {
         this.description = description;
     }
 
+    public Long getPartnerId() {
+        return partnerId;
+    }
+
+    public void setPartnerId(Long partnerId) {
+        this.partnerId = partnerId;
+    }
+
+    public Integer getTicketTotal() {
+        return ticketTotal;
+    }
+
+    public void setTicketTotal(Integer orderTotal) {
+        this.ticketTotal = orderTotal;
+    }
+
+    public Integer getFansCount() {
+        return fansCount;
+    }
+
+    public void setFansCount(Integer fansCount) {
+        this.fansCount = fansCount;
+    }
+
+    public void setPartnerStaff(PartnerStaff partnerStaff) {
+        this.partnerStaff = partnerStaff;
+    }
+
+    public String getPartnerAlbum() {
+        return partnerAlbum;
+    }
+
+    public void setPartnerAlbum(String partnerAlbum) {
+        this.partnerAlbum = partnerAlbum;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "partner_id", nullable = false)
-    private Long id;
+    private Long partnerId;
 
     @Column(name = "b_name", nullable = false, length = 50)
     private String businessName;
@@ -121,8 +150,27 @@ public class Partner {
     @Column(name = "postcode")
     private Integer postcode;
 
-    @Column(name = "decription", length = 200)
+    @Column(name = "description", length = 200)
     private String description;
 
-    // Getters and setters for all fields
+    @Column(name = "ticket_total")
+    private Integer ticketTotal = 0; // 订单总量
+
+    @Column(name = "fans_count")
+    private Integer fansCount = 0; // 粉丝数
+
+    public PartnerStaff getPartnerStaff() {
+        return partnerStaff;
+    }
+
+    // 假设staff_id关联到Customer_staff表的staff_id
+    @ManyToOne
+    @JoinColumn(name = "partner_staff_id", referencedColumnName = "partner_staff_id")
+    private PartnerStaff partnerStaff;
+
+    // 如果activityImage是一个JSON数组或其他复杂结构，需要适当处理
+    @Column(columnDefinition = "TEXT")
+    private String partnerAlbum;
+
+// Getters and setters for all fields
 }

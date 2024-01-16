@@ -31,7 +31,9 @@ dependencies {
 //	implementation 'android.arch.work:work-runtime:1.0.1'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2' // or gson if you prefer Gson
-
+// Jackson Databind for JSON processing
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'mysql:mysql-connector-java:8.0.23'
 	implementation group: 'software.aws.rds', name: 'aws-mysql-jdbc', version: '1.1.9'
 	implementation 'org.springframework.boot:spring-boot-starter'
@@ -52,7 +54,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'jakarta.mail:jakarta.mail-api:2.1.2'
 
-
+//	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	compileOnly 'org.projectlombok:lombok:1.18.22'
 	annotationProcessor 'org.projectlombok:lombok:1.18.22'
@@ -83,8 +85,12 @@ task prepareTestProperties(type: Copy) {
 	into 'build/resources/main'
 }
 
-tasks.named('resolveMainClassName') {
-	dependsOn 'prepareTestProperties'
+tasks.named('resolveMainClassName').configure {
+	if (project.hasProperty('prod')) {
+		dependsOn 'prepareProdProperties'
+	} else if (project.hasProperty('test')) {
+		dependsOn 'prepareTestProperties'
+	}
 }
 
 // 修改bootJar任务，在执行之前选择和准备正确的配置文件
