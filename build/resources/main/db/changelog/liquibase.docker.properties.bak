@@ -1,8 +1,0 @@
-searchPath: /liquibase/changelog
-#url: jdbc:mysql://localhost:3306/5619
-#url: jdbc:mysql://host.docker.internal:3306/5619
-url: jdbc:mysql://liuqu.crkthhieiwvr.ap-southeast-2.rds.amazonaws.com:3306/5619
-changeLogFile: db.changelog-master.yaml
-username: root
-#password: root
-password: Yourpassword.

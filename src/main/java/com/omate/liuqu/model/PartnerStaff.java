@@ -8,10 +8,11 @@ public class PartnerStaff {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "partner_staff_id", nullable = false)
     private Integer partnerStaffId;
 
-    @Column(nullable = false)
-    private Integer partnerId; // 假设这是另一张表的外键
+//    @Column(nullable = false)
+//    private Integer partnerId; // 假设这是另一张表的外键
 
     @Column(length = 50, nullable = false)
     private String staffName;
@@ -33,9 +34,7 @@ public class PartnerStaff {
     @Column(length = 10)
     private String gender;
 
-    @ManyToOne
-    @JoinColumn(name = "partner_id", referencedColumnName = "id", nullable = false)
-    private Partner partner;
+
     // getter和setter方法
 }
 

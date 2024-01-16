@@ -1,8 +1,12 @@
 package com.omate.liuqu.controller;
 
 
+import com.omate.liuqu.dto.ActivityDTO;
+import com.omate.liuqu.model.Activity;
 import com.omate.liuqu.model.Partner;
 import com.omate.liuqu.service.PartnerService;
+import jakarta.validation.Valid;
+import lombok.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,9 +22,11 @@ public class PartnerController {
         this.partnerService = partnerService;
     }
 
-    @PostMapping
-    public Partner createPartner(@RequestBody Partner partner) {
-        return partnerService.createPartner(partner);
+    @PostMapping(value = "/createPartner", consumes = { "multipart/form-data" })
+//    @PostMapping("/createPartner")
+    public Partner createPartner(@Valid Partner partner,  @RequestParam("partnerStaffId") Long partnerStaffId) {
+
+        return partnerService.createPartner(partner, partnerStaffId);
     }
 
     @GetMapping
@@ -39,7 +45,7 @@ public class PartnerController {
     public ResponseEntity<Partner> updatePartner(@PathVariable Long id, @RequestBody Partner partner) {
         return partnerService.getPartnerById(id)
                 .map(existingPartner -> {
-                    partner.setId(id);
+                    partner.setPartnerId(id);
                     return ResponseEntity.ok(partnerService.updatePartner(partner));
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
@@ -53,5 +59,14 @@ public class PartnerController {
                     return ResponseEntity.ok().<Void>build();
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/{partnerId}/activities")
+    public ResponseEntity<List<ActivityDTO>> getActivitiesByPartner(@PathVariable Long partnerId) {
+        List<ActivityDTO> activities = partnerService.getActivitiesWithDetailsByPartner(partnerId);
+        if (activities.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(activities);
     }
 }
