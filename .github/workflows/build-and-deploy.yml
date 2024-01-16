@@ -48,13 +48,13 @@ jobs:
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
-          username: ego1437
+          username: Ego1437
           password: ${{ secrets.DEPLOY_ADA }}
 
       - name: Build and Push Docker Image
         run: |
-          docker build . --tag ghcr.io/Ego1437/liuqu-backend:latest
-          docker push ghcr.io/Ego1437/liuqu-backend:latest
+          docker build . --tag ghcr.io/ego1437/liuqu-backend:latest
+          docker push ghcr.io/ego1437/liuqu-backend:latest
 
 #      - name: Push to ECR
 #        id: ecr
