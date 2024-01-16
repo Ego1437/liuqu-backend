@@ -1,5 +1,6 @@
 package com.omate.liuqu.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
@@ -113,6 +114,7 @@ public class User {
     @NotBlank(message = "UserType is mandatory")
 
     @Column(length = 20)
+    @JsonIgnore  // 阻止序列化商家信息
     private String password;
 
     private Integer age;

@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
+import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -24,8 +25,6 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private StringRedisTemplate redisTemplate;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -103,6 +102,16 @@ public class UserService {
 //            throw new InvalidVerificationCodeException("Invalid verification code");
 //        }
 //    }
+
+    public User getUserById(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            // 处理用户不存在的情况，根据你的业务需求来决定是抛出异常还是返回 null
+            throw new RuntimeException("User not found with id: " + userId);
+        }
+    }
 
     private String generateRandomDigits(int length) {
         Random random = new Random();
