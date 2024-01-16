@@ -21,7 +21,10 @@ if [ ! "$(docker ps -q -f name=redis-server)" ]; then
         docker rm redis-server
     fi
     # 运行 Redis 容器
-    docker run --name redis-server -d --network spring-redis-net redis
+    docker run --name redis-server -d --network spring-redis-net \
+        -v "$(pwd)/docker/redis/redis.conf:/usr/local/etc/redis/redis.conf" \
+        redis redis-server /usr/local/etc/redis/redis.conf
+
 fi
 
 # 调用 build.sh 脚本来重新构建和启动 Spring Boot 应用
