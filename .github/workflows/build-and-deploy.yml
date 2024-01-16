@@ -30,7 +30,6 @@ jobs:
     steps:
       - name: Checkout project sources
         uses: actions/checkout@v3
-
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
@@ -44,18 +43,29 @@ jobs:
         with:
           arguments: buildTodoCoderJar
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          registry: ghcr.io
-          username: Ego1437
-          password: ${{ secrets.DEPLOY_ADA }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-southeast-2
 
-      - name: Build and Push Docker Image
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push the image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: liuqu-backend
+          IMAGE_TAG: latest
         run: |
-          docker build . --tag ghcr.io/ego1437/liuqu-backend:latest
-          docker push ghcr.io/ego1437/liuqu-backend:latest
-
+          # Build a docker container and push it to ECR
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f ./docker/springboot/Dockerfile .
+          echo "Pushing image to ECR..."
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 #      - name: Push to ECR
 #        id: ecr
 #        uses: jwalton/gh-ecr-push@v1
