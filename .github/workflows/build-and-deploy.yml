@@ -62,10 +62,10 @@ jobs:
           IMAGE_TAG: latest
         run: |
           # Build a docker container and push it to ECR
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f ./docker/springboot/Dockerfile .
+          docker build -t liuqu-backend -f ./docker/springboot/Dockerfile .
+          docker tag liuqu-backend:latest 992382689127.dkr.ecr.ap-southeast-2.amazonaws.com/liuqu-backend:latest
           echo "Pushing image to ECR..."
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+          docker push 992382689127.dkr.ecr.ap-southeast-2.amazonaws.com/liuqu-backend:latest
 #      - name: Push to ECR
 #        id: ecr
 #        uses: jwalton/gh-ecr-push@v1
