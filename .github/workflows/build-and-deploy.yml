@@ -48,8 +48,8 @@ jobs:
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
-          username: Ego1437
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: ego1437
+          password: ${{ secrets.DEPLOY_ADA }}
 
       - name: Build and Push Docker Image
         run: |
