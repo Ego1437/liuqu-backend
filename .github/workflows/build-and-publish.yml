@@ -43,9 +43,9 @@ jobs:
 #        with:
 #          arguments: buildTodoCoderJar
 
-      - name: Build with build.sh
+      - name: Build with build-jar.sh
         run: |
-          ./build.sh prod
+          ./build-jar.sh prod
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
