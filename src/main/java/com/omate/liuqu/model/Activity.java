@@ -133,6 +133,14 @@ public class Activity {
         this.verificationType = verificationType;
     }
 
+    public String getCollaborators() {
+        return collaborators;
+    }
+
+    public void setCollaborators(String collaborators) {
+        this.collaborators = collaborators;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "activity_id")
@@ -199,4 +207,7 @@ public class Activity {
     private List<Event> events;
 
     private Integer verificationType;
+
+    @Column(columnDefinition = "TEXT")
+    private String collaborators;
 }

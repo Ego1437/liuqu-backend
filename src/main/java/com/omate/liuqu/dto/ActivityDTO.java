@@ -120,6 +120,14 @@ public class ActivityDTO {
         this.verificationType = verificationType;
     }
 
+    public String getCollaborators() {
+        return collaborators;
+    }
+
+    public void setCollaborators(String collaborators) {
+        this.collaborators = collaborators;
+    }
+
     private Long activityId;
     private String activityAddress;
     private String activityImage;
@@ -134,9 +142,10 @@ public class ActivityDTO {
     private CustomerStaff customerStaff;
     private Integer verificationType;
     private List<EventDTO> events; // 使用EventDTO替换Event实体
+    private String collaborators; // 使用EventDTO替换Event实体
     // 可以考虑添加其他您需要的字段
 
-    public ActivityDTO(Long activityId, String activityAddress, String activityImage, String activityName, Integer activityDuration, String portfolio, String activityDetail, Integer activityStatus, Integer categoryLevel1, Integer categoryLevel2, Set<TagDTO> tags, CustomerStaff customerStaff, Integer verificationType, List<EventDTO> events) {
+    public ActivityDTO(Long activityId, String activityAddress, String activityImage, String activityName, Integer activityDuration, String portfolio, String activityDetail, Integer activityStatus, Integer categoryLevel1, Integer categoryLevel2, Set<TagDTO> tags, CustomerStaff customerStaff, Integer verificationType, List<EventDTO> events, String collaborators) {
         this.activityId = activityId;
         this.activityAddress = activityAddress;
         this.activityImage = activityImage;
@@ -151,7 +160,9 @@ public class ActivityDTO {
         this.customerStaff = customerStaff;
         this.verificationType = verificationType;
         this.events = events;
+        this.collaborators = collaborators;
     }
+
 
     // Getters and setters
     // ...

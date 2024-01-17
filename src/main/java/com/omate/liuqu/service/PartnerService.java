@@ -95,7 +95,8 @@ public class PartnerService {
                 tagDTOs,
                 staff,
                 activity.getVerificationType(),
-                eventDTOs
+                eventDTOs,
+                activity.getCollaborators()
         );
 
         return activityDTO;

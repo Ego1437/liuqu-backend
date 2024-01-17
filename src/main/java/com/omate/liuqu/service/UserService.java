@@ -1,8 +1,10 @@
 package com.omate.liuqu.service;
 
+import com.omate.liuqu.dto.UserDTO;
 import com.omate.liuqu.model.LoginResponse;
 import com.omate.liuqu.model.User;
 import com.omate.liuqu.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -84,6 +86,49 @@ public class UserService {
         }
     }
 
+    public UserDTO updateUser(Long userId, UserDTO updateDTO) {
+        // 从数据库中获取用户
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        // 更新用户信息
+        // 这里需要根据实际的DTO内容来更新，以下仅为示例
+        if (updateDTO.getUserName() != null) {
+            user.setUserName(updateDTO.getUserName());
+        }
+        if (updateDTO.getUserEmail() != null) {
+            user.setUserEmail(updateDTO.getUserEmail());
+        }
+//        if (updateDTO.getUserTel() != null) {
+//            user.setUserTel(updateDTO.getUserTel());
+//        }
+        if (updateDTO.getBirthday() != null) {
+            user.setBirthday(updateDTO.getBirthday());
+        }
+        if (updateDTO.getGender() != null) {
+            user.setGender(updateDTO.getGender());
+        }
+        if (updateDTO.getAvatarPath() != null) {
+            user.setAvatar(updateDTO.getAvatarPath());
+        }
+        if (updateDTO.getAddress() != null) {
+            user.setAddress(updateDTO.getAddress());
+        }
+        if (updateDTO.getPostCode() != null) {
+            user.setPostcode(updateDTO.getPostCode());
+        }
+        if (updateDTO.getIsSubscribe() != null) {
+            user.setIsSubscribe(updateDTO.getIsSubscribe());
+        }
+
+        // 保存更新后的用户
+        userRepository.save(user);
+
+        // 将更新后的用户转换为DTO并返回
+        return convertToDto(user);
+    }
+
+
 //    public boolean changePassword(PasswordChangeRequest request) {
 //        // 验证验证码
 //        String correctCode = redisTemplate.opsForValue().get("verification_code:" + request.getPhoneNumber());
@@ -120,6 +165,21 @@ public class UserService {
             sb.append(random.nextInt(10));
         }
         return sb.toString();
+    }
+
+    public UserDTO convertToDto(User user) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUserId(user.getUserId());
+        userDTO.setUserName(user.getUserName());
+        userDTO.setUserEmail(user.getUserEmail());
+        userDTO.setUserTel(user.getUserTel());
+        userDTO.setBirthday(user.getBirthday());
+        userDTO.setGender(user.getGender());
+        userDTO.setAvatarPath(user.getAvatar());
+        userDTO.setAddress(user.getAddress());
+        userDTO.setPostCode(user.getPostcode());
+        userDTO.setIsSubscribe(user.getIsSubscribe());
+        return userDTO;
     }
 
 }

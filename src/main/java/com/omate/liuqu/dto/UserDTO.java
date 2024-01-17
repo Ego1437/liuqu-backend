@@ -70,12 +70,12 @@ public class UserDTO {
         this.address = address;
     }
 
-    public Integer getPostcode() {
-        return postcode;
+    public Integer getPostCode() {
+        return postCode;
     }
 
-    public void setPostcode(Integer postcode) {
-        this.postcode = postcode;
+    public void setPostCode(Integer postCode) {
+        this.postCode = postCode;
     }
 
     public Integer getIsSubscribe() {
@@ -110,7 +110,7 @@ public class UserDTO {
     private String gender;
     private String avatarPath;
     private String address;
-    private Integer postcode;
+    private Integer postCode;
     private Integer isSubscribe;
     private LocalDate birthday;
     private String introduction;

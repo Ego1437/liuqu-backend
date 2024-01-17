@@ -139,7 +139,9 @@ databaseChangeLog:
                   constraints:
                     remarks: "活动认证类别"
                     nullable: false
-
+              - column:
+                  name: collaborators
+                  type: VARCHAR(20)
   - changeSet:
       id: 3-create-events-table
       author: Ego
@@ -373,6 +375,11 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: review_score
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
                   name: password
                   type: varchar(20)
               - column:
@@ -483,11 +490,6 @@ databaseChangeLog:
               - column:
                   name: staff_email
                   type: varchar(30)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: review_score
-                  type: int
                   constraints:
                     nullable: false
               - column:
@@ -752,9 +754,6 @@ databaseChangeLog:
               - column:
                   name: gender
                   value: "Non-Binary"
-              - column:
-                  name: review_score
-                  value: "5.0"
 
   - changeSet:
       id: 3-insert-default-partner
@@ -793,6 +792,9 @@ databaseChangeLog:
               - column:
                   name: partner_staff_id
                   value: "1"
+              - column:
+                  name: review_score
+                  value: "5.0"
 
   - changeSet:
       id: 4-insert-default-customer-staff
