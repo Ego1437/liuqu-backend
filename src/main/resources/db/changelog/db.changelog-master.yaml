@@ -524,6 +524,33 @@ databaseChangeLog:
                     unique: true
 
   - changeSet:
+      id: 11-create-banners-table
+      author: Ego
+      changes:
+        - createTable:
+            tableName: banners
+            columns:
+              - column:
+                  name: banner_id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: image_path
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: start
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+  - changeSet:
       id: 12-create-activity-tags-table
       author: Ego
       changes:
@@ -690,6 +717,25 @@ databaseChangeLog:
             baseColumnNames: partner_staff_id
             referencedTableName: partner_staffs
             referencedColumnNames: partner_staff_id
+  - changeSet:
+      id: 1-create-index-on-activities-partner_id
+      author: Ego
+      changes:
+        - createIndex:
+            tableName: activities
+            columns:
+              - column:
+                  name: partner_id
+            indexName: idx_activities_partner_id
+
+  - changeSet:
+      id: 1-add-unique-constraint-user
+      author: Ego
+      changes:
+        - addUniqueConstraint:
+            tableName: users
+            columnNames: user_tel
+            constraintName: unique_user_tel
 
   - changeSet:
       id: 1-insert-default-tags
@@ -824,22 +870,800 @@ databaseChangeLog:
               - column:
                   name: partner_id
                   valueNumeric: 1
+
   - changeSet:
-      id: 1-create-index-on-activities-partner_id
+      id: 4-insert-default-activity
       author: Ego
       changes:
-        - createIndex:
+        - insert:
             tableName: activities
             columns:
               - column:
+                  name: activity_id
+                  value: "1"
+              - column:
                   name: partner_id
-            indexName: idx_activities_partner_id
+                  value: "1"
+              - column:
+                  name: customer_staff_id
+                  value: "1"
+              - column:
+                  name: activity_name
+                  value: "逃离鹦鹉岛"
+              - column:
+                  name: activity_address
+                  value: "unit 19/233 Ele St, Mascot, 2000, Syndey, NSW"
+              - column:
+                  name: activity_image
+                  value: "https://www.toread.com.cn/ueditor/php/upload/image/20180518/1526604550205990.jpg,https://www.toread.com.cn/ueditor/php/upload/image/20180518/1526604550205990.jpg"
+              - column:
+                  name: portfolio
+                  value: "https://www.toread.com.cn/ueditor/php/upload/image/20180518/1526604550205990.jpg"
+              - column:
+                  name: activity_detail
+                  value: "https://www.toread.com.cn/ueditor/php/upload/image/20180518/1526604550205990.jpg,https://www.toread.com.cn/ueditor/php/upload/image/20180518/1526604550205990.jpg,https://www.toread.com.cn/ueditor/php/upload/image/20180518/1526604550205990.jpg,https://www.toread.com.cn/ueditor/php/upload/image/20180518/1526604550205990.jpg"
+              - column:
+                  name: activity_status
+                  value: "1"
+              - column:
+                  name: category_level_1
+                  value: "2"
+              - column:
+                  name: category_level_2
+                  value: "1"
+              - column:
+                  name: verification_type
+                  value: "0"
+              - column:
+                  name: collaborators
+                  value: "1,2"
+              - column:
+                  name: activity_duration
+                  value: "240"
+        - insert:
+            tableName: activities
+            columns:
+              - column:
+                  name: activity_id
+                  value: "2"
+              - column:
+                  name: partner_id
+                  value: "1"
+              - column:
+                  name: customer_staff_id
+                  value: "1"
+              - column:
+                  name: activity_name
+                  value: "狼人杀"
+              - column:
+                  name: activity_address
+                  value: "unit 19/233 Ele St, Mascot, 2000, Syndey, NSW"
+              - column:
+                  name: activity_image
+                  value: "https://www.toread.com.cn/ueditor/php/upload/image/20180518/1526604550205990.jpg,https://www.toread.com.cn/ueditor/php/upload/image/20180518/1526604550205990.jpg"
+              - column:
+                  name: portfolio
+                  value: "https://www.toread.com.cn/ueditor/php/upload/image/20180518/1526604550205990.jpg"
+              - column:
+                  name: activity_detail
+                  value: "https://www.toread.com.cn/ueditor/php/upload/image/20180518/1526604550205990.jpg,https://www.toread.com.cn/ueditor/php/upload/image/20180518/1526604550205990.jpg,https://www.toread.com.cn/ueditor/php/upload/image/20180518/1526604550205990.jpg,https://www.toread.com.cn/ueditor/php/upload/image/20180518/1526604550205990.jpg"
+              - column:
+                  name: activity_status
+                  value: "1"
+              - column:
+                  name: category_level_1
+                  value: "1"
+              - column:
+                  name: category_level_2
+                  value: "2"
+              - column:
+                  name: verification_type
+                  value: "1"
+              - column:
+                  name: collaborators
+                  value: "1,2"
+              - column:
+                  name: activity_duration
+                  value: "240"
+        - insert:
+            tableName: activities
+            columns:
+              - column:
+                  name: activity_id
+                  value: "3"
+              - column:
+                  name: partner_id
+                  value: "1"
+              - column:
+                  name: customer_staff_id
+                  value: "1"
+              - column:
+                  name: activity_name
+                  value: "血染钟楼"
+              - column:
+                  name: activity_address
+                  value: "unit 19/233 Ele St, Mascot, 2000, Syndey, NSW"
+              - column:
+                  name: activity_image
+                  value: "https://www.toread.com.cn/ueditor/php/upload/image/20180518/1526604550205990.jpg,https://www.toread.com.cn/ueditor/php/upload/image/20180518/1526604550205990.jpg"
+              - column:
+                  name: portfolio
+                  value: "https://www.toread.com.cn/ueditor/php/upload/image/20180518/1526604550205990.jpg"
+              - column:
+                  name: activity_detail
+                  value: "https://www.toread.com.cn/ueditor/php/upload/image/20180518/1526604550205990.jpg,https://www.toread.com.cn/ueditor/php/upload/image/20180518/1526604550205990.jpg,https://www.toread.com.cn/ueditor/php/upload/image/20180518/1526604550205990.jpg,https://www.toread.com.cn/ueditor/php/upload/image/20180518/1526604550205990.jpg"
+              - column:
+                  name: activity_status
+                  value: "1"
+              - column:
+                  name: category_level_1
+                  value: "1"
+              - column:
+                  name: category_level_2
+                  value: "3"
+              - column:
+                  name: verification_type
+                  value: "0"
+              - column:
+                  name: collaborators
+                  value: "1,2"
+              - column:
+                  name: activity_duration
+                  value: "240"
+        - insert:
+            tableName: activities
+            columns:
+              - column:
+                  name: activity_id
+                  value: "4"
+              - column:
+                  name: partner_id
+                  value: "1"
+              - column:
+                  name: customer_staff_id
+                  value: "1"
+              - column:
+                  name: activity_name
+                  value: "猫鼠游戏"
+              - column:
+                  name: activity_address
+                  value: "unit 19/233 Ele St, Mascot, 2000, Syndey, NSW"
+              - column:
+                  name: activity_image
+                  value: "https://www.toread.com.cn/ueditor/php/upload/image/20180518/1526604550205990.jpg,https://www.toread.com.cn/ueditor/php/upload/image/20180518/1526604550205990.jpg"
+              - column:
+                  name: portfolio
+                  value: "https://www.toread.com.cn/ueditor/php/upload/image/20180518/1526604550205990.jpg"
+              - column:
+                  name: activity_detail
+                  value: "https://www.toread.com.cn/ueditor/php/upload/image/20180518/1526604550205990.jpg,https://www.toread.com.cn/ueditor/php/upload/image/20180518/1526604550205990.jpg,https://www.toread.com.cn/ueditor/php/upload/image/20180518/1526604550205990.jpg,https://www.toread.com.cn/ueditor/php/upload/image/20180518/1526604550205990.jpg"
+              - column:
+                  name: activity_status
+                  value: "1"
+              - column:
+                  name: category_level_1
+                  value: "2"
+              - column:
+                  name: category_level_2
+                  value: "5"
+              - column:
+                  name: verification_type
+                  value: "0"
+              - column:
+                  name: collaborators
+                  value: "1,2"
+              - column:
+                  name: activity_duration
+                  value: "240"
 
   - changeSet:
-      id: 1-add-unique-constraint-user
+      id: 4-insert-default-event
       author: Ego
       changes:
-        - addUniqueConstraint:
-            tableName: users
-            columnNames: user_tel
-            constraintName: unique_user_tel
+        - insert:
+            tableName: events
+            columns:
+              - column:
+                  name: event_id
+                  value: "1"
+              - column:
+                  name: activity_id
+                  value: "1"
+              - column:
+                  name: start_time
+                  value: "2024-01-20 23:59:59"
+              - column:
+                  name: deadline
+                  value: "2024-01-15 23:59:59"
+              - column:
+                  name: max_capacity
+                  value: "10"
+              - column:
+                  name: residual_num
+                  value: "7"
+              - column:
+                  name: event_status
+                  value: "1"
+        - insert:
+            tableName: events
+            columns:
+              - column:
+                  name: event_id
+                  value: "2"
+              - column:
+                  name: activity_id
+                  value: "1"
+              - column:
+                  name: start_time
+                  type: datetime
+                  value: "2024-01-25 23:59:59"
+              - column:
+                  name: deadline
+                  value: "2024-01-20 23:59:59"
+              - column:
+                  name: max_capacity
+                  value: "10"
+              - column:
+                  name: residual_num
+                  value: "7"
+              - column:
+                  name: event_status
+                  value: "1"
+        - insert:
+            tableName: events
+            columns:
+              - column:
+                  name: event_id
+                  value: "3"
+              - column:
+                  name: activity_id
+                  value: "1"
+              - column:
+                  name: start_time
+                  type: datetime
+                  value: "2024-01-30 23:59:59"
+              - column:
+                  name: deadline
+                  value: "2024-01-25 23:59:59"
+              - column:
+                  name: max_capacity
+                  value: "10"
+              - column:
+                  name: residual_num
+                  value: "7"
+              - column:
+                  name: event_status
+                  value: "1"
+        - insert:
+            tableName: events
+            columns:
+              - column:
+                  name: event_id
+                  value: "4"
+              - column:
+                  name: activity_id
+                  value: "1"
+              - column:
+                  name: start_time
+                  type: datetime
+                  value: "2024-02-05 23:59:59"
+              - column:
+                  name: deadline
+                  value: "2024-02-01 23:59:59"
+              - column:
+                  name: max_capacity
+                  value: "10"
+              - column:
+                  name: residual_num
+                  value: "7"
+              - column:
+                  name: event_status
+                  value: "1"
+        - insert:
+            tableName: events
+            columns:
+              - column:
+                  name: event_id
+                  value: "5"
+              - column:
+                  name: activity_id
+                  value: "2"
+              - column:
+                  name: start_time
+                  type: datetime
+                  value: "2024-01-20 23:59:59"
+              - column:
+                  name: deadline
+                  value: "2024-01-15 23:59:59"
+              - column:
+                  name: max_capacity
+                  value: "10"
+              - column:
+                  name: residual_num
+                  value: "7"
+              - column:
+                  name: event_status
+                  value: "1"
+        - insert:
+            tableName: events
+            columns:
+              - column:
+                  name: event_id
+                  value: "6"
+              - column:
+                  name: activity_id
+                  value: "2"
+              - column:
+                  name: start_time
+                  type: datetime
+                  value: "2024-01-25 23:59:59"
+              - column:
+                  name: deadline
+                  value: "2024-01-20 23:59:59"
+              - column:
+                  name: max_capacity
+                  value: "10"
+              - column:
+                  name: residual_num
+                  value: "7"
+              - column:
+                  name: event_status
+                  value: "1"
+        - insert:
+            tableName: events
+            columns:
+              - column:
+                  name: event_id
+                  value: "7"
+              - column:
+                  name: activity_id
+                  value: "2"
+              - column:
+                  name: start_time
+                  type: datetime
+                  value: "2024-01-30 23:59:59"
+              - column:
+                  name: deadline
+                  value: "2024-01-25 23:59:59"
+              - column:
+                  name: max_capacity
+                  value: "10"
+              - column:
+                  name: residual_num
+                  value: "7"
+              - column:
+                  name: event_status
+                  value: "1"
+        - insert:
+            tableName: events
+            columns:
+              - column:
+                  name: event_id
+                  value: "8"
+              - column:
+                  name: activity_id
+                  value: "2"
+              - column:
+                  name: start_time
+                  type: datetime
+                  value: "2024-02-05 23:59:59"
+              - column:
+                  name: deadline
+                  value: "2024-02-01 23:59:59"
+              - column:
+                  name: max_capacity
+                  value: "10"
+              - column:
+                  name: residual_num
+                  value: "7"
+              - column:
+                  name: event_status
+                  value: "1"
+
+  - changeSet:
+      id: 4-insert-default-ticket
+      author: Ego
+      changes:
+        - insert:
+            tableName: tickets
+            columns:
+              - column:
+                  name: ticket_id
+                  value: "1"
+              - column:
+                  name: event_id
+                  value: "1"
+              - column:
+                  name: price
+                  value: "35"
+              - column:
+                  name: deadline
+                  value: "2024-01-13 23:59:59"
+              - column:
+                  name: max_capacity
+                  value: "10"
+              - column:
+                  name: residual_num
+                  value: "7"
+              - column:
+                  name: name
+                  value: "早鸟票"
+        - insert:
+            tableName: tickets
+            columns:
+              - column:
+                  name: ticket_id
+                  value: "2"
+              - column:
+                  name: event_id
+                  value: "1"
+              - column:
+                  name: price
+                  value: "45"
+              - column:
+                  name: deadline
+                  value: "2024-01-14 23:59:59"
+              - column:
+                  name: max_capacity
+                  value: "10"
+              - column:
+                  name: residual_num
+                  value: "7"
+              - column:
+                  name: name
+                  value: "普通票"
+        - insert:
+            tableName: tickets
+            columns:
+              - column:
+                  name: ticket_id
+                  value: "3"
+              - column:
+                  name: event_id
+                  value: "2"
+              - column:
+                  name: price
+                  value: "35"
+              - column:
+                  name: deadline
+                  value: "2024-01-13 23:59:59"
+              - column:
+                  name: max_capacity
+                  value: "10"
+              - column:
+                  name: residual_num
+                  value: "7"
+              - column:
+                  name: name
+                  value: "早鸟票"
+        - insert:
+            tableName: tickets
+            columns:
+              - column:
+                  name: ticket_id
+                  value: "4"
+              - column:
+                  name: event_id
+                  value: "2"
+              - column:
+                  name: price
+                  value: "45"
+              - column:
+                  name: deadline
+                  value: "2024-01-17 23:59:59"
+              - column:
+                  name: max_capacity
+                  value: "10"
+              - column:
+                  name: residual_num
+                  value: "0"
+              - column:
+                  name: name
+                  value: "普通票"
+
+        - insert:
+            tableName: tickets
+            columns:
+              - column:
+                  name: ticket_id
+                  value: "5"
+              - column:
+                  name: event_id
+                  value: "3"
+              - column:
+                  name: price
+                  value: "35"
+              - column:
+                  name: deadline
+                  value: "2024-01-13 23:59:59"
+              - column:
+                  name: max_capacity
+                  value: "10"
+              - column:
+                  name: residual_num
+                  value: "7"
+              - column:
+                  name: name
+                  value: "早鸟票"
+        - insert:
+            tableName: tickets
+            columns:
+              - column:
+                  name: ticket_id
+                  value: "6"
+              - column:
+                  name: event_id
+                  value: "3"
+              - column:
+                  name: price
+                  value: "45"
+              - column:
+                  name: deadline
+                  value: "2024-01-20 23:59:59"
+              - column:
+                  name: max_capacity
+                  value: "10"
+              - column:
+                  name: residual_num
+                  value: "0"
+              - column:
+                  name: name
+                  value: "普通票"
+        - insert:
+            tableName: tickets
+            columns:
+              - column:
+                  name: ticket_id
+                  value: "7"
+              - column:
+                  name: event_id
+                  value: "2"
+              - column:
+                  name: price
+                  value: "35"
+              - column:
+                  name: deadline
+                  value: "2024-01-25 23:59:59"
+              - column:
+                  name: max_capacity
+                  value: "10"
+              - column:
+                  name: residual_num
+                  value: "7"
+              - column:
+                  name: name
+                  value: "早鸟票"
+        - insert:
+            tableName: tickets
+            columns:
+              - column:
+                  name: ticket_id
+                  value: "8"
+              - column:
+                  name: event_id
+                  value: "2"
+              - column:
+                  name: price
+                  value: "45"
+              - column:
+                  name: deadline
+                  value: "2024-01-26 23:59:59"
+              - column:
+                  name: max_capacity
+                  value: "10"
+              - column:
+                  name: residual_num
+                  value: "0"
+              - column:
+                  name: name
+                  value: "普通票"
+
+        - insert:
+            tableName: tickets
+            columns:
+              - column:
+                  name: ticket_id
+                  value: "9"
+              - column:
+                  name: event_id
+                  value: "5"
+              - column:
+                  name: price
+                  value: "35"
+              - column:
+                  name: deadline
+                  value: "2024-01-13 23:59:59"
+              - column:
+                  name: max_capacity
+                  value: "10"
+              - column:
+                  name: residual_num
+                  value: "0"
+              - column:
+                  name: name
+                  value: "早鸟票"
+        - insert:
+            tableName: tickets
+            columns:
+              - column:
+                  name: ticket_id
+                  value: "10"
+              - column:
+                  name: event_id
+                  value: "5"
+              - column:
+                  name: price
+                  value: "45"
+              - column:
+                  name: deadline
+                  value: "2024-01-05 23:59:59"
+              - column:
+                  name: max_capacity
+                  value: "10"
+              - column:
+                  name: residual_num
+                  value: "0"
+              - column:
+                  name: name
+                  value: "普通票"
+        - insert:
+            tableName: tickets
+            columns:
+              - column:
+                  name: ticket_id
+                  value: "11"
+              - column:
+                  name: event_id
+                  value: "6"
+              - column:
+                  name: price
+                  value: "35"
+              - column:
+                  name: deadline
+                  value: "2024-01-25 23:59:59"
+              - column:
+                  name: max_capacity
+                  value: "10"
+              - column:
+                  name: residual_num
+                  value: "7"
+              - column:
+                  name: name
+                  value: "早鸟票"
+        - insert:
+            tableName: tickets
+            columns:
+              - column:
+                  name: ticket_id
+                  value: "12"
+              - column:
+                  name: event_id
+                  value: "2"
+              - column:
+                  name: price
+                  value: "45"
+              - column:
+                  name: deadline
+                  value: "2024-01-26 23:59:59"
+              - column:
+                  name: max_capacity
+                  value: "10"
+              - column:
+                  name: residual_num
+                  value: "0"
+              - column:
+                  name: name
+                  value: "普通票"
+
+  - changeSet:
+      id: 4-insert-activity-tags
+      author: Ego
+      changes:
+        - insert:
+            tableName: activity_tags
+            columns:
+              - column:
+                  name: activity_id
+                  value: "1"
+              - column:
+                  name: tag_id
+                  value: "1"
+        - insert:
+            tableName: activity_tags
+            columns:
+              - column:
+                  name: activity_id
+                  value: "1"
+              - column:
+                  name: tag_id
+                  value: "2"
+        - insert:
+            tableName: activity_tags
+            columns:
+              - column:
+                  name: activity_id
+                  value: "1"
+              - column:
+                  name: tag_id
+                  value: "3"
+        - insert:
+            tableName: activity_tags
+            columns:
+              - column:
+                  name: activity_id
+                  value: "2"
+              - column:
+                  name: tag_id
+                  value: "1"
+        - insert:
+            tableName: activity_tags
+            columns:
+              - column:
+                  name: activity_id
+                  value: "2"
+              - column:
+                  name: tag_id
+                  value: "2"
+        - insert:
+            tableName: activity_tags
+            columns:
+              - column:
+                  name: activity_id
+                  value: "2"
+              - column:
+                  name: tag_id
+                  value: "3"
+        - insert:
+            tableName: activity_tags
+            columns:
+              - column:
+                  name: activity_id
+                  value: "2"
+              - column:
+                  name: tag_id
+                  value: "4"
+        - insert:
+            tableName: activity_tags
+            columns:
+              - column:
+                  name: activity_id
+                  value: "3"
+              - column:
+                  name: tag_id
+                  value: "4"
+        - insert:
+            tableName: activity_tags
+            columns:
+              - column:
+                  name: activity_id
+                  value: "3"
+              - column:
+                  name: tag_id
+                  value: "5"
+        - insert:
+            tableName: activity_tags
+            columns:
+              - column:
+                  name: activity_id
+                  value: "4"
+              - column:
+                  name: tag_id
+                  value: "1"
+        - insert:
+            tableName: activity_tags
+            columns:
+              - column:
+                  name: activity_id
+                  value: "4"
+              - column:
+                  name: tag_id
+                  value: "2"
+        - insert:
+            tableName: activity_tags
+            columns:
+              - column:
+                  name: activity_id
+                  value: "4"
+              - column:
+                  name: tag_id
+                  value: "4"
