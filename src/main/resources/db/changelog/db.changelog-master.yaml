@@ -53,6 +53,13 @@ databaseChangeLog:
                 - column:
                     name: is_subscribe
                     type: int
+                - column:
+                    name: birthday
+                    type: date
+                - column:
+                    name: introduction
+                    type: varchar(255)
+
 
   - changeSet:
       id: 2-create-activities-table
@@ -126,7 +133,12 @@ databaseChangeLog:
                   constraints:
                     remarks: "活动状态"
                     nullable: false
-
+              - column:
+                  name: verification_type
+                  type: int
+                  constraints:
+                    remarks: "活动认证类别"
+                    nullable: false
 
   - changeSet:
       id: 3-create-events-table
@@ -474,6 +486,11 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: review_score
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
                   name: password
                   type: varchar(20)
               - column:
@@ -735,6 +752,9 @@ databaseChangeLog:
               - column:
                   name: gender
                   value: "Non-Binary"
+              - column:
+                  name: review_score
+                  value: "5.0"
 
   - changeSet:
       id: 3-insert-default-partner

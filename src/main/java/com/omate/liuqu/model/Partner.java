@@ -1,6 +1,7 @@
 package com.omate.liuqu.model;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 
@@ -120,6 +121,14 @@ public class Partner {
         this.partnerAlbum = partnerAlbum;
     }
 
+    public BigDecimal getReviewScore() {
+        return reviewScore;
+    }
+
+    public void setReviewScore(BigDecimal reviewScore) {
+        this.reviewScore = reviewScore;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "partner_id", nullable = false)
@@ -172,5 +181,7 @@ public class Partner {
     @Column(columnDefinition = "TEXT")
     private String partnerAlbum;
 
+    @Column(name = "review_score")
+    private BigDecimal reviewScore;
 // Getters and setters for all fields
 }

@@ -112,6 +112,14 @@ public class ActivityDTO {
         this.events = events;
     }
 
+    public Integer getVerificationType() {
+        return verificationType;
+    }
+
+    public void setVerificationType(Integer verificationType) {
+        this.verificationType = verificationType;
+    }
+
     private Long activityId;
     private String activityAddress;
     private String activityImage;
@@ -124,14 +132,11 @@ public class ActivityDTO {
     private Integer categoryLevel2;
     private Set<TagDTO> tags;
     private CustomerStaff customerStaff;
+    private Integer verificationType;
     private List<EventDTO> events; // 使用EventDTO替换Event实体
     // 可以考虑添加其他您需要的字段
 
-    public ActivityDTO(Long activityId, String activityAddress, String activityImage,
-                       String activityName, Integer activityDuration, String portfolio,
-                       String activityDetail, Integer activityStatus,
-                       Integer categoryLevel1, Integer categoryLevel2,
-                       Set<TagDTO> tags, CustomerStaff customerStaff, List<EventDTO> events) {
+    public ActivityDTO(Long activityId, String activityAddress, String activityImage, String activityName, Integer activityDuration, String portfolio, String activityDetail, Integer activityStatus, Integer categoryLevel1, Integer categoryLevel2, Set<TagDTO> tags, CustomerStaff customerStaff, Integer verificationType, List<EventDTO> events) {
         this.activityId = activityId;
         this.activityAddress = activityAddress;
         this.activityImage = activityImage;
@@ -144,6 +149,7 @@ public class ActivityDTO {
         this.categoryLevel2 = categoryLevel2;
         this.tags = tags;
         this.customerStaff = customerStaff;
+        this.verificationType = verificationType;
         this.events = events;
     }
 

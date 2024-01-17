@@ -47,7 +47,7 @@ public class UserController {
 
     /**
      * *
-     * 
+     * updateUserInfoById
      * @param user
      * @return userDTO
      */
@@ -58,7 +58,7 @@ public class UserController {
         userDTO.setUserEmail(user.getUserEmail());
         userDTO.setUserTel(user.getUserTel());
         userDTO.setGender(user.getGender());
-        userDTO.setAge(user.getAge());
+        userDTO.setBirthday(user.getBirthday());
         userDTO.setAvatarPath(user.getAvatar());
         userDTO.setPostcode(user.getPostcode());
         userDTO.setAddress(user.getAddress());

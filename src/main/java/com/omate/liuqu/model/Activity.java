@@ -125,6 +125,14 @@ public class Activity {
         this.customerStaff = customerStaff;
     }
 
+    public Integer getVerificationType() {
+        return verificationType;
+    }
+
+    public void setVerificationType(Integer verificationType) {
+        this.verificationType = verificationType;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "activity_id")
@@ -189,4 +197,6 @@ public class Activity {
 
     @OneToMany(mappedBy = "activity")
     private List<Event> events;
+
+    private Integer verificationType;
 }
