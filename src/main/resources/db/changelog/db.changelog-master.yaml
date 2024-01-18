@@ -254,6 +254,12 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
+                  name: order_omipay_number
+                  type: varchar(255)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
                   name: activity_id
                   type: bigint
                   constraints:
@@ -300,6 +306,11 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: order_pay_url
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
                   name: order_date
                   type: date
                   constraints:
@@ -329,14 +340,26 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: event_time
-                  type: date
+                  name: partner_id
+                  type: bigint
                   constraints:
                     nullable: false
               - column:
-                  name: promotion
-                  type: varchar(100)
-
+                  name: message
+                  type: varchar(255)
+              - column:
+                  name: status
+                  type: int
+              - column:
+                  name: start_time
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: update_time
+                  type: datetime
+                  constraints:
+                    nullable: false
   - changeSet:
       id: 7-create-partners-table
       author: Ego

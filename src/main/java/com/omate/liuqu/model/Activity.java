@@ -12,6 +12,75 @@ import jakarta.persistence.Entity;
 @Entity
 @Table(name = "activities")
 public class Activity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "activity_id")
+    private Long activityId;
+
+    // 假设partner_id关联到Partner表的partner_id
+    @ManyToOne
+    @JoinColumn(name = "partner_id", referencedColumnName = "partner_id")
+    @JsonIgnore  // 阻止序列化商家信息
+    private Partner partner;
+
+    @Column(name = "partner_id", updatable = false, insertable = false)
+    private Long partnerId;
+
+    // 假设staff_id关联到Customer_staff表的staff_id
+    @ManyToOne
+    @JoinColumn(name = "customer_staff_id", referencedColumnName = "customer_staff_id")
+    private CustomerStaff customerStaff;
+
+    private String activityAddress;
+
+    // 如果activityImage是一个JSON数组或其他复杂结构，需要适当处理
+    @Column(columnDefinition = "TEXT")
+    private String activityImage;
+
+    private String activityName;
+
+    private Integer activityDuration;
+
+    // 如果portfolio是一个JSON对象或数组，需要适当处理
+    @Column(columnDefinition = "TEXT")
+    private String portfolio;
+
+    // 如果activityDetail是一个JSON对象或数组，需要适当处理
+    @Column(columnDefinition = "TEXT")
+    private String activityDetail;
+
+    private Integer activityStatus;
+
+    @ManyToMany
+    @JoinTable(
+            name = "activity_tags",
+            joinColumns = @JoinColumn(name = "activity_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private Set<Tag> tags;
+    // getters and setters
+
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
+    }
+
+    @Column(name = "category_level_1")
+    private Integer categoryLevel1;
+
+    @Column(name = "category_level_2")
+    private Integer categoryLevel2;
+
+    @OneToMany(mappedBy = "activity")
+    private List<Event> events;
+
+    private Integer verificationType;
+
+    @Column(columnDefinition = "TEXT")
+    private String collaborators;
 
     public Long getActivityId() {
         return activityId;
@@ -140,74 +209,4 @@ public class Activity {
     public void setCollaborators(String collaborators) {
         this.collaborators = collaborators;
     }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "activity_id")
-    private Long activityId;
-
-    // 假设partner_id关联到Partner表的partner_id
-    @ManyToOne
-    @JoinColumn(name = "partner_id", referencedColumnName = "partner_id")
-    @JsonIgnore  // 阻止序列化商家信息
-    private Partner partner;
-
-    @Column(name = "partner_id", updatable = false, insertable = false)
-    private Long partnerId;
-
-    // 假设staff_id关联到Customer_staff表的staff_id
-    @ManyToOne
-    @JoinColumn(name = "customer_staff_id", referencedColumnName = "customer_staff_id")
-    private CustomerStaff customerStaff;
-
-    private String activityAddress;
-
-    // 如果activityImage是一个JSON数组或其他复杂结构，需要适当处理
-    @Column(columnDefinition = "TEXT")
-    private String activityImage;
-
-    private String activityName;
-
-    private Integer activityDuration;
-
-    // 如果portfolio是一个JSON对象或数组，需要适当处理
-    @Column(columnDefinition = "TEXT")
-    private String portfolio;
-
-    // 如果activityDetail是一个JSON对象或数组，需要适当处理
-    @Column(columnDefinition = "TEXT")
-    private String activityDetail;
-
-    private Integer activityStatus;
-
-    @ManyToMany
-    @JoinTable(
-            name = "activity_tags",
-            joinColumns = @JoinColumn(name = "activity_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id")
-    )
-    private Set<Tag> tags;
-    // getters and setters
-
-    public List<Event> getEvents() {
-        return events;
-    }
-
-    public void setEvents(List<Event> events) {
-        this.events = events;
-    }
-
-    @Column(name = "category_level_1")
-    private Integer categoryLevel1;
-
-    @Column(name = "category_level_2")
-    private Integer categoryLevel2;
-
-    @OneToMany(mappedBy = "activity")
-    private List<Event> events;
-
-    private Integer verificationType;
-
-    @Column(columnDefinition = "TEXT")
-    private String collaborators;
 }
