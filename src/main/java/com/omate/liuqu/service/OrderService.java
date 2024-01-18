@@ -1,6 +1,8 @@
 package com.omate.liuqu.service;
 
+import ch.qos.logback.classic.util.LogbackMDCAdapter;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omate.liuqu.model.Activity;
 import com.omate.liuqu.model.Order;
@@ -17,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.security.MessageDigest;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -40,12 +43,28 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
-    public Optional<Order> getOrderById(Long id) {
+    public Optional<Order> getOrderById(String id) {
         return orderRepository.findById(id);
     }
 
+    private JsonNode jsonNode;
 
     // ... 其他方法 ...
+    public List<Order> getOrdersByUserId(Long userId) {
+        return orderRepository.findByUserId(userId);
+    }
+
+    public boolean updateOrderStatus(String orderId, Integer newStatus) {
+        Optional<Order> orderOptional = orderRepository.findById(orderId);
+        if (orderOptional.isPresent()) {
+            Order order = orderOptional.get();
+            order.setOrderStatus(newStatus);
+            orderRepository.save(order);
+            return true;
+        }
+        return false;
+    }
+
 
     private String generateNonceStr() {
         String candidateChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -103,52 +122,41 @@ public class OrderService {
         // 查询 Activity 实体
         Activity activity = activityRepository.findById(activityId)
                 .orElseThrow(() -> new RuntimeException("Activity not found"));
+
+        order.setActivity(activity);
         // 获取 Activity 名称
         String activityName = activity.getActivityName();
 
-        String startTime = order.getOrderDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        LocalDateTime now = LocalDateTime.now();
+        String startTime = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         String orderName = activityName + " " + startTime; // 组合名称
-        BigDecimal totalAmount = order.getTotalAmount(); // 总金额
+        BigDecimal finalAmount = order.getFinalAmount(); // 总金额
         String orderId = order.getOrderId(); // 自增ID
 
         RestTemplate restTemplate = new RestTemplate();
         // JSON 请求体的 Map
-        Map<String, Object> jsonParams = new HashMap<>();
-        jsonParams.put("order_name", orderName); // 组合后的名称
-        jsonParams.put("currency", "AUD"); // 货币类型
-        jsonParams.put("amount", totalAmount.intValue()); // Order 实体中的 totalAmount
-        jsonParams.put("notify_url", ""); // 通知地址
-        jsonParams.put("out_order_no", orderId); // Order 实体的自增 ID
-        jsonParams.put("platform", "ALIPAYONLINE"); // 支付平台
-        jsonParams.put("o_number", order.getPartnerId()); // 商家id
-        jsonParams.put("app_id", "wx571a1u199z0qc240"); // 商户的AppId
-
-// QueryString 参数的 Map
+        // 查询字符串参数的 Map
         Map<String, String> queryStringParams = new HashMap<>();
         queryStringParams.put("m_number", "20002946064");
         queryStringParams.put("timestamp", String.valueOf(System.currentTimeMillis()));
         queryStringParams.put("nonce_str", generateNonceStr());
+        queryStringParams.put("order_name", orderName); // 组合后的名称
+        queryStringParams.put("currency", "AUD"); // 货币类型
+        queryStringParams.put("amount", String.valueOf(finalAmount.intValue())); // Order 实体中的 totalAmount
+        queryStringParams.put("notify_url", "www.omatesydney.com"); // 通知地址
+        queryStringParams.put("out_order_no", orderId); // Order 实体的自增 ID
+        queryStringParams.put("platform", "ALIPAYONLINE"); // 支付平台
+//        queryStringParams.put("o_number", String.valueOf(order.getPartnerId())); // 商家id
+        queryStringParams.put("o_number", "001"); // 商家id
+        queryStringParams.put("app_id", "wx571a1u199z0qc240"); // 商户的AppId
+        // 添加签名，假设 generateSignature 已经考虑了所有参数
         queryStringParams.put("sign", generateSignature(queryStringParams));
 
-// 使用 ObjectMapper 将 JSON 请求体的 Map 转换为 JSON 字符串
+        // 使用 ObjectMapper 将 JSON 请求体的 Map 转换为 JSON 字符串
         ObjectMapper objectMapper = new ObjectMapper();
-        String jsonRequestBody = null;
-        try {
-            jsonRequestBody = objectMapper.writeValueAsString(jsonParams);
-        } catch (JsonProcessingException e) {
-            // 处理异常
-            // 这里可以记录日志，或者根据您的应用程序需求来处理异常
-            e.printStackTrace();
-        }
-
         // 设置请求头
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-
-        // 创建请求实体
-        HttpEntity<String> entity = new HttpEntity<>(jsonRequestBody, headers);
-
-
         // 构建 QueryString
         String queryString = queryStringParams.entrySet().stream()
                 .map(entry -> entry.getKey() + "=" + entry.getValue())
@@ -157,36 +165,46 @@ public class OrderService {
         // 将查询字符串参数附加到 URL
         String urlWithQueryString = API_URL + "?" + queryString;
 
-        // 发送 POST 请求
-        ResponseEntity<String> response = restTemplate.postForEntity(urlWithQueryString, entity, String.class);
+        // 发送 GET 请求
+        ResponseEntity<String> response = restTemplate.getForEntity(urlWithQueryString, String.class);
 
 
         // 处理响应
+
         if (response.getStatusCode().is2xxSuccessful()) {
             ObjectMapper resultObjectMapper = new ObjectMapper();
             try {
-                ApiSuccessResponse successResponse = resultObjectMapper.readValue(response.getBody(), ApiSuccessResponse.class);
-                if ("SUCCESS".equals(successResponse.getReturnCode())) {
+                JsonNode jsonNode = resultObjectMapper.readTree(response.getBody());
+                String returnCode = jsonNode.get("return_code").asText();
+
+                if ("SUCCESS".equals(returnCode)) {
                     // 更新订单信息
-                    order.setOrderOmipayNumber(successResponse.getOrderString());
-                    order.setOrderPayUrl(successResponse.getOrderNo());
+                    String orderNo = jsonNode.get("order_no").asText();
+                    String orderString = jsonNode.get("order_string").asText();
+                    order.setOrderOmipayNumber(orderNo);
+                    order.setOrderPayUrl(orderString);
                     orderRepository.save(order);
                     return order;
                 } else {
                     // 回滚票档余票数量
+                    String errorCode = jsonNode.get("error_code").asText();
+                    String errorMsg = jsonNode.get("error_msg").asText();
                     ticketService.rollbackResidualNum(order.getTicketId(), order.getQuantity());
-                    ApiErrorResponse errorResponse = resultObjectMapper.readValue(response.getBody(), ApiErrorResponse.class);
-                    throw new ExternalApiException("订单创建失败: " + errorResponse.getErrorMsg());
+                    throw new ExternalApiException(errorCode +"订单创建失败: " + errorMsg);
                 }
             } catch (Exception e) {
                 // JSON解析错误
+                String errorCode = jsonNode.get("error_code").asText();
+                String errorMsg = jsonNode.get("error_msg").asText();
                 ticketService.rollbackResidualNum(order.getTicketId(), order.getQuantity());
-                throw new ExternalApiException("订单创建失败: 解析响应数据出错");
+                throw new ExternalApiException(errorCode + "订单创建失败: "+ errorMsg);
             }
         } else {
             // HTTP错误响应
+            String errorCode = jsonNode.get("error_code").asText();
+            String errorMsg = jsonNode.get("error_msg").asText();
             ticketService.rollbackResidualNum(order.getTicketId(), order.getQuantity());
-            throw new ExternalApiException("订单创建失败: API请求错误");
+            throw new ExternalApiException(errorCode + "订单创建失败: " + errorMsg);
         }
 
         // ...
@@ -204,13 +222,13 @@ public class OrderService {
         }
     }
 
-    public Order updateOrder(Long id, Order orderDetails) {
+    public Order updateOrder(String id, Order orderDetails) {
         Order order = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
         // Update the order entity here
         return orderRepository.save(order);
     }
 
-    public void deleteOrder(Long id) {
+    public void deleteOrder(String id) {
         Order order = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
         orderRepository.delete(order);
     }
@@ -218,64 +236,76 @@ public class OrderService {
     // 你需要定义ApiSuccessResponse和ApiErrorResponse类来匹配API的响应格式
     // 例如:
     public static class ApiSuccessResponse {
-        private String returnCode;
-        private String orderString;
-        private String orderNo;
+        private String return_code;
+        private String order_string;
+        private String order_no;
         // getter和setter
 
         public String getReturnCode() {
-            return returnCode;
+            return return_code;
         }
 
         public void setReturnCode(String returnCode) {
-            this.returnCode = returnCode;
+            this.return_code = returnCode;
         }
 
         public String getOrderString() {
-            return orderString;
+            return order_string;
         }
 
         public void setOrderString(String orderString) {
-            this.orderString = orderString;
+            this.order_string = orderString;
         }
 
         public String getOrderNo() {
-            return orderNo;
+            return order_no;
         }
 
         public void setOrderNo(String orderNo) {
-            this.orderNo = orderNo;
+            this.order_no = orderNo;
+        }
+
+        public ApiSuccessResponse(String return_code, String order_string, String order_no) {
+            this.return_code = return_code;
+            this.order_string = order_string;
+            this.order_no = order_no;
         }
     }
 
     public static class ApiErrorResponse {
-        private String returnCode;
-        private String errorCode;
-        private String errorMsg;
+        private String return_code;
+        private String error_code;
+        private String error_msg;
         // getter和setter
 
         public String getReturnCode() {
-            return returnCode;
+            return return_code;
         }
 
         public void setReturnCode(String returnCode) {
-            this.returnCode = returnCode;
+            this.return_code = returnCode;
         }
 
         public String getErrorCode() {
-            return errorCode;
+            return error_code;
         }
 
         public void setErrorCode(String errorCode) {
-            this.errorCode = errorCode;
+            this.error_code = errorCode;
         }
 
         public String getErrorMsg() {
-            return errorMsg;
+            return error_msg;
         }
 
         public void setErrorMsg(String errorMsg) {
-            this.errorMsg = errorMsg;
+            this.error_msg = errorMsg;
+        }
+
+        public ApiErrorResponse(String return_code, String error_code, String error_msg) {
+            this.return_code = return_code;
+            this.error_code = error_code;
+            this.error_msg = error_msg;
         }
     }
 }

@@ -248,8 +248,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: order_id
-                  type: bigint
-                  autoIncrement: true
+                  type: varchar(50)
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -275,6 +274,11 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: partner_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
                   name: customer_staff_id
                   type: int
                   constraints:
@@ -297,6 +301,7 @@ databaseChangeLog:
                   type: int
                   constraints:
                     nullable: false
+
               - column:
                   name: platform_discount
                   type: decimal(10,2)
@@ -306,13 +311,23 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: order_status
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
                   name: order_pay_url
                   type: varchar(255)
                   constraints:
                     nullable: false
               - column:
-                  name: order_date
-                  type: date
+                  name: start_time
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: update_time
+                  type: datetime
                   constraints:
                     nullable: false
   - changeSet:
