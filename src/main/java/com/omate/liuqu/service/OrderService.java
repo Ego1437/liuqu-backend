@@ -104,7 +104,7 @@ public class OrderService {
         }
     }
 
-    public Order createOrder(Order order) {
+    public Order createOrder(Order order) throws JsonProcessingException {
         boolean updateResult = ticketService.updateResidualNum(order.getTicketId(), order.getQuantity());
 
         if(updateResult) {
@@ -115,7 +115,7 @@ public class OrderService {
         }
     }
 
-    public Order createThirdOrder(Order order){
+    public Order createThirdOrder(Order order) throws JsonProcessingException {
         String generatedId = generateNonceStr();
         order.setOrderId(generatedId);
         Long activityId = order.getActivityId();
@@ -171,27 +171,26 @@ public class OrderService {
 
         // 处理响应
 
+
         if (response.getStatusCode().is2xxSuccessful()) {
             ObjectMapper resultObjectMapper = new ObjectMapper();
+            JsonNode jsonNode = resultObjectMapper.readTree(response.getBody());
             try {
-                JsonNode jsonNode = resultObjectMapper.readTree(response.getBody());
-                String returnCode = jsonNode.get("return_code").asText();
 
-                if ("SUCCESS".equals(returnCode)) {
-                    // 更新订单信息
-                    String orderNo = jsonNode.get("order_no").asText();
-                    String orderString = jsonNode.get("order_string").asText();
-                    order.setOrderOmipayNumber(orderNo);
-                    order.setOrderPayUrl(orderString);
-                    orderRepository.save(order);
-                    return order;
-                } else {
-                    // 回滚票档余票数量
+                String returnCode = jsonNode.get("return_code").asText();
+                if (!"SUCCESS".equals(returnCode)) {
                     String errorCode = jsonNode.get("error_code").asText();
                     String errorMsg = jsonNode.get("error_msg").asText();
-                    ticketService.rollbackResidualNum(order.getTicketId(), order.getQuantity());
-                    throw new ExternalApiException(errorCode +"订单创建失败: " + errorMsg);
+                    throw new ExternalApiException(errorCode + "订单创建失败: " + errorMsg);
                 }
+                // 更新订单信息
+                String orderNo = jsonNode.get("order_no").asText();
+                String orderString = jsonNode.get("order_string").asText();
+                order.setOrderOmipayNumber(orderNo);
+                order.setOrderPayUrl(orderString);
+                orderRepository.save(order);
+                return order;
+
             } catch (Exception e) {
                 // JSON解析错误
                 String errorCode = jsonNode.get("error_code").asText();
@@ -233,79 +232,4 @@ public class OrderService {
         orderRepository.delete(order);
     }
 
-    // 你需要定义ApiSuccessResponse和ApiErrorResponse类来匹配API的响应格式
-    // 例如:
-    public static class ApiSuccessResponse {
-        private String return_code;
-        private String order_string;
-        private String order_no;
-        // getter和setter
-
-        public String getReturnCode() {
-            return return_code;
-        }
-
-        public void setReturnCode(String returnCode) {
-            this.return_code = returnCode;
-        }
-
-        public String getOrderString() {
-            return order_string;
-        }
-
-        public void setOrderString(String orderString) {
-            this.order_string = orderString;
-        }
-
-        public String getOrderNo() {
-            return order_no;
-        }
-
-        public void setOrderNo(String orderNo) {
-            this.order_no = orderNo;
-        }
-
-        public ApiSuccessResponse(String return_code, String order_string, String order_no) {
-            this.return_code = return_code;
-            this.order_string = order_string;
-            this.order_no = order_no;
-        }
-    }
-
-    public static class ApiErrorResponse {
-        private String return_code;
-        private String error_code;
-        private String error_msg;
-        // getter和setter
-
-        public String getReturnCode() {
-            return return_code;
-        }
-
-        public void setReturnCode(String returnCode) {
-            this.return_code = returnCode;
-        }
-
-        public String getErrorCode() {
-            return error_code;
-        }
-
-        public void setErrorCode(String errorCode) {
-            this.error_code = errorCode;
-        }
-
-        public String getErrorMsg() {
-            return error_msg;
-        }
-
-        public void setErrorMsg(String errorMsg) {
-            this.error_msg = errorMsg;
-        }
-
-        public ApiErrorResponse(String return_code, String error_code, String error_msg) {
-            this.return_code = return_code;
-            this.error_code = error_code;
-            this.error_msg = error_msg;
-        }
-    }
 }

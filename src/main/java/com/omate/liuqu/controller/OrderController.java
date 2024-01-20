@@ -1,5 +1,6 @@
 package com.omate.liuqu.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.omate.liuqu.model.Order;
 import com.omate.liuqu.model.Result;
 import com.omate.liuqu.service.OrderService;
@@ -30,7 +31,7 @@ public class OrderController {
     }
 
     @PostMapping("/createOrder")
-    public ResponseEntity<Result> createOrder(@RequestBody Order order) {
+    public ResponseEntity<Result> createOrder(@RequestBody Order order) throws JsonProcessingException {
         Order newOrder = orderService.createOrder(order);
         Result result = new Result();
         if(newOrder != null){

@@ -173,6 +173,7 @@ databaseChangeLog:
                   constraints:
                     remarks: "结束时间"
                     nullable: false
+
               - column:
                   name: max_capacity
                   type: int
@@ -236,6 +237,11 @@ databaseChangeLog:
                   type: int
                   constraints:
                     remarks: "剩余票数"
+                    nullable: false
+              - column:
+                  name: ticket_status
+                  type: int
+                  constraints:
                     nullable: false
 
 
@@ -317,7 +323,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: order_pay_url
-                  type: varchar(255)
+                  type: text
                   constraints:
                     nullable: false
               - column:
@@ -397,6 +403,9 @@ databaseChangeLog:
               - column:
                   name: partner_album
                   type: text  # Adjust this type based on your specific DB support for JSON
+              - column:
+                  name: partner_avatar
+                  type: text
               - column:
                   name: b_name
                   type: char(50)
@@ -857,6 +866,9 @@ databaseChangeLog:
                   value: "partner@example.com"
               - column:
                   name: partner_album
+                  value: "https://seopic.699pic.com/photo/50232/7585.jpg_wh1200.jpg,https://seopic.699pic.com/photo/50232/7585.jpg_wh1200.jpg, https://seopic.699pic.com/photo/50232/7585.jpg_wh1200.jpg,https://seopic.699pic.com/photo/50232/7585.jpg_wh1200.jpg"
+              - column:
+                  name: partner_avatar
                   value: "https://seopic.699pic.com/photo/50232/7585.jpg_wh1200.jpg,https://seopic.699pic.com/photo/50232/7585.jpg_wh1200.jpg, https://seopic.699pic.com/photo/50232/7585.jpg_wh1200.jpg,https://seopic.699pic.com/photo/50232/7585.jpg_wh1200.jpg"
               - column:
                   name: password
@@ -1326,6 +1338,9 @@ databaseChangeLog:
               - column:
                   name: name
                   value: "早鸟票"
+              - column:
+                  name: ticket_status
+                  value: "1"
         - insert:
             tableName: tickets
             columns:
@@ -1350,6 +1365,9 @@ databaseChangeLog:
               - column:
                   name: name
                   value: "普通票"
+              - column:
+                  name: ticket_status
+                  value: "1"
         - insert:
             tableName: tickets
             columns:
@@ -1374,6 +1392,9 @@ databaseChangeLog:
               - column:
                   name: name
                   value: "早鸟票"
+              - column:
+                  name: ticket_status
+                  value: "1"
         - insert:
             tableName: tickets
             columns:
@@ -1398,6 +1419,9 @@ databaseChangeLog:
               - column:
                   name: name
                   value: "普通票"
+              - column:
+                  name: ticket_status
+                  value: "1"
 
         - insert:
             tableName: tickets
@@ -1423,6 +1447,9 @@ databaseChangeLog:
               - column:
                   name: name
                   value: "早鸟票"
+              - column:
+                  name: ticket_status
+                  value: "1"
         - insert:
             tableName: tickets
             columns:
@@ -1447,6 +1474,9 @@ databaseChangeLog:
               - column:
                   name: name
                   value: "普通票"
+              - column:
+                  name: ticket_status
+                  value: "1"
         - insert:
             tableName: tickets
             columns:
@@ -1471,6 +1501,9 @@ databaseChangeLog:
               - column:
                   name: name
                   value: "早鸟票"
+              - column:
+                  name: ticket_status
+                  value: "1"
         - insert:
             tableName: tickets
             columns:
@@ -1495,6 +1528,9 @@ databaseChangeLog:
               - column:
                   name: name
                   value: "普通票"
+              - column:
+                  name: ticket_status
+                  value: "1"
 
         - insert:
             tableName: tickets
@@ -1520,6 +1556,9 @@ databaseChangeLog:
               - column:
                   name: name
                   value: "早鸟票"
+              - column:
+                  name: ticket_status
+                  value: "1"
         - insert:
             tableName: tickets
             columns:
@@ -1544,6 +1583,9 @@ databaseChangeLog:
               - column:
                   name: name
                   value: "普通票"
+              - column:
+                  name: ticket_status
+                  value: "1"
         - insert:
             tableName: tickets
             columns:
@@ -1568,6 +1610,9 @@ databaseChangeLog:
               - column:
                   name: name
                   value: "早鸟票"
+              - column:
+                  name: ticket_status
+                  value: "1"
         - insert:
             tableName: tickets
             columns:
@@ -1592,6 +1637,9 @@ databaseChangeLog:
               - column:
                   name: name
                   value: "普通票"
+              - column:
+                  name: ticket_status
+                  value: "1"
 
   - changeSet:
       id: 4-insert-activity-tags
