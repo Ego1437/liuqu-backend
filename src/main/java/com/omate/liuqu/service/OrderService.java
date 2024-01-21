@@ -4,8 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omate.liuqu.model.Activity;
+import com.omate.liuqu.model.Event;
 import com.omate.liuqu.model.Order;
 import com.omate.liuqu.repository.ActivityRepository;
+import com.omate.liuqu.repository.EventRepository;
 import com.omate.liuqu.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -29,6 +31,9 @@ public class OrderService {
 
     private static final String API_URL = "https://www.omipay.com.cn/omipay/api/v2/MakeAPPOrder";
     private static final String SECRET_KEY = "b94dbe95833240198227afca0f13135d";
+
+    @Autowired
+    private EventRepository eventRepository;
 
     @Autowired
     private OrderRepository orderRepository;
@@ -147,7 +152,12 @@ public class OrderService {
         // 获取 Activity 名称
         String activityName = activity.getActivityName();
 
-        LocalDateTime now = LocalDateTime.now();
+        // 获取Event的时间
+        Long eventId = order.getEventId();
+        // 查询 Activity 实体
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new RuntimeException("Event not found"));
+        LocalDateTime now = event.getStartTime();
         String startTime = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         String orderName = activityName + " " + startTime; // 组合名称
         BigDecimal finalAmount = order.getFinalAmount(); // 总金额

@@ -2,6 +2,7 @@ package com.omate.liuqu.service;
 
 import com.omate.liuqu.dto.UserDTO;
 import com.omate.liuqu.model.LoginResponse;
+import com.omate.liuqu.model.PasswordChangeRequest;
 import com.omate.liuqu.model.User;
 import com.omate.liuqu.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -129,24 +130,23 @@ public class UserService {
     }
 
 
-//    public boolean changePassword(PasswordChangeRequest request) {
-//        // 验证验证码
-//        String correctCode = redisTemplate.opsForValue().get("verification_code:" + request.getPhoneNumber());
-//        if (correctCode != null && correctCode.equals(request.getVerificationCode())) {
-//            // 查找用户
-//            User user = userRepository.findByUserTel(request.getPhoneNumber());
-//            if (user != null) {
-//                // 更新密码
-//                user.setPassword(passwordEncoder.encode(request.getNewPassword()));
-//                userRepository.save(user);
-//                return true;
-//            } else {
-//                throw new UsernameNotFoundException("User not found with phone number: " + request.getPhoneNumber());
-//            }
-//        } else {
-//            throw new InvalidVerificationCodeException("Invalid verification code");
-//        }
-//    }
+    public boolean changePassword(PasswordChangeRequest request) {
+        // 验证验证码
+        if (verificationService.verifyCode(request.getPhoneNumber(), request.getVerificationCode())) {
+            // 查找用户
+            User user = userRepository.findByUserTel(request.getPhoneNumber());
+            if (user != null) {
+                // 更新密码
+                user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+                userRepository.save(user);
+                return true;
+            } else {
+                throw new UsernameNotFoundException("User not found with phone number: " + request.getPhoneNumber());
+            }
+        } else {
+            throw new IllegalArgumentException("Invalid verification code");
+        }
+    }
 
     public User getUserById(Long userId) {
         Optional<User> user = userRepository.findById(userId);

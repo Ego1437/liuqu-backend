@@ -123,6 +123,23 @@ public class UserController {
         return ResponseEntity.ok(result);
     }
 
+    @PostMapping("/change-password")
+    public ResponseEntity<Result> changePassword(@RequestBody PasswordChangeRequest request) {
+        Result result = new Result();
+        try {
+            boolean isChanged = userService.changePassword(request);
+            if (isChanged) {
+                result.setResultSuccess(0, "Password changed successfully");
+            } else {
+                result.setResultFailed(10);
+            }
+            return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (UsernameNotFoundException | IllegalArgumentException e) {
+            result.setResultFailed(5, e.getMessage());
+            return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PutMapping("/updateUserInfoById/{userId}")
     public ResponseEntity<Result> updateUser(@PathVariable Long userId, @Valid @RequestBody UserDTO updateDTO) {
         Result result = new Result();
