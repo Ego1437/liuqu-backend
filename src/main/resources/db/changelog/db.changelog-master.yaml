@@ -590,17 +590,20 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: image_path
-                  type: varchar(255)
-                  constraints:
-                    nullable: false
-                    unique: true
+                  name: image_url
+                  type: text
               - column:
-                  name: start
+                  name: title
                   type: varchar(255)
-                  constraints:
-                    nullable: false
-                    unique: true
+              - column:
+                  name: link
+                  type: text
+              - column:
+                  name: start_time
+                  type: datetime
+              - column:
+                  name: end_time
+                  type: datetime
 
   - changeSet:
       id: 12-create-activity-tags-table
