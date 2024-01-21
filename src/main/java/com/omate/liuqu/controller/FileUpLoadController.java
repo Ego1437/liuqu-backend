@@ -50,10 +50,6 @@ public class FileUpLoadController {
                 return "application/octet-stream";
         }
     }
-
-
-
-
     
     @GetMapping("/view/{filename}")
     public ResponseEntity<Resource> viewFile(@PathVariable String filename) {

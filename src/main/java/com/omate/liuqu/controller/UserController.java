@@ -124,7 +124,13 @@ public class UserController {
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity<Result> changePassword(@RequestBody PasswordChangeRequest request) {
+    public ResponseEntity<Result> changePassword(@RequestParam String phoneNumber,
+                                                 @RequestParam String newPassword,
+                                                 @RequestParam String verificationCode) {
+        PasswordChangeRequest request = new PasswordChangeRequest();
+        request.setNewPassword(newPassword);
+        request.setPhoneNumber(phoneNumber);
+        request.setVerificationCode(verificationCode);
         Result result = new Result();
         try {
             boolean isChanged = userService.changePassword(request);

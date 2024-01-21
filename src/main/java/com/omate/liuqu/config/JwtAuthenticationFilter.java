@@ -5,6 +5,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 
 // ... 其他导入 ...
 
+@Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     // ... 注入或定义需要的依赖 ...
