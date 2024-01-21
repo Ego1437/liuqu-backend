@@ -35,6 +35,9 @@ public class Partner {
     @Column(name = "type", length = 10)
     private String type;
 
+    @Column(name = "partner_avatar", length = 100)
+    private String partnerAvatar;
+
     @Column(name = "address", length = 100)
     private String address;
 
@@ -66,7 +69,17 @@ public class Partner {
     @Column(name = "review_score")
     private BigDecimal reviewScore;
 // Getters and setters for all fields
-public String getBusinessName() {
+
+
+    public String getPartnerAvatar() {
+        return partnerAvatar;
+    }
+
+    public void setPartnerAvatar(String partnerAvatar) {
+        this.partnerAvatar = partnerAvatar;
+    }
+
+    public String getBusinessName() {
     return businessName;
 }
 

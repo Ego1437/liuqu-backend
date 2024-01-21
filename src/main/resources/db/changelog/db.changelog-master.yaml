@@ -295,6 +295,11 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: contact_phone
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+              - column:
                   name: total_amount
                   type: decimal(10,2)
                   constraints:
@@ -848,6 +853,7 @@ databaseChangeLog:
                   name: gender
                   value: "Non-Binary"
 
+
   - changeSet:
       id: 3-insert-default-partner
       author: Ego
@@ -869,7 +875,7 @@ databaseChangeLog:
                   value: "https://seopic.699pic.com/photo/50232/7585.jpg_wh1200.jpg,https://seopic.699pic.com/photo/50232/7585.jpg_wh1200.jpg, https://seopic.699pic.com/photo/50232/7585.jpg_wh1200.jpg,https://seopic.699pic.com/photo/50232/7585.jpg_wh1200.jpg"
               - column:
                   name: partner_avatar
-                  value: "https://seopic.699pic.com/photo/50232/7585.jpg_wh1200.jpg,https://seopic.699pic.com/photo/50232/7585.jpg_wh1200.jpg, https://seopic.699pic.com/photo/50232/7585.jpg_wh1200.jpg,https://seopic.699pic.com/photo/50232/7585.jpg_wh1200.jpg"
+                  value: "https://seopic.699pic.com/photo/50232/7585.jpg_wh1200.jpg"
               - column:
                   name: password
                   value: "securepassword"

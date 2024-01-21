@@ -1,6 +1,5 @@
 package com.omate.liuqu.service;
 
-import ch.qos.logback.classic.util.LogbackMDCAdapter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,15 +8,16 @@ import com.omate.liuqu.model.Order;
 import com.omate.liuqu.repository.ActivityRepository;
 import com.omate.liuqu.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
-import java.net.URL;
 import java.security.MessageDigest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -39,33 +39,21 @@ public class OrderService {
     @Autowired
     private TicketService ticketService;
 
-    public List<Order> getAllOrders() {
-        return orderRepository.findAll();
+    private boolean isOrderOfCurrentUser(Order order) {
+        // 获取当前认证用户
+        String currentUsername = getCurrentUsername();
+        // 检查订单是否属于该用户
+        return order.getUserId().equals(currentUsername);
     }
 
-    public Optional<Order> getOrderById(String id) {
-        return orderRepository.findById(id);
-    }
-
-    private JsonNode jsonNode;
-
-    // ... 其他方法 ...
-    public List<Order> getOrdersByUserId(Long userId) {
-        return orderRepository.findByUserId(userId);
-    }
-
-    public boolean updateOrderStatus(String orderId, Integer newStatus) {
-        Optional<Order> orderOptional = orderRepository.findById(orderId);
-        if (orderOptional.isPresent()) {
-            Order order = orderOptional.get();
-            order.setOrderStatus(newStatus);
-            orderRepository.save(order);
-            return true;
+    private String getCurrentUsername() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            return ((UserDetails)principal).getUsername();
+        } else {
+            return principal.toString(); // 或者处理未认证的情况
         }
-        return false;
     }
-
-
     private String generateNonceStr() {
         String candidateChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         int length = 10 + new Random().nextInt(23);
@@ -75,7 +63,6 @@ public class OrderService {
         }
         return sb.toString();
     }
-
     private String generateSignature(Map<String, String> params) {
         // 将参数按照 key 的字典顺序排序
         String toSign = params.get("m_number") + "&" +
@@ -104,6 +91,36 @@ public class OrderService {
         }
     }
 
+    private JsonNode jsonNode;
+
+    public List<Order> getAllOrders() {
+        return orderRepository.findAll();
+    }
+
+    public Optional<Order> getOrderById(String id) {
+        return orderRepository.findById(id);
+    }
+
+    // ... 其他方法 ...
+    public List<Order> getOrdersByUserId(Long userId) {
+        return orderRepository.findByUserId(userId);
+    }
+
+    public boolean updateOrderStatus(String orderId, Integer newStatus) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        // 检查订单是否属于当前用户
+        if (!isOrderOfCurrentUser(order)) {
+            throw new AccessDeniedException("您无权修改此订单");
+        }
+
+        order.setOrderStatus(newStatus);
+        orderRepository.save(order);
+
+        return true;
+    }
+
     public Order createOrder(Order order) throws JsonProcessingException {
         boolean updateResult = ticketService.updateResidualNum(order.getTicketId(), order.getQuantity());
 
@@ -116,8 +133,11 @@ public class OrderService {
     }
 
     public Order createThirdOrder(Order order) throws JsonProcessingException {
+        // 生成随机字符串作为OrderId
         String generatedId = generateNonceStr();
         order.setOrderId(generatedId);
+
+        // 设置Activity与Order的关联
         Long activityId = order.getActivityId();
         // 查询 Activity 实体
         Activity activity = activityRepository.findById(activityId)
@@ -193,31 +213,13 @@ public class OrderService {
 
             } catch (Exception e) {
                 // JSON解析错误
-                String errorCode = jsonNode.get("error_code").asText();
-                String errorMsg = jsonNode.get("error_msg").asText();
                 ticketService.rollbackResidualNum(order.getTicketId(), order.getQuantity());
-                throw new ExternalApiException(errorCode + "订单创建失败: "+ errorMsg);
+                throw new ExternalApiException("订单创建失败: JSON解析错误");
             }
         } else {
             // HTTP错误响应
-            String errorCode = jsonNode.get("error_code").asText();
-            String errorMsg = jsonNode.get("error_msg").asText();
             ticketService.rollbackResidualNum(order.getTicketId(), order.getQuantity());
-            throw new ExternalApiException(errorCode + "订单创建失败: " + errorMsg);
-        }
-
-        // ...
-    }
-
-    public class InsufficientTicketsException extends RuntimeException {
-        public InsufficientTicketsException(String message) {
-            super(message);
-        }
-    }
-
-    public class ExternalApiException extends RuntimeException {
-        public ExternalApiException(String message) {
-            super(message);
+            throw new ExternalApiException("订单创建失败: Http响应错误");
         }
     }
 
@@ -230,6 +232,12 @@ public class OrderService {
     public void deleteOrder(String id) {
         Order order = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
         orderRepository.delete(order);
+    }
+
+    public class ExternalApiException extends RuntimeException {
+        public ExternalApiException(String message) {
+            super(message);
+        }
     }
 
 }

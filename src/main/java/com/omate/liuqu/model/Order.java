@@ -28,6 +28,9 @@ public class Order {
     private Long eventId;
 
     @Column(nullable = false)
+    private String contactPhone;
+
+    @Column(nullable = false)
     private Long ticketId;
 
     @Column(nullable = false)
@@ -72,6 +75,13 @@ public class Order {
     private LocalDateTime updateTime;
 
     // getters and setters
+    public String getContactPhone() {
+        return contactPhone;
+    }
+
+    public void setContactPhone(String contactPhone) {
+        this.contactPhone = contactPhone;
+    }
 
     public Long getActivityId() {
         return activityId;
