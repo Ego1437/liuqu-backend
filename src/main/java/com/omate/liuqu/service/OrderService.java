@@ -3,12 +3,13 @@ package com.omate.liuqu.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omate.liuqu.model.Activity;
-import com.omate.liuqu.model.Event;
-import com.omate.liuqu.model.Order;
+import com.omate.liuqu.dto.PaymentNotificationDTO;
+import com.omate.liuqu.model.*;
 import com.omate.liuqu.repository.ActivityRepository;
 import com.omate.liuqu.repository.EventRepository;
 import com.omate.liuqu.repository.OrderRepository;
+import com.omate.liuqu.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -17,6 +18,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
@@ -31,6 +33,7 @@ public class OrderService {
 
     private static final String API_URL = "https://www.omipay.com.cn/omipay/api/v2/MakeAPPOrder";
     private static final String SECRET_KEY = "b94dbe95833240198227afca0f13135d";
+    private JsonNode jsonNode;
 
     @Autowired
     private EventRepository eventRepository;
@@ -42,7 +45,27 @@ public class OrderService {
     private ActivityRepository activityRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private TicketService ticketService;
+
+    @Autowired
+    private NotificationService notificationService;
+
+
+    private boolean verifySignature(String timestamp, String nonceStr, String incomingSign) {
+        // 使用相同的方法拼接字符串
+        Map<String, String> queryStringParams = new HashMap<>();
+        queryStringParams.put("m_number", "20002946064");
+        queryStringParams.put("timestamp", timestamp);
+        queryStringParams.put("nonce_str", nonceStr);
+        String calculatedSign = generateSignature(queryStringParams);
+        // 对字符串进行MD5加密
+        // 将计算出的签名与传入的签名进行比较
+        boolean result = calculatedSign.equals(incomingSign);
+        return result;
+    }
 
     private boolean isOrderOfCurrentUser(Order order) {
         // 获取当前认证用户
@@ -96,7 +119,25 @@ public class OrderService {
         }
     }
 
-    private JsonNode jsonNode;
+    private void sendNotificationToUser(Order order) {
+        String messageTemplate = order.getEvent().getMessageTemplate().getTemplate();
+
+        // 创建通知对象
+        Notification notification = new Notification();
+        notification.setUser(order.getUser()); // 假设 Order 实体中有 user 属性
+        notification.setMessage(messageTemplate);
+        notification.setActivity(order.getActivity()); // 假设 Order 实体中有 activity 属性
+        notification.setPartner(order.getPartner()); // 假设 Order 实体中有 partner 属性
+        notification.setUserId(order.getUserId()); // 假设 Order 实体中有 user 属性
+        notification.setActivityId(order.getActivityId()); // 假设 Order 实体中有 activity 属性
+        notification.setPartnerId(order.getPartnerId()); // 假设 Order 实体中有 partner 属性
+        // 设置通知的其他必要信息
+        notification.setStatus(0);
+
+
+        // 保存通知
+        notificationService.saveNotification(notification);
+    }
 
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
@@ -126,6 +167,38 @@ public class OrderService {
         return true;
     }
 
+    @Transactional
+    public boolean processPaymentNotification(PaymentNotificationDTO notification) {
+        // 实现您处理支付通知的逻辑
+        // 这可能涉及到验证签名、更新订单状态等操作
+        if (!verifySignature(notification.getTimestamp().toString(),
+                notification.getNonceStr(), notification.getSign())) {
+            throw new SecurityException("签名验证失败");
+        }
+        // ...
+        // 验证通过后，根据订单号找到订单
+        Optional<Order> optionalOrder = orderRepository.findById(notification.getOutOrderNo());
+        if (!optionalOrder.isPresent()) {
+            throw new EntityNotFoundException("订单未找到:" + notification.getOutOrderNo());
+        }
+
+        // 获取订单实体
+        Order order = optionalOrder.get();
+
+        // 更新订单状态和其他信息
+        order.setOrderStatus(1); // 假设1表示支付成功
+        order.setPayTime(LocalDateTime.now()); // 或使用notification中的支付时间
+        order.setExchangeRate(notification.getExchangeRate());
+        order.setCnyAmount(notification.getCnyAmount());
+
+        // 发送通知给用户
+
+        sendNotificationToUser(order);
+        // 保存订单更新
+        orderRepository.save(order);
+        // 返回处理结果
+        return true;
+    }
     public Order createOrder(Order order) throws JsonProcessingException {
         boolean updateResult = ticketService.updateResidualNum(order.getTicketId(), order.getQuantity());
 
@@ -144,20 +217,21 @@ public class OrderService {
 
         // 设置Activity与Order的关联
         Long activityId = order.getActivityId();
-        // 查询 Activity 实体
         Activity activity = activityRepository.findById(activityId)
                 .orElseThrow(() -> new RuntimeException("Activity not found"));
+        User user = userRepository.findById(order.getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        Event event = eventRepository.findById(order.getEventId())
+                .orElseThrow(() -> new EntityNotFoundException("Event not found"));
 
+        order.setUser(user);
+        order.setEvent(event);
         order.setActivity(activity);
+        order.setPartner(activity.getPartner());
         // 获取 Activity 名称
         String activityName = activity.getActivityName();
 
-        // 获取Event的时间
-        Long eventId = order.getEventId();
-        // 查询 Activity 实体
-        Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new RuntimeException("Event not found"));
-        LocalDateTime now = event.getStartTime();
+        LocalDateTime now = order.getEvent().getStartTime();
         String startTime = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         String orderName = activityName + " " + startTime; // 组合名称
         BigDecimal finalAmount = order.getFinalAmount(); // 总金额
@@ -173,7 +247,7 @@ public class OrderService {
         queryStringParams.put("order_name", orderName); // 组合后的名称
         queryStringParams.put("currency", "AUD"); // 货币类型
         queryStringParams.put("amount", String.valueOf(finalAmount.intValue())); // Order 实体中的 totalAmount
-        queryStringParams.put("notify_url", "www.omatesydney.com"); // 通知地址
+        queryStringParams.put("notify_url", "http://13.236.138.98:8083/api/notifications/payment"); // 通知地址
         queryStringParams.put("out_order_no", orderId); // Order 实体的自增 ID
         queryStringParams.put("platform", "ALIPAYONLINE"); // 支付平台
 //        queryStringParams.put("o_number", String.valueOf(order.getPartnerId())); // 商家id
@@ -200,8 +274,6 @@ public class OrderService {
 
 
         // 处理响应
-
-
         if (response.getStatusCode().is2xxSuccessful()) {
             ObjectMapper resultObjectMapper = new ObjectMapper();
             JsonNode jsonNode = resultObjectMapper.readTree(response.getBody());
@@ -211,6 +283,7 @@ public class OrderService {
                 if (!"SUCCESS".equals(returnCode)) {
                     String errorCode = jsonNode.get("error_code").asText();
                     String errorMsg = jsonNode.get("error_msg").asText();
+                    ticketService.rollbackResidualNum(order.getTicketId(), order.getQuantity());
                     throw new ExternalApiException(errorCode + "订单创建失败: " + errorMsg);
                 }
                 // 更新订单信息

@@ -85,7 +85,6 @@ public class FileUpLoadController {
         int dotIndex = originalFilename.lastIndexOf('.');
         String baseName = (dotIndex == -1) ? originalFilename : originalFilename.substring(0, dotIndex);
         String extension = (dotIndex == -1) ? "" : originalFilename.substring(dotIndex + 1);
-//        String newFilename = URLEncoder.encode(baseName, "UTF-8") + "_" + timestamp + "." + extension;
         String newFilename = Base64.getEncoder().encodeToString(baseName.getBytes(StandardCharsets.UTF_8))+ "_" + timestamp + "." + extension;
         Path path = Paths.get("image/" + newFilename);
         Files.createDirectories(path.getParent());

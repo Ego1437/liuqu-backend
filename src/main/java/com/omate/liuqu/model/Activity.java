@@ -58,8 +58,8 @@ public class Activity {
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     private Set<Tag> tags;
-    // getters and setters
 
+    // getters and setters
     public List<Event> getEvents() {
         return events;
     }

@@ -1,6 +1,7 @@
 package com.omate.liuqu.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -70,6 +71,19 @@ public class Event {
         this.deadline = deadline;
     }
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @JoinColumn(name = "message_template_id")
+    private MessageTemplate messageTemplate;
+
+
+    public MessageTemplate getMessageTemplate() {
+        return messageTemplate;
+    }
+
+    public void setMessageTemplate(MessageTemplate messageTemplate) {
+        this.messageTemplate = messageTemplate;
+    }
     public Integer getEventStatus() {
         return eventStatus;
     }

@@ -79,8 +79,7 @@ databaseChangeLog:
                   name: activity_name
                   type: varchar(255)
                   constraints:
-                    remarks: "活动类型"
-                    primaryKey: true
+                    remarks: "活动名称"
                     nullable: false
               - column:
                   name: partner_id
@@ -142,6 +141,7 @@ databaseChangeLog:
               - column:
                   name: collaborators
                   type: VARCHAR(20)
+
   - changeSet:
       id: 3-create-events-table
       author: Ego
@@ -191,7 +191,9 @@ databaseChangeLog:
                   type: int
                   constraints:
                     nullable: false
-
+              - column:
+                  name: message_template_id
+                  type: bigint
   - changeSet:
       id: 4-create-tickets-table
       author: Ego
@@ -262,7 +264,6 @@ databaseChangeLog:
                   name: order_omipay_number
                   type: varchar(255)
                   constraints:
-                    primaryKey: true
                     nullable: false
               - column:
                   name: activity_id
@@ -295,6 +296,11 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: contact_name
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+              - column:
                   name: contact_phone
                   type: varchar(30)
                   constraints:
@@ -312,7 +318,6 @@ databaseChangeLog:
                   type: int
                   constraints:
                     nullable: false
-
               - column:
                   name: platform_discount
                   type: decimal(10,2)
@@ -331,6 +336,21 @@ databaseChangeLog:
                   type: text
                   constraints:
                     nullable: false
+              - column:
+                  name: pay_time
+                  type: datetime
+                  constraints:
+                    nullable: true
+              - column:
+                  name: exchange_rate
+                  type: decimal(10,2)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: cny_amount
+                  type: int
+                  constraints:
+                    nullable: true
               - column:
                   name: start_time
                   type: datetime
@@ -509,7 +529,6 @@ databaseChangeLog:
                     foreignKeyName: fk_customer_staffs_partners
                     references: partners(partner_id)
 
-
   - changeSet:
       id: 10-create-partners-table
       author: Ego
@@ -631,6 +650,34 @@ databaseChangeLog:
             columnNames: activity_id, tag_id
 
   - changeSet:
+      id: 13-create-message-templates-table
+      author: Ego
+      changes:
+        - createTable:
+            tableName: message_templates
+            columns:
+              - column:
+                  name: message_template_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: partner_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_message_templates_partner
+                    references: partners(partner_id)
+              - column:
+                  name: template
+                  type: text
+                  constraints:
+                    nullable: false
+
+
+  - changeSet:
       id: 1-add-fk-events-activity_id
       author: Ego
       changes:
@@ -749,7 +796,6 @@ databaseChangeLog:
             referencedTableName: users
             referencedColumnNames: user_id
             onDelete: CASCADE
-
   - changeSet:
       id: 11-add-fk-notification-activity_id
       author: Ego
@@ -772,6 +818,17 @@ databaseChangeLog:
             baseColumnNames: partner_staff_id
             referencedTableName: partner_staffs
             referencedColumnNames: partner_staff_id
+
+  - changeSet:
+      id: 13-add-foreign-key-to-activities
+      author: Ego
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: events
+            baseColumnNames: message_template_id
+            constraintName: fk_events_message_templates
+            referencedTableName: message_templates
+            referencedColumnNames: message_template_id
   - changeSet:
       id: 1-create-index-on-activities-partner_id
       author: Ego
@@ -1143,6 +1200,9 @@ databaseChangeLog:
               - column:
                   name: event_status
                   value: "1"
+              - column:
+                  name: message_template_id
+                  value: "1"
         - insert:
             tableName: events
             columns:
@@ -1167,6 +1227,9 @@ databaseChangeLog:
                   value: "7"
               - column:
                   name: event_status
+                  value: "1"
+              - column:
+                  name: message_template_id
                   value: "1"
         - insert:
             tableName: events
@@ -1193,6 +1256,9 @@ databaseChangeLog:
               - column:
                   name: event_status
                   value: "1"
+              - column:
+                  name: message_template_id
+                  value: "1"
         - insert:
             tableName: events
             columns:
@@ -1217,6 +1283,9 @@ databaseChangeLog:
                   value: "7"
               - column:
                   name: event_status
+                  value: "1"
+              - column:
+                  name: message_template_id
                   value: "1"
         - insert:
             tableName: events
@@ -1243,6 +1312,9 @@ databaseChangeLog:
               - column:
                   name: event_status
                   value: "1"
+              - column:
+                  name: message_template_id
+                  value: "1"
         - insert:
             tableName: events
             columns:
@@ -1267,6 +1339,9 @@ databaseChangeLog:
                   value: "7"
               - column:
                   name: event_status
+                  value: "1"
+              - column:
+                  name: message_template_id
                   value: "1"
         - insert:
             tableName: events
@@ -1293,6 +1368,9 @@ databaseChangeLog:
               - column:
                   name: event_status
                   value: "1"
+              - column:
+                  name: message_template_id
+                  value: "1"
         - insert:
             tableName: events
             columns:
@@ -1317,6 +1395,9 @@ databaseChangeLog:
                   value: "7"
               - column:
                   name: event_status
+                  value: "1"
+              - column:
+                  name: message_template_id
                   value: "1"
 
   - changeSet:
@@ -1762,3 +1843,20 @@ databaseChangeLog:
               - column:
                   name: tag_id
                   value: "4"
+
+  - changeSet:
+      id: 5-insert-message-templates
+      author: Ego
+      changes:
+        - insert:
+            tableName: message_templates
+            columns:
+              - column:
+                  name: message_template_id
+                  value: "1"
+              - column:
+                  name: partner_id
+                  value: "1"
+              - column:
+                  name: template
+                  value: "恭喜你已经成功报名鹦鹉岛，请玩家务必提前30分钟到达"
