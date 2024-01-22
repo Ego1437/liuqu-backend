@@ -1171,8 +1171,250 @@ databaseChangeLog:
               - column:
                   name: activity_duration
                   value: "240"
+  - changeSet:
+      id: 5-insert-message-templates
+      author: Ego
+      changes:
+        - insert:
+            tableName: message_templates
+            columns:
+              - column:
+                  name: message_template_id
+                  value: "1"
+              - column:
+                  name: partner_id
+                  value: "1"
+              - column:
+                  name: template
+                  value: "恭喜你已经成功报名鹦鹉岛，请玩家务必提前30分钟到达"
 
-
+  - changeSet:
+      id: 4-insert-default-event
+      author: Ego
+      changes:
+        - insert:
+            tableName: events
+            columns:
+              - column:
+                  name: event_id
+                  value: "1"
+              - column:
+                  name: activity_id
+                  value: "1"
+              - column:
+                  name: start_time
+                  value: "2024-01-20 23:59:59"
+              - column:
+                  name: deadline
+                  value: "2024-01-15 23:59:59"
+              - column:
+                  name: max_capacity
+                  value: "10"
+              - column:
+                  name: residual_num
+                  value: "7"
+              - column:
+                  name: event_status
+                  value: "1"
+              - column:
+                  name: message_template_id
+                  value: "1"
+        - insert:
+            tableName: events
+            columns:
+              - column:
+                  name: event_id
+                  value: "2"
+              - column:
+                  name: activity_id
+                  value: "1"
+              - column:
+                  name: start_time
+                  type: datetime
+                  value: "2024-01-25 23:59:59"
+              - column:
+                  name: deadline
+                  value: "2024-01-20 23:59:59"
+              - column:
+                  name: max_capacity
+                  value: "10"
+              - column:
+                  name: residual_num
+                  value: "7"
+              - column:
+                  name: event_status
+                  value: "1"
+              - column:
+                  name: message_template_id
+                  value: "1"
+        - insert:
+            tableName: events
+            columns:
+              - column:
+                  name: event_id
+                  value: "3"
+              - column:
+                  name: activity_id
+                  value: "1"
+              - column:
+                  name: start_time
+                  type: datetime
+                  value: "2024-01-30 23:59:59"
+              - column:
+                  name: deadline
+                  value: "2024-01-25 23:59:59"
+              - column:
+                  name: max_capacity
+                  value: "10"
+              - column:
+                  name: residual_num
+                  value: "7"
+              - column:
+                  name: event_status
+                  value: "1"
+              - column:
+                  name: message_template_id
+                  value: "1"
+        - insert:
+            tableName: events
+            columns:
+              - column:
+                  name: event_id
+                  value: "4"
+              - column:
+                  name: activity_id
+                  value: "1"
+              - column:
+                  name: start_time
+                  type: datetime
+                  value: "2024-02-05 23:59:59"
+              - column:
+                  name: deadline
+                  value: "2024-02-01 23:59:59"
+              - column:
+                  name: max_capacity
+                  value: "10"
+              - column:
+                  name: residual_num
+                  value: "7"
+              - column:
+                  name: event_status
+                  value: "1"
+              - column:
+                  name: message_template_id
+                  value: "1"
+        - insert:
+            tableName: events
+            columns:
+              - column:
+                  name: event_id
+                  value: "5"
+              - column:
+                  name: activity_id
+                  value: "2"
+              - column:
+                  name: start_time
+                  type: datetime
+                  value: "2024-01-20 23:59:59"
+              - column:
+                  name: deadline
+                  value: "2024-01-15 23:59:59"
+              - column:
+                  name: max_capacity
+                  value: "10"
+              - column:
+                  name: residual_num
+                  value: "7"
+              - column:
+                  name: event_status
+                  value: "1"
+              - column:
+                  name: message_template_id
+                  value: "1"
+        - insert:
+            tableName: events
+            columns:
+              - column:
+                  name: event_id
+                  value: "6"
+              - column:
+                  name: activity_id
+                  value: "2"
+              - column:
+                  name: start_time
+                  type: datetime
+                  value: "2024-01-25 23:59:59"
+              - column:
+                  name: deadline
+                  value: "2024-01-20 23:59:59"
+              - column:
+                  name: max_capacity
+                  value: "10"
+              - column:
+                  name: residual_num
+                  value: "7"
+              - column:
+                  name: event_status
+                  value: "1"
+              - column:
+                  name: message_template_id
+                  value: "1"
+        - insert:
+            tableName: events
+            columns:
+              - column:
+                  name: event_id
+                  value: "7"
+              - column:
+                  name: activity_id
+                  value: "2"
+              - column:
+                  name: start_time
+                  type: datetime
+                  value: "2024-01-30 23:59:59"
+              - column:
+                  name: deadline
+                  value: "2024-01-25 23:59:59"
+              - column:
+                  name: max_capacity
+                  value: "10"
+              - column:
+                  name: residual_num
+                  value: "7"
+              - column:
+                  name: event_status
+                  value: "1"
+              - column:
+                  name: message_template_id
+                  value: "1"
+        - insert:
+            tableName: events
+            columns:
+              - column:
+                  name: event_id
+                  value: "8"
+              - column:
+                  name: activity_id
+                  value: "2"
+              - column:
+                  name: start_time
+                  type: datetime
+                  value: "2024-02-05 23:59:59"
+              - column:
+                  name: deadline
+                  value: "2024-02-01 23:59:59"
+              - column:
+                  name: max_capacity
+                  value: "10"
+              - column:
+                  name: residual_num
+                  value: "7"
+              - column:
+                  name: event_status
+                  value: "1"
+              - column:
+                  name: message_template_id
+                  value: "1"
 
   - changeSet:
       id: 4-insert-default-ticket
@@ -1618,246 +1860,3 @@ databaseChangeLog:
                   name: tag_id
                   value: "4"
 
-  - changeSet:
-      id: 5-insert-message-templates
-      author: Ego
-      changes:
-        - insert:
-            tableName: message_templates
-            columns:
-              - column:
-                  name: message_template_id
-                  value: "1"
-              - column:
-                  name: partner_id
-                  value: "1"
-              - column:
-                  name: template
-                  value: "恭喜你已经成功报名鹦鹉岛，请玩家务必提前30分钟到达"
-  - changeSet:
-      id: 4-insert-default-event
-      author: Ego
-      changes:
-        - insert:
-            tableName: events
-            columns:
-              - column:
-                  name: event_id
-                  value: "1"
-              - column:
-                  name: activity_id
-                  value: "1"
-              - column:
-                  name: start_time
-                  value: "2024-01-20 23:59:59"
-              - column:
-                  name: deadline
-                  value: "2024-01-15 23:59:59"
-              - column:
-                  name: max_capacity
-                  value: "10"
-              - column:
-                  name: residual_num
-                  value: "7"
-              - column:
-                  name: event_status
-                  value: "1"
-              - column:
-                  name: message_template_id
-                  value: "1"
-        - insert:
-            tableName: events
-            columns:
-              - column:
-                  name: event_id
-                  value: "2"
-              - column:
-                  name: activity_id
-                  value: "1"
-              - column:
-                  name: start_time
-                  type: datetime
-                  value: "2024-01-25 23:59:59"
-              - column:
-                  name: deadline
-                  value: "2024-01-20 23:59:59"
-              - column:
-                  name: max_capacity
-                  value: "10"
-              - column:
-                  name: residual_num
-                  value: "7"
-              - column:
-                  name: event_status
-                  value: "1"
-              - column:
-                  name: message_template_id
-                  value: "1"
-        - insert:
-            tableName: events
-            columns:
-              - column:
-                  name: event_id
-                  value: "3"
-              - column:
-                  name: activity_id
-                  value: "1"
-              - column:
-                  name: start_time
-                  type: datetime
-                  value: "2024-01-30 23:59:59"
-              - column:
-                  name: deadline
-                  value: "2024-01-25 23:59:59"
-              - column:
-                  name: max_capacity
-                  value: "10"
-              - column:
-                  name: residual_num
-                  value: "7"
-              - column:
-                  name: event_status
-                  value: "1"
-              - column:
-                  name: message_template_id
-                  value: "1"
-        - insert:
-            tableName: events
-            columns:
-              - column:
-                  name: event_id
-                  value: "4"
-              - column:
-                  name: activity_id
-                  value: "1"
-              - column:
-                  name: start_time
-                  type: datetime
-                  value: "2024-02-05 23:59:59"
-              - column:
-                  name: deadline
-                  value: "2024-02-01 23:59:59"
-              - column:
-                  name: max_capacity
-                  value: "10"
-              - column:
-                  name: residual_num
-                  value: "7"
-              - column:
-                  name: event_status
-                  value: "1"
-              - column:
-                  name: message_template_id
-                  value: "1"
-        - insert:
-            tableName: events
-            columns:
-              - column:
-                  name: event_id
-                  value: "5"
-              - column:
-                  name: activity_id
-                  value: "2"
-              - column:
-                  name: start_time
-                  type: datetime
-                  value: "2024-01-20 23:59:59"
-              - column:
-                  name: deadline
-                  value: "2024-01-15 23:59:59"
-              - column:
-                  name: max_capacity
-                  value: "10"
-              - column:
-                  name: residual_num
-                  value: "7"
-              - column:
-                  name: event_status
-                  value: "1"
-              - column:
-                  name: message_template_id
-                  value: "1"
-        - insert:
-            tableName: events
-            columns:
-              - column:
-                  name: event_id
-                  value: "6"
-              - column:
-                  name: activity_id
-                  value: "2"
-              - column:
-                  name: start_time
-                  type: datetime
-                  value: "2024-01-25 23:59:59"
-              - column:
-                  name: deadline
-                  value: "2024-01-20 23:59:59"
-              - column:
-                  name: max_capacity
-                  value: "10"
-              - column:
-                  name: residual_num
-                  value: "7"
-              - column:
-                  name: event_status
-                  value: "1"
-              - column:
-                  name: message_template_id
-                  value: "1"
-        - insert:
-            tableName: events
-            columns:
-              - column:
-                  name: event_id
-                  value: "7"
-              - column:
-                  name: activity_id
-                  value: "2"
-              - column:
-                  name: start_time
-                  type: datetime
-                  value: "2024-01-30 23:59:59"
-              - column:
-                  name: deadline
-                  value: "2024-01-25 23:59:59"
-              - column:
-                  name: max_capacity
-                  value: "10"
-              - column:
-                  name: residual_num
-                  value: "7"
-              - column:
-                  name: event_status
-                  value: "1"
-              - column:
-                  name: message_template_id
-                  value: "1"
-        - insert:
-            tableName: events
-            columns:
-              - column:
-                  name: event_id
-                  value: "8"
-              - column:
-                  name: activity_id
-                  value: "2"
-              - column:
-                  name: start_time
-                  type: datetime
-                  value: "2024-02-05 23:59:59"
-              - column:
-                  name: deadline
-                  value: "2024-02-01 23:59:59"
-              - column:
-                  name: max_capacity
-                  value: "10"
-              - column:
-                  name: residual_num
-                  value: "7"
-              - column:
-                  name: event_status
-                  value: "1"
-              - column:
-                  name: message_template_id
-                  value: "1"
