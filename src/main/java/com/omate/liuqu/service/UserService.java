@@ -100,9 +100,9 @@ public class UserService {
         if (updateDTO.getUserEmail() != null) {
             user.setUserEmail(updateDTO.getUserEmail());
         }
-//        if (updateDTO.getUserTel() != null) {
-//            user.setUserTel(updateDTO.getUserTel());
-//        }
+        if (updateDTO.getIntroduction() != null) {
+            user.setIntroduction(updateDTO.getIntroduction());
+        }
         if (updateDTO.getBirthday() != null) {
             user.setBirthday(updateDTO.getBirthday());
         }

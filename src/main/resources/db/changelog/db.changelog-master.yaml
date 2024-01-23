@@ -343,7 +343,7 @@ databaseChangeLog:
                     nullable: true
               - column:
                   name: exchange_rate
-                  type: decimal(10,2)
+                  type: int
                   constraints:
                     nullable: true
               - column:

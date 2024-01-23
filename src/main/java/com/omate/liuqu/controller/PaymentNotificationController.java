@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/notifications")
 public class PaymentNotificationController {
@@ -35,13 +38,13 @@ public class PaymentNotificationController {
 
 // 假设您有一个服务方法来处理支付通知
         boolean isSuccess = orderService.processPaymentNotification(notification);
-
+        Map<String, String> response = new HashMap<>();
         if (isSuccess) {
-            // 返回成功响应
-            return ResponseEntity.ok().build();
+            response.put("return_code", "SUCCESS");
+            return ResponseEntity.ok(response);
         } else {
-            // 如果处理失败，根据您的业务逻辑返回适当的响应
-            return ResponseEntity.badRequest().build();
+            response.put("return_code", "FAIL");
+            return ResponseEntity.badRequest().body(response);
         }
     }
 }
