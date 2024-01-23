@@ -172,14 +172,14 @@ public class OrderService {
         // 实现您处理支付通知的逻辑
         // 这可能涉及到验证签名、更新订单状态等操作
         if (!verifySignature(notification.getTimestamp().toString(),
-                notification.getNonceStr(), notification.getSign())) {
+                notification.getNonce_str(), notification.getSign())) {
             throw new SecurityException("签名验证失败");
         }
         // ...
         // 验证通过后，根据订单号找到订单
-        Optional<Order> optionalOrder = orderRepository.findById(notification.getOutOrderNo());
+        Optional<Order> optionalOrder = orderRepository.findById(notification.getOut_order_no());
         if (!optionalOrder.isPresent()) {
-            throw new EntityNotFoundException("订单未找到:" + notification.getOutOrderNo());
+            throw new EntityNotFoundException("订单未找到:" + notification.getOut_order_no());
         }
 
         // 获取订单实体
@@ -188,8 +188,8 @@ public class OrderService {
         // 更新订单状态和其他信息
         order.setOrderStatus(1); // 假设1表示支付成功
         order.setPayTime(LocalDateTime.now()); // 或使用notification中的支付时间
-        order.setExchangeRate(notification.getExchangeRate());
-        order.setCnyAmount(notification.getCnyAmount());
+        order.setExchangeRate(notification.getExchange_rate());
+        order.setCnyAmount(notification.getCny_amount());
 
         // 发送通知给用户
 

@@ -27,11 +27,11 @@ public class PaymentNotificationController {
         // 记录请求体
         logger.warn("=====================================================================================");
         logger.warn("Received payment notification: {}", notification);
-        logger.warn("OutOrderNo: "+ notification.getOutOrderNo() + "OrderNo: " + notification.getOrderNo() + "NonceStr: " +notification.getNonceStr()
-                + "NonceStr: " + notification.getNonceStr() + "Sign: " + notification.getSign() + "CnyAmount: " + notification.getCnyAmount()
-                + "Currency: " + notification.getCurrency() + "ExchangeRate: " + notification.getExchangeRate() + "OrderTime: " + notification.getOrderTime()
-                + "PayTime: " + notification.getPayTime() + "Timestamp: " + notification.getTimestamp() + "TotalAmount: " + notification.getTotalAmount()
-                + "ReturnCode: " + notification.getReturnCode());
+        logger.warn("OutOrderNo: "+ notification.getOut_order_no() + "OrderNo: " + notification.getOrder_no() + "NonceStr: " +notification.getNonce_str()
+                + "NonceStr: " + notification.getNonce_str() + "Sign: " + notification.getSign() + "CnyAmount: " + notification.getCny_amount()
+                + "Currency: " + notification.getCurrency() + "ExchangeRate: " + notification.getExchange_rate() + "OrderTime: " + notification.getOrder_time()
+                + "PayTime: " + notification.getPay_time() + "Timestamp: " + notification.getTimestamp() + "TotalAmount: " + notification.getTotal_amount()
+                + "ReturnCode: " + notification.getReturn_code());
 
 // 假设您有一个服务方法来处理支付通知
         boolean isSuccess = orderService.processPaymentNotification(notification);
