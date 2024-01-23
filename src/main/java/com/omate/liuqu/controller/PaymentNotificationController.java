@@ -5,12 +5,15 @@ import com.omate.liuqu.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/api/notifications")
 public class PaymentNotificationController {
 
     private final OrderService orderService;
+    private static final Logger logger = LoggerFactory.getLogger(PaymentNotificationController.class);
 
     @Autowired
     public PaymentNotificationController(OrderService orderService) {
@@ -21,6 +24,10 @@ public class PaymentNotificationController {
     public ResponseEntity<?> receivePaymentNotification(@RequestBody PaymentNotificationDTO notification) {
         // 假设您有一个服务方法来处理支付通知
         boolean isSuccess = orderService.processPaymentNotification(notification);
+
+        // 记录请求体
+        logger.info("=====================================================================================");
+        logger.info("Received payment notification: {}", notification);
 
         if (isSuccess) {
             // 返回成功响应

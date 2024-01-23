@@ -154,12 +154,12 @@ public class OrderService {
 
     public boolean updateOrderStatus(String orderId, Integer newStatus) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Order not found"));
 
         // 检查订单是否属于当前用户
-        if (!isOrderOfCurrentUser(order)) {
-            throw new AccessDeniedException("您无权修改此订单");
-        }
+//        if (!isOrderOfCurrentUser(order)) {
+//            throw new AccessDeniedException("您无权修改此订单");
+//        }
 
         order.setOrderStatus(newStatus);
         orderRepository.save(order);
@@ -218,7 +218,7 @@ public class OrderService {
         // 设置Activity与Order的关联
         Long activityId = order.getActivityId();
         Activity activity = activityRepository.findById(activityId)
-                .orElseThrow(() -> new RuntimeException("Activity not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Activity not found"));
         User user = userRepository.findById(order.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
         Event event = eventRepository.findById(order.getEventId())
