@@ -22,12 +22,19 @@ public class PaymentNotificationController {
 
     @PostMapping("/payment")
     public ResponseEntity<?> receivePaymentNotification(@RequestBody PaymentNotificationDTO notification) {
-        // 假设您有一个服务方法来处理支付通知
-        boolean isSuccess = orderService.processPaymentNotification(notification);
+
 
         // 记录请求体
-        logger.info("=====================================================================================");
-        logger.info("Received payment notification: {}", notification);
+        logger.warn("=====================================================================================");
+        logger.warn("Received payment notification: {}", notification);
+        logger.warn("OutOrderNo: "+ notification.getOutOrderNo() + "OrderNo: " + notification.getOrderNo() + "NonceStr: " +notification.getNonceStr()
+                + "NonceStr: " + notification.getNonceStr() + "Sign: " + notification.getSign() + "CnyAmount: " + notification.getCnyAmount()
+                + "Currency: " + notification.getCurrency() + "ExchangeRate: " + notification.getExchangeRate() + "OrderTime: " + notification.getOrderTime()
+                + "PayTime: " + notification.getPayTime() + "Timestamp: " + notification.getTimestamp() + "TotalAmount: " + notification.getTotalAmount()
+                + "ReturnCode: " + notification.getReturnCode());
+
+// 假设您有一个服务方法来处理支付通知
+        boolean isSuccess = orderService.processPaymentNotification(notification);
 
         if (isSuccess) {
             // 返回成功响应
