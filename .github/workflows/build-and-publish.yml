@@ -49,8 +49,8 @@ jobs:
           MYSQL_USER: ${{ secrets.MYSQL_USER }}
           MYSQL_PASSWD: ${{ secrets.MYSQL_PASSWD }}
         run: |
-          rm -f ./src/main/application.prod.properties
-          touch ./src/main/application.prod.properties
+          rm -f ./src/main/resources/application.prod.properties
+          touch ./src/main/resources/application.prod.properties
           cat << EOF > ./src/main/application.prod.properties
           org.gradle.java.home= /Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home
           spring.mvc.format.date=yyyy-MM-dd
