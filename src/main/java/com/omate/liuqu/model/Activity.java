@@ -82,6 +82,10 @@ public class Activity {
     @Column(columnDefinition = "TEXT")
     private String collaborators;
 
+    @ManyToMany(mappedBy = "favoriteActivities")
+    @JsonIgnore
+    private Set<User> favoritedByUsers;
+
     public Long getActivityId() {
         return activityId;
     }
@@ -208,5 +212,10 @@ public class Activity {
 
     public void setCollaborators(String collaborators) {
         this.collaborators = collaborators;
+    }
+
+
+    public int getFavoritesCount() {
+        return favoritedByUsers.size();
     }
 }

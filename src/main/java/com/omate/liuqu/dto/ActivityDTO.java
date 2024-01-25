@@ -8,6 +8,47 @@ import java.util.List;
 import java.util.Set;
 
 public class ActivityDTO {
+
+    private Long activityId;
+    private String activityAddress;
+    private String activityImage;
+    private String activityName;
+    private Integer activityDuration;
+    private String portfolio;
+    private String activityDetail;
+    private Integer activityStatus;
+    private Integer categoryLevel1;
+    private Integer categoryLevel2;
+    private Set<TagDTO> tags;
+    private CustomerStaff customerStaff;
+    private Integer verificationType;
+    private List<EventDTO> events; // 使用EventDTO替换Event实体
+    private String collaborators; // 使用EventDTO替换Event实体
+    private Integer favoritesCount;
+    // 可以考虑添加其他您需要的字段
+
+    public ActivityDTO(Long activityId, String activityAddress, String activityImage, String activityName, Integer activityDuration, String portfolio, String activityDetail, Integer activityStatus, Integer categoryLevel1, Integer categoryLevel2, Set<TagDTO> tags, CustomerStaff customerStaff, Integer verificationType, List<EventDTO> events, String collaborators, Integer favoritesCount) {
+        this.activityId = activityId;
+        this.activityAddress = activityAddress;
+        this.activityImage = activityImage;
+        this.activityName = activityName;
+        this.activityDuration = activityDuration;
+        this.portfolio = portfolio;
+        this.activityDetail = activityDetail;
+        this.activityStatus = activityStatus;
+        this.categoryLevel1 = categoryLevel1;
+        this.categoryLevel2 = categoryLevel2;
+        this.tags = tags;
+        this.customerStaff = customerStaff;
+        this.verificationType = verificationType;
+        this.events = events;
+        this.collaborators = collaborators;
+        this.favoritesCount = favoritesCount;
+    }
+
+
+    // Getters and setters
+    // ...
     public Long getActivityId() {
         return activityId;
     }
@@ -128,43 +169,12 @@ public class ActivityDTO {
         this.collaborators = collaborators;
     }
 
-    private Long activityId;
-    private String activityAddress;
-    private String activityImage;
-    private String activityName;
-    private Integer activityDuration;
-    private String portfolio;
-    private String activityDetail;
-    private Integer activityStatus;
-    private Integer categoryLevel1;
-    private Integer categoryLevel2;
-    private Set<TagDTO> tags;
-    private CustomerStaff customerStaff;
-    private Integer verificationType;
-    private List<EventDTO> events; // 使用EventDTO替换Event实体
-    private String collaborators; // 使用EventDTO替换Event实体
-    // 可以考虑添加其他您需要的字段
-
-    public ActivityDTO(Long activityId, String activityAddress, String activityImage, String activityName, Integer activityDuration, String portfolio, String activityDetail, Integer activityStatus, Integer categoryLevel1, Integer categoryLevel2, Set<TagDTO> tags, CustomerStaff customerStaff, Integer verificationType, List<EventDTO> events, String collaborators) {
-        this.activityId = activityId;
-        this.activityAddress = activityAddress;
-        this.activityImage = activityImage;
-        this.activityName = activityName;
-        this.activityDuration = activityDuration;
-        this.portfolio = portfolio;
-        this.activityDetail = activityDetail;
-        this.activityStatus = activityStatus;
-        this.categoryLevel1 = categoryLevel1;
-        this.categoryLevel2 = categoryLevel2;
-        this.tags = tags;
-        this.customerStaff = customerStaff;
-        this.verificationType = verificationType;
-        this.events = events;
-        this.collaborators = collaborators;
+    public Integer getFavoritesCount() {
+        return favoritesCount;
     }
 
-
-    // Getters and setters
-    // ...
+    public void setFavoritesCount(Integer favoritesCount) {
+        this.favoritesCount = favoritesCount;
+    }
 }
 

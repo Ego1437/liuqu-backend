@@ -1,4 +1,5 @@
 package com.omate.liuqu.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -7,6 +8,7 @@ import java.util.Date;
 
 import java.util.List;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "Partners")
@@ -68,8 +70,16 @@ public class Partner {
 
     @Column(name = "review_score")
     private BigDecimal reviewScore;
-// Getters and setters for all fields
 
+    @ManyToMany(mappedBy = "followedPartners")
+    @JsonIgnore
+    private Set<User> followedByUsers;
+
+
+// Getters and setters for all fields
+    public int getFollowersCount() {
+        return followedByUsers.size();
+    }
 
     public String getPartnerAvatar() {
         return partnerAvatar;

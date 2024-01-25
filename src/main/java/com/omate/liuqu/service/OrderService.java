@@ -20,7 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
-
+import io.github.cdimascio.dotenv.Dotenv;
 import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.time.LocalDateTime;
@@ -32,7 +32,12 @@ import java.util.stream.Collectors;
 public class OrderService {
 
     private static final String API_URL = "https://www.omipay.com.cn/omipay/api/v2/MakeAPPOrder";
-    private static final String SECRET_KEY = "b94dbe95833240198227afca0f13135d";
+    private static final String SECRET_KEY;
+
+    static {
+        Dotenv dotenv = Dotenv.load();
+        SECRET_KEY = dotenv.get("SECRET_KEY");
+    }
     private JsonNode jsonNode;
 
     @Autowired

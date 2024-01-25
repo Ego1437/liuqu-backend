@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -131,7 +132,7 @@ public class User {
     private LocalDate birthday;
 
     @Column(length = 10)
-    private String gender;
+    private String gender = "其他";
 
     @Column(length = 100)
     private String address;
@@ -144,4 +145,19 @@ public class User {
     @Column(length = 255)
     private String introduction;
     // getter和setter方法
+    @ManyToMany
+    @JoinTable(
+            name = "user_favorite_activities",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "activity_id")
+    )
+    private Set<Activity> favoriteActivities;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_followed_partners",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "partner_id")
+    )
+    private Set<Partner> followedPartners;
 }
