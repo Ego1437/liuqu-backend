@@ -154,7 +154,7 @@ public class OrderService {
 
     // ... 其他方法 ...
     public List<Order> getOrdersByUserId(Long userId) {
-        return orderRepository.findByUserId(userId);
+        return orderRepository.findByUserIdOrderByStartTimeDesc(userId);
     }
 
     public boolean updateOrderStatus(String orderId, Integer newStatus) {

@@ -108,6 +108,22 @@ public class User {
         this.introduction = introduction;
     }
 
+    public Set<Activity> getFavoriteActivities() {
+        return favoriteActivities;
+    }
+
+    public void setFavoriteActivities(Set<Activity> favoriteActivities) {
+        this.favoriteActivities = favoriteActivities;
+    }
+
+    public Set<Partner> getFollowedPartners() {
+        return followedPartners;
+    }
+
+    public void setFollowedPartners(Set<Partner> followedPartners) {
+        this.followedPartners = followedPartners;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id") // 确保这里的列名与数据库中的列名一致

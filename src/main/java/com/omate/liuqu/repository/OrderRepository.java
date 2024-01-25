@@ -13,6 +13,9 @@ import java.util.Optional;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, String> {
     List<Order> findByUserId(Long userId);
+
+    List<Order> findByUserIdOrderByStartTimeDesc(Long userId);
+
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT o FROM Order o WHERE o.id = :id")
     Order findOrderByIdWithPessimisticLock(String id);

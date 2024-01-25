@@ -82,6 +82,9 @@ public class Activity {
     @Column(columnDefinition = "TEXT")
     private String collaborators;
 
+    @Column(name = "fans_count")
+    private Integer fansCount = 0; // 粉丝数
+
     @ManyToMany(mappedBy = "favoriteActivities")
     @JsonIgnore
     private Set<User> favoritedByUsers;
@@ -214,8 +217,19 @@ public class Activity {
         this.collaborators = collaborators;
     }
 
+    public Integer getFansCount() {
+        return fansCount;
+    }
 
-    public int getFavoritesCount() {
-        return favoritedByUsers.size();
+    public void setFansCount(Integer fansCount) {
+        this.fansCount = fansCount;
+    }
+
+    public Set<User> getFavoritedByUsers() {
+        return favoritedByUsers;
+    }
+
+    public void setFavoritedByUsers(Set<User> favoritedByUsers) {
+        this.favoritedByUsers = favoritedByUsers;
     }
 }

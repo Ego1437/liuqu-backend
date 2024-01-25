@@ -72,7 +72,7 @@ public class ActivityService {
                 .orElseThrow(() -> new EntityNotFoundException("Activity not found"));
 
         ActivityDTO dto =  convertToDTO(activity);
-        dto.setFavoritesCount(activity.getFavoritesCount());
+        dto.setFavoritesCount(activity.getFansCount());
         return dto;
     }
 
@@ -227,7 +227,7 @@ public class ActivityService {
                 activity.getVerificationType(),
                 eventDTOs,
                 activity.getCollaborators(),
-                activity.getFavoritesCount()
+                activity.getFansCount()
         );
 
         return activityDTO;

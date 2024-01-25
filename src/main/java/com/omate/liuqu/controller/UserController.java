@@ -168,5 +168,17 @@ public class UserController {
         }
     }
 
+    @GetMapping("/{userId}/favorite-activities")
+    public ResponseEntity<?> getFavoriteActivities(@PathVariable Long userId) {
+        Result result = new Result();
+        result.setResultSuccess(0, userService.getFavoriteActivities(userId)); // 使用0作为成功代码，您可以根据需要更改这个值
+        return ResponseEntity.ok(result);
+    }
 
+    @GetMapping("/{userId}/followed-partners")
+    public ResponseEntity<?> getFollowedPartners(@PathVariable Long userId) {
+        Result result = new Result();
+        result.setResultSuccess(0, userService.getFollowedPartners(userId)); // 使用0作为成功代码，您可以根据需要更改这个值
+        return ResponseEntity.ok(result);
+    }
 }

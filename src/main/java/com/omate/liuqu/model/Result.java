@@ -49,6 +49,11 @@ public class Result implements Serializable {
         this.data = data;
     }
 
+    public void setResultSuccess(int code, String Log) {
+        this.code = code;
+        this.message = Log;
+    }
+
     public void setResultFailed(int code) {
         this.code = code;
         this.message = resultMessage.get(code);
