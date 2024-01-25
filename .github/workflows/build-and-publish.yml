@@ -80,8 +80,8 @@ jobs:
           spring.mvc.throw-exception-if-no-handler-found=true
           spring.resources.static-locations=file:./image/
           app.jwt.secretKey=hqGh8QqBNtwtH2R3NGepTcSmUUjG/gHudMgGiOOVSLMGgCIZelGIQ6JDeoUt6RaXC2Guyojqr1P4J8T+M2MuUQ==
-          
           EOF
+          sed -i -e 's/          //g' src/main/resources/application.prod.properties
 
       - name: Build with build-jar.sh
         run: |
