@@ -2,6 +2,8 @@ package com.omate.liuqu.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.time.LocalDate;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO {
     public Long getUserId() {
@@ -68,12 +70,12 @@ public class UserDTO {
         this.address = address;
     }
 
-    public Integer getPostcode() {
-        return postcode;
+    public Integer getPostCode() {
+        return postCode;
     }
 
-    public void setPostcode(Integer postcode) {
-        this.postcode = postcode;
+    public void setPostCode(Integer postCode) {
+        this.postCode = postCode;
     }
 
     public Integer getIsSubscribe() {
@@ -84,6 +86,22 @@ public class UserDTO {
         this.isSubscribe = isSubscribe;
     }
 
+    public LocalDate getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(LocalDate birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
+    }
+
     private Long userId;
     private String userName;
     private String userEmail;
@@ -92,8 +110,10 @@ public class UserDTO {
     private String gender;
     private String avatarPath;
     private String address;
-    private Integer postcode;
+    private Integer postCode;
     private Integer isSubscribe;
+    private LocalDate birthday;
+    private String introduction;
 
 
 

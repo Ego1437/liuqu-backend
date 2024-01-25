@@ -24,8 +24,9 @@ public class EventController {
 
     @PostMapping("/createEvent")
     public ResponseEntity<Result> createEvent(@RequestBody Event event,
-                                             @RequestParam("activityId") Long activityId) {
-        Event createdEvent = eventService.createEvent(event, activityId);
+                                             @RequestParam("activityId") Long activityId,
+                                              @RequestParam("messageTemplateId") Long messageTemplateId) {
+        Event createdEvent = eventService.createEvent(event, activityId, messageTemplateId);
         Result result = new Result();
         result.setResultSuccess(0, createdEvent); // 使用0作为成功代码，您可以根据需要更改这个值
         return ResponseEntity.ok(result);
