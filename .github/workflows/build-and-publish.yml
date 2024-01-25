@@ -43,12 +43,6 @@ jobs:
 #        with:
 #          arguments: buildTodoCoderJar
 
-      - name: Generate .env file
-        run: |
-          cat << EOF > ./docker/springboot/.env
-          SECRET_KEY = $OMIPAY_SECRET_KEY
-          EOF
-
       - name: Generate application.prod.properties
         run: |
           rm -f ./src/main/application.prod.properties
@@ -106,6 +100,9 @@ jobs:
           ECR_REPOSITORY: liuqu-backend
           IMAGE_TAG: latest
         run: |
+          cat << EOF > .env
+          SECRET_KEY = $OMIPAY_SECRET_KEY
+          EOF
           # Build a docker container and push it to ECR
           docker build -t liuqu-backend -f ./docker/springboot/Dockerfile .
           docker tag liuqu-backend:latest 992382689127.dkr.ecr.ap-southeast-2.amazonaws.com/liuqu-backend:latest
