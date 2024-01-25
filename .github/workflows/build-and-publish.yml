@@ -51,7 +51,7 @@ jobs:
         run: |
           rm -f ./src/main/resources/application.prod.properties
           touch ./src/main/resources/application.prod.properties
-          cat << EOF > ./src/main/application.prod.properties
+          cat << EOF > ./src/main/resources/application.prod.properties
           org.gradle.java.home= /Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home
           spring.mvc.format.date=yyyy-MM-dd
           spring.jpa.hibernate.ddl-auto=none
@@ -79,7 +79,8 @@ jobs:
           spring.resources.add-mappings=false
           spring.mvc.throw-exception-if-no-handler-found=true
           spring.resources.static-locations=file:./image/
-          app.jwt.secretKey=hqGh8QqBNtwtH2R3NGepTcSmUUjG/gHudMgGiOOVSLMGgCIZelGIQ6JDeoUt6RaXC2Guyojqr1P4J8T+M2MuUQ==  
+          app.jwt.secretKey=hqGh8QqBNtwtH2R3NGepTcSmUUjG/gHudMgGiOOVSLMGgCIZelGIQ6JDeoUt6RaXC2Guyojqr1P4J8T+M2MuUQ==
+          
           EOF
 
       - name: Build with build-jar.sh
