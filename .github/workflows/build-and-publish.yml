@@ -44,6 +44,10 @@ jobs:
 #          arguments: buildTodoCoderJar
 
       - name: Generate application.prod.properties
+        env:
+          MYSQL_URL: ${{ secrets.MYSQL_URL }}
+          MYSQL_USER: ${{ secrets.MYSQL_USER }}
+          MYSQL_PASSWD: ${{ secrets.MYSQL_PASSWD }}
         run: |
           rm -f ./src/main/application.prod.properties
           touch ./src/main/application.prod.properties
@@ -99,6 +103,7 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: liuqu-backend
           IMAGE_TAG: latest
+          OMIPAY_SECRET_KEY: ${{ secrets.OMIPAY_SECRET_KEY }}
         run: |
           cat << EOF > .env
           SECRET_KEY = $OMIPAY_SECRET_KEY
