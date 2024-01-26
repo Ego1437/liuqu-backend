@@ -72,6 +72,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<Result> loginUser(@RequestParam String phoneNumber, @RequestParam String password) {
+        logger.warn("Registering user with phoneNumber: {}, password: {}", phoneNumber, password);
         Result result = new Result();
         try {
             LoginResponse response = userService.loginUser(phoneNumber, password);
@@ -80,9 +81,11 @@ public class UserController {
             }else {
                 result.setResultSuccess(0, response);
             }
+            logger.warn("Registering user with result: {}", result);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             result.setResultFailed(10, "Login failed: " + e.getMessage());
+            logger.warn("Registering user with result: {}", result);
             return ResponseEntity.badRequest().body(result);
         }
     }
@@ -91,7 +94,7 @@ public class UserController {
     public ResponseEntity<Result> registerUser(@RequestParam String phoneNumber,
                                                       @RequestParam String password,
                                                       @RequestParam String verificationCode) {
-        logger.info("Registering user with phoneNumber: {}, password: {}, verificationCode {}", phoneNumber, password, verificationCode);
+        logger.warn("Registering user with phoneNumber: {}, password: {}, verificationCode {}", phoneNumber, password, verificationCode);
         Result result = new Result();
         try {
             LoginResponse response = userService.registerUser(phoneNumber, password, verificationCode);
@@ -100,10 +103,12 @@ public class UserController {
             }else {
                 result.setResultSuccess(0, response);
             }
+            logger.warn("Registering user with result: {}", result);
             return ResponseEntity.ok(result);
 
         } catch (IllegalArgumentException e) {
             result.setResultFailed(5);
+            logger.warn("Registering user with result: {}", result);
             return ResponseEntity.badRequest().body(result);
         }
     }
