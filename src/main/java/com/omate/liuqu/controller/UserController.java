@@ -90,7 +90,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/user/{userId}")
+    @DeleteMapping("/delete/{userId}")
     public ResponseEntity<Result> deleteUser(@RequestParam String phoneNumber, @RequestParam String verificationCode) {
         logger.info("Request to delete user with phoneNumber: {}", phoneNumber);
         Result result = new Result();
