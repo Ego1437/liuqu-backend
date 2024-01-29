@@ -70,6 +70,14 @@ public class Ticket {
         this.residualNum = residualNum;
     }
 
+    public Integer getTicketStatus() {
+        return ticketStatus;
+    }
+
+    public void setTicketStatus(Integer ticketStatus) {
+        this.ticketStatus = ticketStatus;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ticketId;
@@ -87,6 +95,9 @@ public class Ticket {
     @JsonBackReference
     @JoinColumn(name = "event_id", nullable = false, referencedColumnName = "event_id")
     private Event event;
+
+    @Column(name = "ticket_status") // 映射到表中的max_capacity列
+    private Integer ticketStatus;
 
     @Column(name = "max_capacity") // 映射到表中的max_capacity列
     private Integer maxCapacity;
