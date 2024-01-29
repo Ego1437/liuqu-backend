@@ -90,6 +90,34 @@ public class UserController {
         }
     }
 
+    @DeleteMapping("/user/{userId}")
+    public ResponseEntity<Result> deleteUser(@RequestParam String phoneNumber, @RequestParam String verificationCode) {
+        logger.info("Request to delete user with phoneNumber: {}", phoneNumber);
+        Result result = new Result();
+
+        try {
+            boolean isDeleted = userService.deleteUser(phoneNumber, verificationCode);
+            if (isDeleted) {
+                result.setResultSuccess(0, "User successfully deleted");
+                return ResponseEntity.ok(result);
+            } else {
+                result.setResultFailed(1, "User deletion failed");
+                return ResponseEntity.badRequest().body(result);
+            }
+        } catch (IllegalArgumentException e) {
+            result.setResultFailed(2, "Invalid verification code: " + e.getMessage());
+            return ResponseEntity.badRequest().body(result);
+        } catch (EntityNotFoundException e) {
+            result.setResultFailed(3, "User not found: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+        } catch (Exception e) {
+            result.setResultFailed(4, "Error during deletion: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+        }
+
+    }
+
+
     @PostMapping("/register")
     public ResponseEntity<Result> registerUser(@RequestParam String phoneNumber,
                                                       @RequestParam String password,

@@ -28,7 +28,6 @@ public class PaymentNotificationController {
 
 
         // 记录请求体
-        logger.warn("=====================================================================================");
         logger.warn("Received payment notification: {}", notification);
         logger.warn("OutOrderNo: "+ notification.getOut_order_no() + "OrderNo: " + notification.getOrder_no() + "NonceStr: " +notification.getNonce_str()
                 + "NonceStr: " + notification.getNonce_str() + "Sign: " + notification.getSign() + "CnyAmount: " + notification.getCny_amount()
