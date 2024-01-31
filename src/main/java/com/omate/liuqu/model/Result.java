@@ -21,11 +21,13 @@ public class Result implements Serializable {
         resultMessage.put(2, "The username already exists!");
         resultMessage.put(3, "search failed");
         resultMessage.put(4, "Invalid token!");
-        resultMessage.put(5, "Failed to send email");
-        resultMessage.put(6, "Passwords do not match");
-        resultMessage.put(7, "Reset password link has been sent to the email if it exists");
+        resultMessage.put(5, "Create failed!");
+        resultMessage.put(6, "Missing required parameters");
+        resultMessage.put(7, "Reset password link has been sent to the phone if it exists");
         resultMessage.put(8, "Only JPEG, PNG, GIF, BMP, TIFF, SVG, or WebP images are allowed");
         resultMessage.put(9, "Invalid email format");
+        resultMessage.put(10, "Password change failed");
+
 
 
     }

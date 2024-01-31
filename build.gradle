@@ -54,7 +54,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'jakarta.mail:jakarta.mail-api:2.1.2'
 
-//	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	compileOnly 'org.projectlombok:lombok:1.18.22'
 	annotationProcessor 'org.projectlombok:lombok:1.18.22'
@@ -62,6 +61,8 @@ dependencies {
 	testCompileOnly 'org.projectlombok:lombok:1.18.22'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
 
+	// 添加 dotenv-java 库
+	implementation 'io.github.cdimascio:dotenv-java:2.2.0'
 }
 
 tasks.named('test') {
