@@ -43,9 +43,49 @@ jobs:
 #        with:
 #          arguments: buildTodoCoderJar
 
-      - name: Build with build.sh
+      - name: Generate application.prod.properties
+        env:
+          MYSQL_URL: ${{ secrets.MYSQL_URL }}
+          MYSQL_USER: ${{ secrets.MYSQL_USER }}
+          MYSQL_PASSWD: ${{ secrets.MYSQL_PASSWD }}
         run: |
-          ./build.sh prod
+          rm -f ./src/main/resources/application.prod.properties
+          touch ./src/main/resources/application.prod.properties
+          cat << EOF > ./src/main/resources/application.prod.properties
+          org.gradle.java.home= /Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home
+          spring.mvc.format.date=yyyy-MM-dd
+          spring.jpa.hibernate.ddl-auto=none
+          app.base-url=http://localhost:8083
+          spring.datasource.url=$MYSQL_URL
+          spring.datasource.username=$MYSQL_USER
+          spring.datasource.password=$MYSQL_PASSWD
+          spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
+          spring.redis.host=clustercfg.liuqu.kyx9nh.apse2.cache.amazonaws.com
+          spring.redis.port=6379
+          spring.security.user.username=root
+          spring.security.user.password=e688f855-1859-49e2-b0e0-c31c510b724b
+          spring.datasource.driver-class-username=com.mysql.cj.jdbc.Driver
+          driver=com.mysql.cj.jdbc.Driver
+          spring.liquibase.change-log=classpath:db/changelog/db.changelog-master.yaml
+          logging.level.root=WARN
+          logging.level.org.springframework=INFO
+          logging.level.org.springframework.security=DEBUG
+          logging.level.org.springframework.web=DEBUG
+          logging.level.org.hibernate.SQL=DEBUG
+          logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+          spring.servlet.multipart.enabled=true
+          spring.servlet.multipart.max-file-size=5MB
+          spring.servlet.multipart.max-request-size=5MB
+          spring.resources.add-mappings=false
+          spring.mvc.throw-exception-if-no-handler-found=true
+          spring.resources.static-locations=file:./image/
+          app.jwt.secretKey=hqGh8QqBNtwtH2R3NGepTcSmUUjG/gHudMgGiOOVSLMGgCIZelGIQ6JDeoUt6RaXC2Guyojqr1P4J8T+M2MuUQ==
+          EOF
+          sed -i -e 's/          //g' src/main/resources/application.prod.properties
+
+      - name: Build with build-jar.sh
+        run: |
+          ./build-jar.sh prod
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -64,7 +104,11 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: liuqu-backend
           IMAGE_TAG: latest
+          OMIPAY_SECRET_KEY: ${{ secrets.OMIPAY_SECRET_KEY }}
         run: |
+          cat << EOF > .env
+          SECRET_KEY = $OMIPAY_SECRET_KEY
+          EOF
           # Build a docker container and push it to ECR
           docker build -t liuqu-backend -f ./docker/springboot/Dockerfile .
           docker tag liuqu-backend:latest 992382689127.dkr.ecr.ap-southeast-2.amazonaws.com/liuqu-backend:latest
