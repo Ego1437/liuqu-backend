@@ -615,6 +615,12 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
+                  name: click_count
+                  type: int
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
                   name: image_url
                   type: text
               - column:
