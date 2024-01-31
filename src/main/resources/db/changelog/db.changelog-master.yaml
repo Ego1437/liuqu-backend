@@ -141,6 +141,12 @@ databaseChangeLog:
               - column:
                   name: collaborators
                   type: VARCHAR(20)
+              - column:
+                  name: fans_count
+                  type: int
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
 
   - changeSet:
       id: 3-create-events-table
@@ -609,6 +615,12 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
+                  name: click_count
+                  type: int
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
                   name: image_url
                   type: text
               - column:
@@ -675,8 +687,66 @@ databaseChangeLog:
                   type: text
                   constraints:
                     nullable: false
-
-
+  - changeSet:
+      id: 14-create-user-activity-table
+      author: Ego
+      changes:
+        - createTable:
+            tableName: user_favorite_activities
+            columns:
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: activity_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+            constraints:
+              - primaryKey:
+                  columnNames: user_id, activity_id
+              - foreignKey:
+                  name: fk_user_activity_user
+                  referencedTableName: users
+                  columnNames: user_id
+                  referencedColumnNames: id
+              - foreignKey:
+                  name: fk_user_activity_activity
+                  referencedTableName: activities
+                  columnNames: activity_id
+                  referencedColumnNames: id
+  - changeSet:
+      id: 15-create-user-partner-table
+      author: ego
+      changes:
+        - createTable:
+            tableName: user_followed_partners
+            columns:
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: partner_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+            constraints:
+              - primaryKey:
+                  columnNames: user_id, partner_id
+              - foreignKey:
+                  name: fk_user_partner_user
+                  referencedTableName: users
+                  columnNames: user_id
+                  referencedColumnNames: id
+              - foreignKey:
+                  name: fk_user_partner_partner
+                  referencedTableName: partners
+                  columnNames: partner_id
+                  referencedColumnNames: id
   - changeSet:
       id: 1-add-fk-events-activity_id
       author: Ego
@@ -1203,16 +1273,16 @@ databaseChangeLog:
                   value: "1"
               - column:
                   name: start_time
-                  value: "2024-01-20 23:59:59"
+                  value: "2024-01-28 12:37:00"
               - column:
                   name: deadline
-                  value: "2024-01-15 23:59:59"
+                  value: "2024-01-27 23:59:59"
               - column:
                   name: max_capacity
-                  value: "10"
+                  value: "16"
               - column:
                   name: residual_num
-                  value: "7"
+                  value: "16"
               - column:
                   name: event_status
                   value: "1"

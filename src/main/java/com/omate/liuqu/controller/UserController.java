@@ -72,6 +72,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<Result> loginUser(@RequestParam String phoneNumber, @RequestParam String password) {
+        logger.warn("Registering user with phoneNumber: {}, password: {}", phoneNumber, password);
         Result result = new Result();
         try {
             LoginResponse response = userService.loginUser(phoneNumber, password);
@@ -80,18 +81,48 @@ public class UserController {
             }else {
                 result.setResultSuccess(0, response);
             }
+            logger.warn("Registering user with result: {}", result);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             result.setResultFailed(10, "Login failed: " + e.getMessage());
+            logger.warn("Registering user with result: {}", result);
             return ResponseEntity.badRequest().body(result);
         }
     }
+
+    @DeleteMapping("/delete/{userId}")
+    public ResponseEntity<Result> deleteUser(@RequestParam String phoneNumber, @RequestParam String verificationCode) {
+        logger.info("Request to delete user with phoneNumber: {}", phoneNumber);
+        Result result = new Result();
+
+        try {
+            boolean isDeleted = userService.deleteUser(phoneNumber, verificationCode);
+            if (isDeleted) {
+                result.setResultSuccess(0, "User successfully deleted");
+                return ResponseEntity.ok(result);
+            } else {
+                result.setResultFailed(1, "User deletion failed");
+                return ResponseEntity.badRequest().body(result);
+            }
+        } catch (IllegalArgumentException e) {
+            result.setResultFailed(2, "Invalid verification code: " + e.getMessage());
+            return ResponseEntity.badRequest().body(result);
+        } catch (EntityNotFoundException e) {
+            result.setResultFailed(3, "User not found: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+        } catch (Exception e) {
+            result.setResultFailed(4, "Error during deletion: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+        }
+
+    }
+
 
     @PostMapping("/register")
     public ResponseEntity<Result> registerUser(@RequestParam String phoneNumber,
                                                       @RequestParam String password,
                                                       @RequestParam String verificationCode) {
-        logger.info("Registering user with phoneNumber: {}, password: {}, verificationCode {}", phoneNumber, password, verificationCode);
+        logger.warn("Registering user with phoneNumber: {}, password: {}, verificationCode {}", phoneNumber, password, verificationCode);
         Result result = new Result();
         try {
             LoginResponse response = userService.registerUser(phoneNumber, password, verificationCode);
@@ -100,10 +131,12 @@ public class UserController {
             }else {
                 result.setResultSuccess(0, response);
             }
+            logger.warn("Registering user with result: {}", result);
             return ResponseEntity.ok(result);
 
         } catch (IllegalArgumentException e) {
             result.setResultFailed(5);
+            logger.warn("Registering user with result: {}", result);
             return ResponseEntity.badRequest().body(result);
         }
     }
@@ -168,5 +201,17 @@ public class UserController {
         }
     }
 
+    @GetMapping("/{userId}/favorite-activities")
+    public ResponseEntity<?> getFavoriteActivities(@PathVariable Long userId) {
+        Result result = new Result();
+        result.setResultSuccess(0, userService.getFavoriteActivities(userId)); // 使用0作为成功代码，您可以根据需要更改这个值
+        return ResponseEntity.ok(result);
+    }
 
+    @GetMapping("/{userId}/followed-partners")
+    public ResponseEntity<?> getFollowedPartners(@PathVariable Long userId) {
+        Result result = new Result();
+        result.setResultSuccess(0, userService.getFollowedPartners(userId)); // 使用0作为成功代码，您可以根据需要更改这个值
+        return ResponseEntity.ok(result);
+    }
 }

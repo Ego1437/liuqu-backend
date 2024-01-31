@@ -26,6 +26,9 @@ public class Banner {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startTime;
 
+    @Column(name = "click_count")
+    private Integer clickCount = 0; // 添加点击次数字段
+
     @Column(name = "end_time")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endTime;
@@ -79,5 +82,15 @@ public class Banner {
 
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
+    }
+
+    // 点击次数的getter
+    public Integer getClickCount() {
+        return clickCount;
+    }
+
+    // 点击次数的setter
+    public void setClickCount(Integer clickCount) {
+        this.clickCount = clickCount;
     }
 }

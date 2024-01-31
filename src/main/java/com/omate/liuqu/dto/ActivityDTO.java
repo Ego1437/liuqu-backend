@@ -24,10 +24,10 @@ public class ActivityDTO {
     private Integer verificationType;
     private List<EventDTO> events; // 使用EventDTO替换Event实体
     private String collaborators; // 使用EventDTO替换Event实体
-    private Integer favoritesCount;
+    private Integer fansCount;
     // 可以考虑添加其他您需要的字段
 
-    public ActivityDTO(Long activityId, String activityAddress, String activityImage, String activityName, Integer activityDuration, String portfolio, String activityDetail, Integer activityStatus, Integer categoryLevel1, Integer categoryLevel2, Set<TagDTO> tags, CustomerStaff customerStaff, Integer verificationType, List<EventDTO> events, String collaborators, Integer favoritesCount) {
+    public ActivityDTO(Long activityId, String activityAddress, String activityImage, String activityName, Integer activityDuration, String portfolio, String activityDetail, Integer activityStatus, Integer categoryLevel1, Integer categoryLevel2, Set<TagDTO> tags, CustomerStaff customerStaff, Integer verificationType, List<EventDTO> events, String collaborators, Integer fansCount) {
         this.activityId = activityId;
         this.activityAddress = activityAddress;
         this.activityImage = activityImage;
@@ -43,7 +43,7 @@ public class ActivityDTO {
         this.verificationType = verificationType;
         this.events = events;
         this.collaborators = collaborators;
-        this.favoritesCount = favoritesCount;
+        this.fansCount = fansCount;
     }
 
 
@@ -169,12 +169,12 @@ public class ActivityDTO {
         this.collaborators = collaborators;
     }
 
-    public Integer getFavoritesCount() {
-        return favoritesCount;
+    public Integer getFansCount() {
+        return fansCount;
     }
 
-    public void setFavoritesCount(Integer favoritesCount) {
-        this.favoritesCount = favoritesCount;
+    public void setFavoritesCount(Integer fansCount) {
+        this.fansCount = fansCount;
     }
 }
 

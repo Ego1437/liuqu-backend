@@ -1,9 +1,7 @@
 package com.omate.liuqu.service;
 
 import com.omate.liuqu.dto.UserDTO;
-import com.omate.liuqu.model.LoginResponse;
-import com.omate.liuqu.model.PasswordChangeRequest;
-import com.omate.liuqu.model.User;
+import com.omate.liuqu.model.*;
 import com.omate.liuqu.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +13,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.util.Optional;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -148,6 +147,14 @@ public class UserService {
         }
     }
 
+    public Set<Activity> getFavoriteActivities(Long userId) {
+        return userRepository.findFavoriteActivitiesByUserId(userId);
+    }
+
+    public Set<Partner> getFollowedPartners(Long userId) {
+        return userRepository.findFollowedPartnersByUserId(userId);
+    }
+
     public User getUserById(Long userId) {
         Optional<User> user = userRepository.findById(userId);
         if (user.isPresent()) {
@@ -180,6 +187,29 @@ public class UserService {
         userDTO.setPostCode(user.getPostcode());
         userDTO.setIsSubscribe(user.getIsSubscribe());
         return userDTO;
+    }
+
+    public boolean deleteUser(String phoneNumber, String verificationCode) {
+        // 验证验证码
+        boolean isValid = verificationService.verifyCode(phoneNumber, verificationCode);
+        if (!isValid) {
+            // 验证码不正确，可以抛出一个异常或返回错误信息
+            throw new IllegalArgumentException("Invalid verification code");
+        }
+
+        // 根据手机号查找用户
+        User user = userRepository.findByUserTel(phoneNumber);
+        if (user == null) {
+            // 用户不存在，可以抛出一个异常或返回错误信息
+            throw new EntityNotFoundException("User not found");
+        }
+
+        // 执行删除用户操作
+        userRepository.delete(user);
+
+        // 可以添加其他清理工作，比如删除用户相关的其他数据（如果有的话）
+
+        return true;
     }
 
 }

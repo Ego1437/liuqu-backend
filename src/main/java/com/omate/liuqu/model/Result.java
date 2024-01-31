@@ -37,6 +37,29 @@ public class Result implements Serializable {
     private String message;
     private Object data;
 
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
+    }
 
     public void setResultSuccess(int code) {
         this.message = resultMessage.get(code);
@@ -47,6 +70,11 @@ public class Result implements Serializable {
         this.code = code;
         this.message = resultMessage.get(code);
         this.data = data;
+    }
+
+    public void setResultSuccess(int code, String Log) {
+        this.code = code;
+        this.message = Log;
     }
 
     public void setResultFailed(int code) {

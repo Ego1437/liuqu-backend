@@ -42,7 +42,7 @@ public class TokenService {
 
     public String createAccessToken(User user) {
 
-        long validityInMilliseconds = TimeUnit.HOURS.toMillis(3); // 3小时
+        long validityInMilliseconds = TimeUnit.DAYS.toMillis(30); // 3小时
         return Jwts.builder()
                 .setSubject(String.valueOf(user.getUserId()))
                 .setIssuedAt(new Date())

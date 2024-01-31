@@ -97,7 +97,7 @@ public class PartnerService {
                 activity.getVerificationType(),
                 eventDTOs,
                 activity.getCollaborators(),
-                activity.getFavoritesCount()
+                activity.getFansCount()
         );
 
         return activityDTO;

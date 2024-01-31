@@ -89,7 +89,7 @@ public class OrderService {
     }
     private String generateNonceStr() {
         String candidateChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        int length = 10 + new Random().nextInt(23);
+        int length = 15;
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < length; i++) {
             sb.append(candidateChars.charAt(new Random().nextInt(candidateChars.length())));
@@ -154,7 +154,7 @@ public class OrderService {
 
     // ... 其他方法 ...
     public List<Order> getOrdersByUserId(Long userId) {
-        return orderRepository.findByUserId(userId);
+        return orderRepository.findByUserIdOrderByStartTimeDesc(userId);
     }
 
     public boolean updateOrderStatus(String orderId, Integer newStatus) {
