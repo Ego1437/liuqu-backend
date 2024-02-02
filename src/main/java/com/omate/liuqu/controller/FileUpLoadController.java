@@ -40,7 +40,7 @@ public class FileUpLoadController {
         this.svc = svc;
     }
 
-    @PostMapping("/upload/test")
+    @PostMapping("/upload")
     public ResponseEntity<Result> uploadFile(@RequestPart(value = "file") MultipartFile file) {
         Result result = new Result();
         Map<String, Object> resultMap = new HashMap<>();
