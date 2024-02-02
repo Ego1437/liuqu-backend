@@ -66,4 +66,38 @@ public class TicketService {
     public void deleteTicket(Long ticketId) {
         ticketRepository.deleteById(ticketId);
     }
+
+    @Transactional
+    public boolean updateResidualNum(Long ticketId, Integer orderQuantity) {
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new RuntimeException("Ticket not found"));
+        Event event = ticket.getEvent(); // 获取关联的Event
+        if (ticket.getResidualNum() >= orderQuantity && event.getResidualNum() >= orderQuantity) {
+            ticket.setResidualNum(ticket.getResidualNum() - orderQuantity);
+            event.setResidualNum(event.getResidualNum() - orderQuantity);
+
+            ticketRepository.save(ticket);
+            eventRepository.save(event); // 假设你有一个EventRepository
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Transactional
+    public void rollbackResidualNum(Long ticketId, Integer quantity) {
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new RuntimeException("Ticket not found"));
+
+        // 回滚操作：将票档的residualNum增加
+        ticket.setResidualNum(ticket.getResidualNum() + quantity);
+        ticketRepository.save(ticket);
+
+        // 如果有需要，也可以在这里添加处理Event的residualNum的逻辑
+        // 例如:
+         Event event = ticket.getEvent();
+         event.setResidualNum(event.getResidualNum() + quantity);
+         eventRepository.save(event);
+    }
 }

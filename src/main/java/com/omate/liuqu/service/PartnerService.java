@@ -94,7 +94,10 @@ public class PartnerService {
                 activity.getCategoryLevel2(),
                 tagDTOs,
                 staff,
-                eventDTOs
+                activity.getVerificationType(),
+                eventDTOs,
+                activity.getCollaborators(),
+                activity.getFansCount()
         );
 
         return activityDTO;

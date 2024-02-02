@@ -23,11 +23,11 @@ import javax.crypto.spec.SecretKeySpec;
 @Service
 public class TokenService {
 
-//    @Autowired
-//    private StringRedisTemplate redisTemplate;
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-    private final ConcurrentHashMap<String, String> refreshTokenStore = new ConcurrentHashMap<>();
+//    private final ConcurrentHashMap<String, String> refreshTokenStore = new ConcurrentHashMap<>();
 
     @Value("${app.jwt.secretKey}")
     private String base64SecretKey;
@@ -42,7 +42,7 @@ public class TokenService {
 
     public String createAccessToken(User user) {
 
-        long validityInMilliseconds = TimeUnit.HOURS.toMillis(3); // 3小时
+        long validityInMilliseconds = TimeUnit.DAYS.toMillis(90); // 3小时
         return Jwts.builder()
                 .setSubject(String.valueOf(user.getUserId()))
                 .setIssuedAt(new Date())
@@ -62,19 +62,19 @@ public class TokenService {
     }
 
     public void storeRefreshToken(String refreshToken, Long userId) {
-//        redisTemplate.opsForValue().set("RefreshToken:" + userId, refreshToken, 15, TimeUnit.DAYS);
-        String key = "RefreshToken:" + userId;
-        refreshTokenStore.put(key, refreshToken);
-        // 在 15 天后移除token
-        scheduler.schedule(() -> {
-            refreshTokenStore.remove(key);
-        }, 15, TimeUnit.DAYS);
+        redisTemplate.opsForValue().set("RefreshToken:" + userId, refreshToken, 15, TimeUnit.DAYS);
+//        String key = "RefreshToken:" + userId;
+//        refreshTokenStore.put(key, refreshToken);
+//         在 15 天后移除token
+//        scheduler.schedule(() -> {
+//            refreshTokenStore.remove(key);
+//        }, 15, TimeUnit.DAYS);
     }
 
 
     public boolean validateRefreshToken(String refreshToken, Long userId) {
-//        String storedToken = redisTemplate.opsForValue().get("RefreshToken:" + userId);
-        String storedToken = refreshTokenStore.get("RefreshToken:" + userId);
+        String storedToken = redisTemplate.opsForValue().get("RefreshToken:" + userId);
+//        String storedToken = refreshTokenStore.get("RefreshToken:" + userId);
         return refreshToken.equals(storedToken);
     }
     @PreDestroy

@@ -1,8 +1,9 @@
 package com.omate.liuqu.service;
 
-import com.omate.liuqu.model.LoginResponse;
-import com.omate.liuqu.model.User;
+import com.omate.liuqu.dto.UserDTO;
+import com.omate.liuqu.model.*;
 import com.omate.liuqu.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,6 +13,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.util.Optional;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -84,24 +86,74 @@ public class UserService {
         }
     }
 
-//    public boolean changePassword(PasswordChangeRequest request) {
-//        // 验证验证码
-//        String correctCode = redisTemplate.opsForValue().get("verification_code:" + request.getPhoneNumber());
-//        if (correctCode != null && correctCode.equals(request.getVerificationCode())) {
-//            // 查找用户
-//            User user = userRepository.findByUserTel(request.getPhoneNumber());
-//            if (user != null) {
-//                // 更新密码
-//                user.setPassword(passwordEncoder.encode(request.getNewPassword()));
-//                userRepository.save(user);
-//                return true;
-//            } else {
-//                throw new UsernameNotFoundException("User not found with phone number: " + request.getPhoneNumber());
-//            }
-//        } else {
-//            throw new InvalidVerificationCodeException("Invalid verification code");
-//        }
-//    }
+    public UserDTO updateUser(Long userId, UserDTO updateDTO) {
+        // 从数据库中获取用户
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        // 更新用户信息
+        // 这里需要根据实际的DTO内容来更新，以下仅为示例
+        if (updateDTO.getUserName() != null) {
+            user.setUserName(updateDTO.getUserName());
+        }
+        if (updateDTO.getUserEmail() != null) {
+            user.setUserEmail(updateDTO.getUserEmail());
+        }
+        if (updateDTO.getIntroduction() != null) {
+            user.setIntroduction(updateDTO.getIntroduction());
+        }
+        if (updateDTO.getBirthday() != null) {
+            user.setBirthday(updateDTO.getBirthday());
+        }
+        if (updateDTO.getGender() != null) {
+            user.setGender(updateDTO.getGender());
+        }
+        if (updateDTO.getAvatarPath() != null) {
+            user.setAvatar(updateDTO.getAvatarPath());
+        }
+        if (updateDTO.getAddress() != null) {
+            user.setAddress(updateDTO.getAddress());
+        }
+        if (updateDTO.getPostCode() != null) {
+            user.setPostcode(updateDTO.getPostCode());
+        }
+        if (updateDTO.getIsSubscribe() != null) {
+            user.setIsSubscribe(updateDTO.getIsSubscribe());
+        }
+
+        // 保存更新后的用户
+        userRepository.save(user);
+
+        // 将更新后的用户转换为DTO并返回
+        return convertToDto(user);
+    }
+
+
+    public boolean changePassword(PasswordChangeRequest request) {
+        // 验证验证码
+        if (verificationService.verifyCode(request.getPhoneNumber(), request.getVerificationCode())) {
+            // 查找用户
+            User user = userRepository.findByUserTel(request.getPhoneNumber());
+            if (user != null) {
+                // 更新密码
+                user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+                userRepository.save(user);
+                return true;
+            } else {
+                throw new UsernameNotFoundException("User not found with phone number: " + request.getPhoneNumber());
+            }
+        } else {
+            throw new IllegalArgumentException("Invalid verification code");
+        }
+    }
+
+    public Set<Activity> getFavoriteActivities(Long userId) {
+        return userRepository.findFavoriteActivitiesByUserId(userId);
+    }
+
+    public Set<Partner> getFollowedPartners(Long userId) {
+        return userRepository.findFollowedPartnersByUserId(userId);
+    }
 
     public User getUserById(Long userId) {
         Optional<User> user = userRepository.findById(userId);
@@ -120,6 +172,44 @@ public class UserService {
             sb.append(random.nextInt(10));
         }
         return sb.toString();
+    }
+
+    public UserDTO convertToDto(User user) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUserId(user.getUserId());
+        userDTO.setUserName(user.getUserName());
+        userDTO.setUserEmail(user.getUserEmail());
+        userDTO.setUserTel(user.getUserTel());
+        userDTO.setBirthday(user.getBirthday());
+        userDTO.setGender(user.getGender());
+        userDTO.setAvatarPath(user.getAvatar());
+        userDTO.setAddress(user.getAddress());
+        userDTO.setPostCode(user.getPostcode());
+        userDTO.setIsSubscribe(user.getIsSubscribe());
+        return userDTO;
+    }
+
+    public boolean deleteUser(String phoneNumber, String verificationCode) {
+        // 验证验证码
+        boolean isValid = verificationService.verifyCode(phoneNumber, verificationCode);
+        if (!isValid) {
+            // 验证码不正确，可以抛出一个异常或返回错误信息
+            throw new IllegalArgumentException("Invalid verification code");
+        }
+
+        // 根据手机号查找用户
+        User user = userRepository.findByUserTel(phoneNumber);
+        if (user == null) {
+            // 用户不存在，可以抛出一个异常或返回错误信息
+            throw new EntityNotFoundException("User not found");
+        }
+
+        // 执行删除用户操作
+        userRepository.delete(user);
+
+        // 可以添加其他清理工作，比如删除用户相关的其他数据（如果有的话）
+
+        return true;
     }
 
 }

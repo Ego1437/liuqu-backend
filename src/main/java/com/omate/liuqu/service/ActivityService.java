@@ -35,11 +35,13 @@ public class ActivityService {
     private final PartnerRepository partnerRepository; // 你的Partner仓库
     private final CustomerStaffRepository customerStaffRepository; // 你的CustomerStaff仓库
 
+
     @Autowired
     public ActivityService(TagRepository tagRepository,
                            ActivityRepository activityRepository,
                            PartnerRepository partnerRepository,
-                           CustomerStaffRepository customerStaffRepository) {
+                           CustomerStaffRepository customerStaffRepository
+                           ) {
         this.activityRepository = activityRepository;
         this.partnerRepository = partnerRepository;
         this.customerStaffRepository = customerStaffRepository;
@@ -63,6 +65,15 @@ public class ActivityService {
         activity.setTags(tags);
 
         return activityRepository.save(activity);
+    }
+
+    public ActivityDTO getActivityDetails(Long activityId) {
+        Activity activity = activityRepository.findById(activityId)
+                .orElseThrow(() -> new EntityNotFoundException("Activity not found"));
+
+        ActivityDTO dto =  convertToDTO(activity);
+        dto.setFavoritesCount(activity.getFansCount());
+        return dto;
     }
 
     public Activity updateActivity(Long activityId, Activity activityDetails, Long partnerId, Integer customerStaffId) {
@@ -172,6 +183,54 @@ public class ActivityService {
                 endTime);
 
         return activityRepository.findAll(spec, pageable);
+    }
+
+    private ActivityDTO convertToDTO(Activity activity) {
+        // 将Tag实体转换为TagDTO
+        Set<TagDTO> tagDTOs = activity.getTags().stream()
+                .map(tag -> new TagDTO(tag.getTagId(), tag.getTagName()))
+                .collect(Collectors.toSet());
+
+        // 将CustomerStaff实体转换为CustomerStaffDTO
+        CustomerStaff staff = activity.getCustomerStaff();
+        CustomerStaffDTO customerStaffDTO = new CustomerStaffDTO(
+                staff.getCustomerStaffId(),
+                staff.getStaffName(),
+                staff.getStaffTelephone(),
+                staff.getStaffEmail()
+        );
+
+        // 将Event实体转换为EventDTO
+        List<EventDTO> eventDTOs = activity.getEvents().stream()
+                .map(event -> new EventDTO(
+                        event.getEventId(),
+                        event.getStartTime(),
+                        event.getDeadline(),
+                        event.getEventStatus()
+                        // 不立即加载TicketDTOs
+                ))
+                .collect(Collectors.toList());
+        // 基本属性转换
+        ActivityDTO activityDTO = new ActivityDTO(
+                activity.getActivityId(),
+                activity.getActivityAddress(),
+                activity.getActivityImage(),
+                activity.getActivityName(),
+                activity.getActivityDuration(),
+                activity.getPortfolio(),
+                activity.getActivityDetail(),
+                activity.getActivityStatus(),
+                activity.getCategoryLevel1(),
+                activity.getCategoryLevel2(),
+                tagDTOs,
+                staff,
+                activity.getVerificationType(),
+                eventDTOs,
+                activity.getCollaborators(),
+                activity.getFansCount()
+        );
+
+        return activityDTO;
     }
 
 
