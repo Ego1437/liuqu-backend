@@ -43,15 +43,15 @@ jobs:
 #        with:
 #          arguments: buildTodoCoderJar
 
-      - name: Generate application.prod.properties
+      - name: Generate application.test.properties
         env:
           MYSQL_URL: ${{ secrets.MYSQL_URL }}
           MYSQL_USER: ${{ secrets.MYSQL_USER }}
           MYSQL_PASSWD: ${{ secrets.MYSQL_PASSWD }}
         run: |
-          rm -f ./src/main/resources/application.prod.properties
-          touch ./src/main/resources/application.prod.properties
-          cat << EOF > ./src/main/resources/application.prod.properties
+          rm -f ./src/main/resources/application.test.properties
+          touch ./src/main/resources/application.test.properties
+          cat << EOF > ./src/main/resources/application.test.properties
           org.gradle.java.home= /Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home
           spring.mvc.format.date=yyyy-MM-dd
           spring.jpa.hibernate.ddl-auto=none
@@ -81,11 +81,11 @@ jobs:
           spring.resources.static-locations=file:./image/
           app.jwt.secretKey=hqGh8QqBNtwtH2R3NGepTcSmUUjG/gHudMgGiOOVSLMGgCIZelGIQ6JDeoUt6RaXC2Guyojqr1P4J8T+M2MuUQ==
           EOF
-          sed -i -e 's/          //g' src/main/resources/application.prod.properties
+          sed -i -e 's/          //g' src/main/resources/application.test.properties
 
       - name: Build with build-jar.sh
         run: |
-          ./build-jar.sh prod
+          ./build-jar.sh test
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1

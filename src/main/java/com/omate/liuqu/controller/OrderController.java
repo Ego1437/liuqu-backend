@@ -1,9 +1,14 @@
 package com.omate.liuqu.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.omate.liuqu.dto.PaymentIntentDTO;
 import com.omate.liuqu.model.Order;
 import com.omate.liuqu.model.Result;
 import com.omate.liuqu.service.OrderService;
+import com.omate.liuqu.service.StripeService;
+import com.stripe.Stripe;
+import com.stripe.model.PaymentIntent;
+import com.stripe.param.PaymentIntentCreateParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +22,8 @@ import java.util.List;
 public class OrderController {
     private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
 
+    @Autowired
+    private StripeService stripeService;
     @Autowired
     private OrderService orderService;
 
@@ -68,5 +75,9 @@ public class OrderController {
         return ResponseEntity.ok(result);
     }
 
+    @PostMapping("/create-payment-intent")
+    public PaymentIntentDTO createPaymentIntent(@RequestBody Long amount) {
+        return stripeService.createPaymentIntent(amount, "usd");
+    }
 
 }
