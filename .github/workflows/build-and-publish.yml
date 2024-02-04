@@ -68,6 +68,7 @@ jobs:
           spring.security.user.password=e688f855-1859-49e2-b0e0-c31c510b724b
           spring.datasource.driver-class-username=com.mysql.cj.jdbc.Driver
           driver=com.mysql.cj.jdbc.Driver
+          stripe.api.key=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
           spring.liquibase.change-log=classpath:db/changelog/db.changelog-master.yaml
           logging.level.root=WARN
           logging.level.org.springframework=INFO
