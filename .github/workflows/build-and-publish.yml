@@ -63,11 +63,13 @@ jobs:
           spring.datasource.password=$MYSQL_PASSWD
           spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
           spring.redis.host=172.31.9.35
+          spring.data.redis.host=172.31.9.35
           spring.redis.port=6379
           spring.security.user.username=root
           spring.security.user.password=e688f855-1859-49e2-b0e0-c31c510b724b
           spring.datasource.driver-class-username=com.mysql.cj.jdbc.Driver
           driver=com.mysql.cj.jdbc.Driver
+          stripe.api.key=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
           spring.liquibase.change-log=classpath:db/changelog/db.changelog-master.yaml
           logging.level.root=WARN
           logging.level.org.springframework=INFO
