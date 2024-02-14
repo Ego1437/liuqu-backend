@@ -53,6 +53,7 @@ public class UserController {
     /**
      * *
      * updateUserInfoById
+     * 
      * @param user
      * @return userDTO
      */
@@ -77,9 +78,9 @@ public class UserController {
         Result result = new Result();
         try {
             LoginResponse response = userService.loginUser(phoneNumber, password);
-            if (response.getAccessToken() == "1"){
+            if (response.getAccessToken() == "1") {
                 result.setResultFailed(1); // 使用0作为成功代码，您可以根据需要更改这个值
-            }else {
+            } else {
                 result.setResultSuccess(0, response);
             }
             logger.warn("Registering user with result: {}", result);
@@ -118,18 +119,18 @@ public class UserController {
 
     }
 
-
     @PostMapping("/register")
     public ResponseEntity<Result> registerUser(@RequestParam String phoneNumber,
-                                                      @RequestParam String password,
-                                                      @RequestParam String verificationCode) {
-        logger.warn("Registering user with phoneNumber: {}, password: {}, verificationCode {}", phoneNumber, password, verificationCode);
+            @RequestParam String password,
+            @RequestParam String verificationCode) {
+        logger.warn("Registering user with phoneNumber: {}, password: {}, verificationCode {}", phoneNumber, password,
+                verificationCode);
         Result result = new Result();
         try {
             LoginResponse response = userService.registerUser(phoneNumber, password, verificationCode);
-            if (response.getAccessToken() == "User has been registered"){
+            if (response.getAccessToken() == "User has been registered") {
                 result.setResultFailed(2); // 使用0作为成功代码，您可以根据需要更改这个值
-            }else {
+            } else {
                 result.setResultSuccess(0, response);
             }
             logger.warn("Registering user with result: {}", result);
@@ -164,9 +165,10 @@ public class UserController {
 
     @PostMapping("/change-password")
     public ResponseEntity<Result> changePassword(@RequestParam String phoneNumber,
-                                                 @RequestParam String newPassword,
-                                                 @RequestParam String verificationCode) {
-        logger.info("Registering user with phoneNumber: {}, newPassword: {}, verificationCode {}", phoneNumber, newPassword, verificationCode);
+            @RequestParam String newPassword,
+            @RequestParam String verificationCode) {
+        logger.info("Registering user with phoneNumber: {}, newPassword: {}, verificationCode {}", phoneNumber,
+                newPassword, verificationCode);
         PasswordChangeRequest request = new PasswordChangeRequest();
         request.setNewPassword(newPassword);
         request.setPhoneNumber(phoneNumber);

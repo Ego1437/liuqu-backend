@@ -1,5 +1,6 @@
 package com.omate.liuqu.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -7,6 +8,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import com.omate.liuqu.service.TokenService;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -26,14 +30,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 // ... 其他导入 ...
-
-@Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
-    // ... 注入或定义需要的依赖 ...
-
-    @Value("${app.jwt.secretKey}")
     private String base64SecretKey;
+
+    // 使用构造器注入
+    public JwtAuthenticationFilter(@Value("${app.jwt.secretKey}") String base64SecretKey) {
+        this.base64SecretKey = base64SecretKey;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
@@ -51,6 +54,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             } catch (Exception e) {
                 // 此处处理Token解析失败的情况
+                // System.out.println("Token解析失败: " + e.getMessage());
             }
         }
 
@@ -68,6 +72,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         Claims claims = parsedToken.getBody();
         String username = claims.getSubject();
         Date expiration = claims.getExpiration();
+
         if (username != null && expiration.after(new Date())) {
             // 从claims中提取角色或权限
             String rolesString = claims.get("roles", String.class);

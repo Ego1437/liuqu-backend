@@ -1,5 +1,6 @@
 package com.omate.liuqu.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,6 +17,8 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -23,12 +26,18 @@ import java.util.Arrays;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+    @Value("${app.jwt.secretKey}")
+    private String secretKey;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter(secretKey);
+    }
 
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -36,19 +45,26 @@ public class SecurityConfig {
                 .cors().configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
                     config.addAllowedOriginPattern("*"); // allow all origins
-//                    config.setAllowedOrigins(Arrays.asList("*")); // allow all origins
-                    config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // allow all methods
+                    // config.setAllowedOrigins(Arrays.asList("*")); // allow all origins
+                    config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // allow all
+                                                                                                        // methods
                     config.setAllowedHeaders(Arrays.asList("*")); // allow all heads
                     config.setAllowCredentials(true); // allow all details
                     return config;
                 })
                 .and()
                 .authorizeRequests()
+                .requestMatchers("/api/login").permitAll() // 允许登录路径不受保护
                 .requestMatchers("/hello").authenticated()
-                .requestMatchers("/api/**", "/image/**").permitAll()
-                .anyRequest().permitAll()
+                .anyRequest().authenticated() // 其他所有请求需要身份验证
+                // .requestMatchers("/api/**", "/image/**").permitAll()
+                // .requestMatchers("/hello").authenticated()
+                // .anyRequest().permitAll()
                 .and()
-                .csrf().disable();
+                .addFilterBefore(
+                        jwtAuthenticationFilter(),
+                        UsernamePasswordAuthenticationFilter.class)
+                .csrf().disable(); // 关闭CSRF保护
         return http.build();
     }
 
@@ -58,6 +74,4 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
         return new CorsFilter(source);
     }
-
-
 }

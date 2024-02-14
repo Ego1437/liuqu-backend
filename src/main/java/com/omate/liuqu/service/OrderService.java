@@ -58,7 +58,6 @@ public class OrderService {
     @Autowired
     private NotificationService notificationService;
 
-
     private boolean verifySignature(String timestamp, String nonceStr, String incomingSign) {
         // 使用相同的方法拼接字符串
         Map<String, String> queryStringParams = new HashMap<>();
@@ -82,11 +81,12 @@ public class OrderService {
     private String getCurrentUsername() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails) {
-            return ((UserDetails)principal).getUsername();
+            return ((UserDetails) principal).getUsername();
         } else {
             return principal.toString(); // 或者处理未认证的情况
         }
     }
+
     private String generateNonceStr() {
         String candidateChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         int length = 15;
@@ -96,6 +96,7 @@ public class OrderService {
         }
         return sb.toString();
     }
+
     private String generateSignature(Map<String, String> params) {
         // 将参数按照 key 的字典顺序排序
         String toSign = params.get("m_number") + "&" +
@@ -106,6 +107,7 @@ public class OrderService {
         // 进行 MD5 加密并转换为大写
         return md5(toSign).toUpperCase();
     }
+
     private String md5(String source) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
@@ -139,7 +141,6 @@ public class OrderService {
         // 设置通知的其他必要信息
         notification.setStatus(0);
 
-
         // 保存通知
         notificationService.saveNotification(notification);
     }
@@ -162,9 +163,9 @@ public class OrderService {
                 .orElseThrow(() -> new EntityNotFoundException("Order not found"));
 
         // 检查订单是否属于当前用户
-//        if (!isOrderOfCurrentUser(order)) {
-//            throw new AccessDeniedException("您无权修改此订单");
-//        }
+        // if (!isOrderOfCurrentUser(order)) {
+        // throw new AccessDeniedException("您无权修改此订单");
+        // }
 
         order.setOrderStatus(newStatus);
         orderRepository.save(order);
@@ -204,10 +205,11 @@ public class OrderService {
         // 返回处理结果
         return true;
     }
+
     public Order createOrder(Order order) throws JsonProcessingException {
         boolean updateResult = ticketService.updateResidualNum(order.getTicketId(), order.getQuantity());
 
-        if(updateResult) {
+        if (updateResult) {
             Order createResult = createThirdOrder(order);
             return createResult;
         } else {
@@ -255,7 +257,8 @@ public class OrderService {
         queryStringParams.put("notify_url", "http://13.236.138.98:8083/api/notifications/payment"); // 通知地址
         queryStringParams.put("out_order_no", orderId); // Order 实体的自增 ID
         queryStringParams.put("platform", "ALIPAYONLINE"); // 支付平台
-//        queryStringParams.put("o_number", String.valueOf(order.getPartnerId())); // 商家id
+        // queryStringParams.put("o_number", String.valueOf(order.getPartnerId())); //
+        // 商家id
         queryStringParams.put("o_number", "001"); // 商家id
         queryStringParams.put("app_id", "wx571a1u199z0qc240"); // 商户的AppId
         // 添加签名，假设 generateSignature 已经考虑了所有参数
@@ -277,13 +280,11 @@ public class OrderService {
         // 发送 GET 请求
         ResponseEntity<String> response = restTemplate.getForEntity(urlWithQueryString, String.class);
 
-
         // 处理响应
         if (response.getStatusCode().is2xxSuccessful()) {
             ObjectMapper resultObjectMapper = new ObjectMapper();
             JsonNode jsonNode = resultObjectMapper.readTree(response.getBody());
             try {
-
                 String returnCode = jsonNode.get("return_code").asText();
                 if (!"SUCCESS".equals(returnCode)) {
                     String errorCode = jsonNode.get("error_code").asText();
@@ -292,6 +293,7 @@ public class OrderService {
                     throw new ExternalApiException(errorCode + "订单创建失败: " + errorMsg);
                 }
                 // 更新订单信息
+                System.out.println(jsonNode.get("order_no").asText());
                 String orderNo = jsonNode.get("order_no").asText();
                 String orderString = jsonNode.get("order_string").asText();
                 order.setOrderOmipayNumber(orderNo);

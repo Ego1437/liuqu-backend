@@ -27,7 +27,6 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
@@ -127,7 +126,6 @@ public class UserService {
         // 将更新后的用户转换为DTO并返回
         return convertToDto(user);
     }
-
 
     public boolean changePassword(PasswordChangeRequest request) {
         // 验证验证码
