@@ -1,6 +1,7 @@
 package com.omate.liuqu.service;
 
 import com.omate.liuqu.model.User;
+import com.omate.liuqu.model.Partner;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.annotation.PreDestroy;
@@ -75,6 +76,50 @@ public class TokenService {
         String storedToken = redisTemplate.opsForValue().get("RefreshToken:" + userId);
         // String storedToken = refreshTokenStore.get("RefreshToken:" + userId);
         return refreshToken.equals(storedToken);
+    }
+
+    public String createPartnerAccessToken(Partner partner) {
+        long validityInMilliseconds = TimeUnit.DAYS.toMillis(90); // 3小时
+        return Jwts.builder()
+                .setSubject(String.valueOf(partner.getPartnerId()))
+                .claim("roles", "ROLE_PARTNER")
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + validityInMilliseconds))
+                .signWith(SignatureAlgorithm.HS512, getSecretKey())
+                .compact();
+    }
+
+    public String createPartnerRefreshToken(Partner partner) {
+        long validityInMilliseconds = TimeUnit.DAYS.toMillis(15); // 15天
+        return Jwts.builder()
+                .setSubject(String.valueOf(partner.getPartnerId()))
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + validityInMilliseconds))
+                .signWith(SignatureAlgorithm.HS512, getSecretKey())
+                .compact();
+    }
+
+    public void storePartnerRefreshToken(String refreshToken, Long partnerId) {
+        redisTemplate.opsForValue().set("RefreshToken:" + partnerId, refreshToken, 15, TimeUnit.DAYS);
+        // String key = "RefreshToken:" + partnerId;
+        // refreshTokenStore.put(key, refreshToken);
+        // 在 15 天后移除token
+        // scheduler.schedule(() -> {
+        // refreshTokenStore.remove(key);
+        // }, 15, TimeUnit.DAYS);
+    }
+
+    public boolean validatePartnerRefreshToken(String refreshToken, Long partnerId) {
+        String storedToken = redisTemplate.opsForValue().get("RefreshToken:" + partnerId);
+        // String storedToken = refreshTokenStore.get("RefreshToken:" + partnerId);
+        return refreshToken.equals(storedToken);
+    }
+
+    public String getInfoFromToken(String token) {
+        String jwtToken = token.substring(7);
+        System.out.println("token: " + jwtToken);
+        System.out.println(Jwts.parser().setSigningKey(getSecretKey()).parseClaimsJws(jwtToken).getBody().getSubject());
+        return Jwts.parser().setSigningKey(getSecretKey()).parseClaimsJws(jwtToken).getBody().getSubject();
     }
 
     @PreDestroy

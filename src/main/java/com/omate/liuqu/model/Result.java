@@ -7,7 +7,6 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-
 @Data
 public class Result implements Serializable {
 
@@ -27,11 +26,9 @@ public class Result implements Serializable {
         resultMessage.put(8, "Only JPEG, PNG, GIF, BMP, TIFF, SVG, or WebP images are allowed");
         resultMessage.put(9, "Invalid email format");
         resultMessage.put(10, "Password change failed");
-
-
+        resultMessage.put(11, "Order cannot be confirmed");
 
     }
-
 
     private int code;
     private String message;

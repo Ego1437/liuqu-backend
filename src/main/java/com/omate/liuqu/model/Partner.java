@@ -1,4 +1,5 @@
 package com.omate.liuqu.model;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -7,6 +8,7 @@ import java.util.Date;
 
 import java.util.List;
 import java.util.Set;
+import java.util.HashSet;
 
 @Entity
 @Table(name = "Partners")
@@ -26,6 +28,7 @@ public class Partner {
     private String businessEmail;
 
     @Column(name = "password", length = 20)
+    @JsonIgnore
     private String password;
 
     @Temporal(TemporalType.DATE)
@@ -67,14 +70,13 @@ public class Partner {
     private String partnerAlbum;
 
     @Column(name = "review_score")
-    private BigDecimal reviewScore;
+    private BigDecimal reviewScore = new BigDecimal(0);
 
     @ManyToMany(mappedBy = "followedPartners")
     @JsonIgnore
-    private Set<User> followedByUsers;
+    private Set<User> followedByUsers = new HashSet<>();
 
-
-// Getters and setters for all fields
+    // Getters and setters for all fields
     public int getFollowersCount() {
         return followedByUsers.size();
     }
@@ -88,8 +90,8 @@ public class Partner {
     }
 
     public String getBusinessName() {
-    return businessName;
-}
+        return businessName;
+    }
 
     public void setBusinessName(String businessName) {
         this.businessName = businessName;

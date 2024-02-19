@@ -39,6 +39,37 @@ public class SecurityConfig {
         return new JwtAuthenticationFilter(secretKey);
     }
 
+    private static final String[] AUTH_WHITELIST = {
+            "/api/verification/**",
+            "/api/activity/**",
+            "/api/tags/**",
+            "/api/partners/**",
+            "/api/login",
+            "/api/register",
+            "/api/change-password",
+            "/api/upload",
+    };
+
+    private static final String[] AUTH_USER = {
+            "/api/notifications/**",
+            "/api/updateUserInfoById",
+            "/api/userInfo",
+            "/api/refreshToken",
+            "/api/orders/**",
+            "/api/favorites/**",
+            "/api/{userId}/favorite-activities",
+            "/api/{userId}/followed-partners",
+            "/api/delete/{userId}",
+    };
+
+    private static final String[] AUTH_PARTNER = {
+            "/api/orders/{orderId}/updateOrderStatusById",
+            "/api/activity/createActivity",
+            "/api/activity/updateActivity/**",
+            "/api/events/createEvent",
+            "/api/tickets/createTicket",
+    };
+
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -53,9 +84,10 @@ public class SecurityConfig {
                     return config;
                 })
                 .and()
-                .authorizeRequests()
-                .requestMatchers("/api/login").permitAll() // 允许登录路径不受保护
-                .requestMatchers("/hello").authenticated()
+                .authorizeHttpRequests()
+                .requestMatchers(AUTH_WHITELIST).permitAll() // 允许所有用户访问
+                .requestMatchers(AUTH_USER).hasRole("USER") // 需要USER角色
+                .requestMatchers(AUTH_PARTNER).hasRole("PARTNER") // 需要PARTNER角色
                 .anyRequest().authenticated() // 其他所有请求需要身份验证
                 // .requestMatchers("/api/**", "/image/**").permitAll()
                 // .requestMatchers("/hello").authenticated()
