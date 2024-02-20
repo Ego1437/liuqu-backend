@@ -45,10 +45,10 @@ public class OrderController {
         logger.warn("Received Order upload request: {}", order);
         Order newOrder = orderService.createOrder(order);
         Result result = new Result();
-        if(newOrder != null){
+        if (newOrder != null) {
             result.setResultSuccess(0, newOrder); // 使用0作为成功代码，您可以根据需要更改这个值
 
-        }else {
+        } else {
             result.setResultFailed(5); // 使用0作为成功代码，您可以根据需要更改这个值
         }
         return ResponseEntity.ok(result);
@@ -64,7 +64,7 @@ public class OrderController {
 
     @PutMapping("/{orderId}/updateOrderStatusById")
     public ResponseEntity<?> updateOrderStatus(@PathVariable String orderId,
-                                               @RequestBody Integer newStatus) {
+            @RequestBody Integer newStatus) {
         Result result = new Result();
         boolean isUpdated = orderService.updateOrderStatus(orderId, newStatus);
         if (isUpdated) {
@@ -75,9 +75,24 @@ public class OrderController {
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/create-payment-intent")
-    public PaymentIntentDTO createPaymentIntent(@RequestBody Long amount) {
-        return stripeService.createPaymentIntent(amount, "usd");
+    @PostMapping("/createStripeOrder")
+    public ResponseEntity<Result> createStripeOrder(@RequestBody Order order) throws JsonProcessingException {
+        Result result = new Result();
+        Order newOrder = stripeService.createOrder(order);
+        if (newOrder != null) {
+            result.setResultSuccess(0, newOrder);
+        } else {
+            result.setResultFailed(5);
+        }
+        return ResponseEntity.ok(result);
     }
 
+    // @PostMapping("/create-payment-intent")
+    // public ResponseEntity<Result> createPaymentIntent(@RequestParam Long amount) {
+    //     Result result = new Result();
+    //     PaymentIntent paymentData = stripeService.createPaymentIntent(amount, "usd");
+    //     result.setResultSuccess(0, paymentData);
+
+    //     return ResponseEntity.ok(result);
+    // }
 }
