@@ -217,4 +217,18 @@ public class UserController {
         result.setResultSuccess(0, userService.getFollowedPartners(userId)); // 使用0作为成功代码，您可以根据需要更改这个值
         return ResponseEntity.ok(result);
     }
+
+    @GetMapping("/check-favorite")
+    public ResponseEntity<?> checkFavorite(@RequestParam Long userId, @RequestParam Long activityId) {
+        Result result = new Result();
+        result.setResultSuccess(0, userService.checkFavorite(userId, activityId)); // 使用0作为成功代码，您可以根据需要更改这个值
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/check-followed")
+    public ResponseEntity<?> checkFollowed(@RequestParam Long userId, @RequestParam Long partnerId) {
+        Result result = new Result();
+        result.setResultSuccess(0, userService.checkFollowed(userId, partnerId)); // 使用0作为成功代码，您可以根据需要更改这个值
+        return ResponseEntity.ok(result);
+    }
 }

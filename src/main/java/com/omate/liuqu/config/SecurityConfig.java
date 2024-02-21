@@ -48,6 +48,13 @@ public class SecurityConfig {
             "/api/register",
             "/api/change-password",
             "/api/upload",
+
+            // 测试用
+            // "/api/orders/**",
+            // "/api/events/createEvent",
+            // "/api/tickets/createTicket",
+            // "/api/check-favorite",
+            // "/api/check-followed",
     };
 
     private static final String[] AUTH_USER = {
@@ -60,6 +67,8 @@ public class SecurityConfig {
             "/api/{userId}/favorite-activities",
             "/api/{userId}/followed-partners",
             "/api/delete/{userId}",
+            "/api/check-favorite",
+            "/api/check-followed",
     };
 
     private static final String[] AUTH_PARTNER = {

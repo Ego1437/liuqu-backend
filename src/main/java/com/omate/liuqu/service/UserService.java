@@ -2,7 +2,9 @@ package com.omate.liuqu.service;
 
 import com.omate.liuqu.dto.UserDTO;
 import com.omate.liuqu.model.*;
+import com.omate.liuqu.repository.ActivityRepository;
 import com.omate.liuqu.repository.UserRepository;
+import com.omate.liuqu.repository.PartnerRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -26,6 +28,12 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ActivityRepository activityRepository;
+
+    @Autowired
+    private PartnerRepository partnerRepository;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -151,6 +159,34 @@ public class UserService {
 
     public Set<Partner> getFollowedPartners(Long userId) {
         return userRepository.findFollowedPartnersByUserId(userId);
+    }
+
+    public Boolean checkFavorite(Long userId, Long activityId) {
+        Set<Activity> activities = userRepository.findFavoriteActivitiesByUserId(userId);
+        if (activities == null || activities.isEmpty()) {
+            return false;
+        }
+        Activity activity = activityRepository.findById(activityId)
+                .orElseThrow(() -> new EntityNotFoundException("Activity not found"));
+        if (activities.contains(activity)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public Boolean checkFollowed(Long userId, Long partnerId) {
+        Set<Partner> partners = userRepository.findFollowedPartnersByUserId(userId);
+        if (partners == null || partners.isEmpty()) {
+            return false;
+        }
+        Partner partner = partnerRepository.findById(partnerId)
+                .orElseThrow(() -> new EntityNotFoundException("Partner not found"));
+        if (partners.contains(partner)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public User getUserById(Long userId) {
